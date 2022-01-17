@@ -1,5 +1,29 @@
 <form (ngSubmit)="upload(file.files)">
+<!-- -->
+  <div>
+   
+    <div class="form-group">
+      
+      <label for="filetype">Types of files:</label>
 
+      <div class="float-container">
+
+        <div class="float-child" style="background-color: aqua;width: 50%;float: left;">
+          <input  [(ngModel)]="typeof" type="radio" value="salesforecast" name="filetype" formControlName="filetype">
+          <label for="salesforecast">Sales Forecast</label>
+       </div>
+  
+       <div class="float-child" style="background-color: greenyellow;width: 50%;float: left;">
+          <input  [(ngModel)]="typeof" type="radio" value="cru" name="filetype" formControlName="filetype">
+          <label for="cru">CRU</label>
+       </div>
+
+      </div>
+     
+     
+    </div>
+    
+  </div>
   <div class="form-group">
     <label for="picture">Select File</label>
     <div class="custom-file">

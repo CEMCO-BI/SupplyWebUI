@@ -1,5 +1,5 @@
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http'
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 
@@ -15,6 +15,10 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
+
+  //type of file
+  @Input()
+  typeof: string = 'default';
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.baseUrl = baseUrl;

@@ -2,6 +2,7 @@ import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } fro
 import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-upload-file',
@@ -17,10 +18,9 @@ export class UploadFileComponent implements OnInit {
   InputVar: ElementRef;
 
   //type of file
-  @Input()
   typeof: string = 'default';
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
     this.baseUrl = baseUrl;
   }
 
@@ -37,28 +37,40 @@ export class UploadFileComponent implements OnInit {
   }
 
   upload(files) {
-    if (files.length === 0)
+    if (files.length === 0) {
+      this.toastr.error('please select a file to upload');
       return;
-
+    }
     const formData = new FormData();
 
     for (const file of files) {
       formData.append(file.name, file);
+      formData.append('typeof',this.typeof);
     }
 
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
-      reportProgress: true,
+      reportProgress: true
     });
 
     this.http.request(uploadReq).subscribe(event => {
       
     });  }
 
-  onFileChange(evt: any) {
+  onFileChange(evt: any, file) {
+    
     const target: DataTransfer = <DataTransfer>(evt.target);
-
-    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-
+ 
+    if (target.files.length !== 1) {
+      this.toastr.error('Cannot upload multiple files');
+    }
+    let name = target.files[0].name;
+    let allowedExtensions = /(\.xls|\.xlsx)$/i;
+    if (!allowedExtensions.exec(name)) {
+      //alert('Please select an Excel File');
+      this.toastr.error('Please select an Excel File');
+      file.value = '';
+      //return false;
+    }
     const reader: FileReader = new FileReader();
 
     reader.onload = (e: any) => {

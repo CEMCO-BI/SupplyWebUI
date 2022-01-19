@@ -36,9 +36,10 @@ namespace SupplyWebApp.Controllers
 
             try
             {
+
                 var file = Request.Form.Files[0];
                 string path = Path.Combine(_hostingEnvironment.WebRootPath, Constants.FILE_UPLOAD_FOLDER);
-
+                
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);

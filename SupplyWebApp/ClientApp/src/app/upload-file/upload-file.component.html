@@ -1,9 +1,62 @@
+<style>
+
+  .float-child1 {
+    float: left;
+    width: 33%;
+    background-color: aquamarine;
+  }
+
+  .float-child2 {
+    float: left;
+    width: 33%;
+    background-color: rgb(0, 255, 179);
+  }
+
+  .float-child3 {
+    float: left;
+    width: 33%;
+    background-color: aquamarine;
+  }
+</style>
+
+<!-- -->
+<div>
+
+
+  <h4>Types of files</h4>
+
+
+  <div class="float-container">
+    <!-- there can be 2 ways of fetching: 1. the value you can just use id for div and use id.value and pass that value using a function
+  and set that value as this.typeof = val -->
+    <div class="float-child1">
+      <input [(ngModel)]="typeOfFile" type="radio" value="salesforecast" name="filetype">
+      <label for="salesforecast"> Sales Forecast</label>
+    </div>
+
+    <div class="float-child2">
+      <input [(ngModel)]="typeOfFile" type="radio" value="cru" name="filetype">
+      <label for="cru"> CRU Pricing</label>
+    </div>
+
+    <div class="float-child3">
+      <input [(ngModel)]="typeOfFile" type="radio" value="plannedbuys" name="filetype">
+      <label for="plannedbuys"> Planned Buys</label>
+    </div>
+
+    filetype : {{typeOfFile}}
+  </div>
+
+
+
+
+</div>
 <form (ngSubmit)="upload(file.files)">
 
   <div class="form-group">
     <label for="picture">Select File</label>
     <div class="custom-file">
-      <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event)" />
+      <input #file type="file"  id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)" />
       <label class="custom-file-label" for="customFile">Choose file</label>
     </div>
   </div>
@@ -21,7 +74,8 @@
       <span>No data to show</span>
     </div>
   </div>
-  <br/>
+  <br />
+
   <input type="submit" class="btn btn-primary" value="Upload" />
   <input type="reset" class="btn btn-default" value="Cancel" (click)="reset()" />
 

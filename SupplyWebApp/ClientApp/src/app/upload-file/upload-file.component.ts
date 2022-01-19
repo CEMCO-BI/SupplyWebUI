@@ -1,7 +1,8 @@
-import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http'
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http'
+import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-upload-file',
@@ -16,7 +17,10 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  //type of file
+  typeOfFile: string = 'default';
+
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
     this.baseUrl = baseUrl;
   }
 
@@ -33,28 +37,42 @@ export class UploadFileComponent implements OnInit {
   }
 
   upload(files) {
-    if (files.length === 0)
+    if (files.length === 0) {
+      this.toastr.error('please select a file to upload');
       return;
-
+    }
     const formData = new FormData();
 
     for (const file of files) {
       formData.append(file.name, file);
     }
 
+
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
       reportProgress: true,
+      params: new HttpParams().set('typeOfFile', this.typeOfFile)
     });
 
     this.http.request(uploadReq).subscribe(event => {
-      
-    });  }
+      console.log(event)
+    });
+  }
 
-  onFileChange(evt: any) {
+  onFileChange(evt: any, file) {
+    
     const target: DataTransfer = <DataTransfer>(evt.target);
-
-    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-
+ 
+    if (target.files.length !== 1) {
+      this.toastr.error('Cannot upload multiple files');
+    }
+    let name = target.files[0].name;
+    let allowedExtensions = /(\.xls|\.xlsx)$/i;
+    if (!allowedExtensions.exec(name)) {
+      //alert('Please select an Excel File');
+      this.toastr.error('Please select an Excel File');
+      file.value = '';
+      //return false;
+    }
     const reader: FileReader = new FileReader();
 
     reader.onload = (e: any) => {

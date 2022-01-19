@@ -35,7 +35,21 @@ namespace SupplyWebApp.Controllers
 
             FileImporter fileImporter = new FileImporter(_dataContext);
 
-            fileImporter.Import(Enums.FileNames.F_01, file);
+            string typeOfFile = Request.Query["typeOfFile"].ToString();
+
+            switch (typeOfFile)
+            {
+                case "F_01":
+                    fileImporter.Import(Enums.FileNames.F_01, file);
+                    break;
+                case "F_02":
+                    fileImporter.Import(Enums.FileNames.F_02, file);
+                    break;
+                case "F_03":
+                    fileImporter.Import(Enums.FileNames.F_03, file);
+                    break;
+            }
+
 
             return Ok();
         }

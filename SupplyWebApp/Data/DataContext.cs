@@ -14,5 +14,7 @@ namespace SupplyWebApp.Data
         }
 
         public DbSet<SalesForecast> SalesForecast { get; set; }
+        public DbSet<PlannedBuy> PlannedBuy { get; set; }
+        public DbSet<CRUPricing> CRUPricing { get; set; }
     }
 }

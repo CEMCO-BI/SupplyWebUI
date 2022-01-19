@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using SupplyWebApp.Data;
+using System.Reflection;
+using System.Linq;
+using System;
 
 namespace SupplyWebApp
 {
@@ -33,16 +36,14 @@ namespace SupplyWebApp
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("CorsPolicy",
-            //        builder => builder.AllowAnyOrigin()
-            //        .AllowAnyMethod()
-            //        .AllowAnyHeader()
-            //        .AllowCredentials());
-            //});
-
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+            Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(t => String.Equals(t.Namespace, "SupplyWebApp.Services", StringComparison.Ordinal))
+                    .Where(t => t.IsPublic && !t.IsAbstract && !t.Name.Equals("FileImporter"))
+                    .ToList()
+                    .ForEach(t => t.GetMethod("RegisterImporter").Invoke(null, null));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

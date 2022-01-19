@@ -38,7 +38,7 @@ export class UploadFileComponent implements OnInit {
 
   upload(files) {
     if (files.length === 0) {
-      this.toastr.error('please select a file to upload');
+      this.toastr.error('Please select a file to upload.');
       return;
     }
     const formData = new FormData();
@@ -54,7 +54,10 @@ export class UploadFileComponent implements OnInit {
     });
 
     this.http.request(uploadReq).subscribe(event => {
-      console.log(event)
+      if (event instanceof HttpResponse) {
+        if (event.body && event.status == 200)
+          this.toastr.success("File upload successful.", "Response", { positionClass: 'toast-bottom-center' });
+      }
     });
   }
 

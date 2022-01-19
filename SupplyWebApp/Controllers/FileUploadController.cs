@@ -38,6 +38,9 @@ namespace SupplyWebApp.Controllers
             {
 
                 var file = Request.Form.Files[0];
+                var formData  = Request.Body;
+                Console.WriteLine("-------------xxxxx------");
+                
                 string path = Path.Combine(_hostingEnvironment.WebRootPath, Constants.FILE_UPLOAD_FOLDER);
                 
                 if (!Directory.Exists(path))

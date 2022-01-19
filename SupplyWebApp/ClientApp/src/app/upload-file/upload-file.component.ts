@@ -1,4 +1,4 @@
-import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
@@ -18,7 +18,7 @@ export class UploadFileComponent implements OnInit {
   InputVar: ElementRef;
 
   //type of file
-  typeof: string = 'default';
+  typeOfFile: string = 'default';
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
     this.baseUrl = baseUrl;
@@ -45,16 +45,18 @@ export class UploadFileComponent implements OnInit {
 
     for (const file of files) {
       formData.append(file.name, file);
-      formData.append('typeof',this.typeof);
     }
 
+
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
-      reportProgress: true
+      reportProgress: true,
+      params: new HttpParams().set('typeOfFile', this.typeOfFile)
     });
 
     this.http.request(uploadReq).subscribe(event => {
-      
-    });  }
+      console.log(event)
+    });
+  }
 
   onFileChange(evt: any, file) {
     

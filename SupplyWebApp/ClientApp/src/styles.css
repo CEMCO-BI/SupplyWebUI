@@ -19,8 +19,3 @@ code {
   background-color: #fff;
   border-color: #ccc;
 }
-
-.table-wrap {
-  height: 400px;
-  overflow-y: auto;
-}

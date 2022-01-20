@@ -41,8 +41,8 @@ export class UploadFileComponent implements OnInit {
    this.InputVar.nativeElement.value = "";
     this.data = [[], []];
     this.header = [[], []];
-   
- }
+  }
+
   reset() {
     // We will clear the value of the input 
     // field using the reference variable.
@@ -78,7 +78,7 @@ export class UploadFileComponent implements OnInit {
       console.log(event);
       if (event instanceof HttpResponse) {
         if (event.status == 200)
-          this.toastr.warning("", " Uploading ...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
+          this.toastr.info("", " Uploading ...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
         setTimeout(() => {
           this.toastr.success("", " Uploaded successfully", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
           this.reset();

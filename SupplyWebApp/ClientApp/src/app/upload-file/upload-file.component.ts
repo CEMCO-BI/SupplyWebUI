@@ -98,10 +98,8 @@ export class UploadFileComponent implements OnInit {
     let name = target.files[0].name;
     let allowedExtensions = /(\.xls|\.xlsx)$/i;
     if (!allowedExtensions.exec(name)) {
-      //alert('Please select an Excel File');
       this.toastr.error('Please select an Excel File');
       file.value = '';
-      //return false;
     }
     const reader: FileReader = new FileReader();
 
@@ -119,7 +117,6 @@ export class UploadFileComponent implements OnInit {
 
       this.data = this.sheet.slice(headerEnd);
       this.header = this.sheet.slice(0, headerEnd);
-      //console.log(x);
 
     };
 

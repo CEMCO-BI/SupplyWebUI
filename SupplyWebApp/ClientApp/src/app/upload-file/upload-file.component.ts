@@ -11,8 +11,10 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class UploadFileComponent implements OnInit {
+  sheet: [][];
   header: [][];
   data: [][];
+  x: [][];
   baseUrl: string;
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
@@ -35,6 +37,7 @@ export class UploadFileComponent implements OnInit {
 
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
+    this.header = [[], []];
   }
 
   upload(files) {
@@ -89,10 +92,12 @@ export class UploadFileComponent implements OnInit {
 
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
-      this.data = (XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      this.sheet = (XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      var headerEnd = this.typeOfFile == "F_02" ? 8 : 1
 
-      let x = this.data.slice(1);
-      console.log(x);
+      this.data = this.sheet.slice(headerEnd);
+      this.header = this.sheet.slice(0, headerEnd);
+      //console.log(x);
 
     };
 

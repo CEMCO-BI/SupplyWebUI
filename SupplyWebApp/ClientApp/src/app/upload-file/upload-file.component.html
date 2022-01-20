@@ -32,6 +32,12 @@
   <div class="table-wrap">
     <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
       <tbody>
+        <tr *ngFor="let row of header">
+          <th *ngFor="let title of row">
+            {{title}}
+          </th>
+        </tr>
+
         <tr *ngFor="let row of data">
           <td *ngFor="let cell of row">
             {{cell}}

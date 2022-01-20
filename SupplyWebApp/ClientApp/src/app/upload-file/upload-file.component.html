@@ -43,6 +43,7 @@
         <label class="custom-file-label" for="customFile">Choose file</label>
       </div>
     </div>
+
     <div class="table-wrap">
       <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
         <tbody>
@@ -56,6 +57,26 @@
       <div *ngIf="!data">
         <span>No data to show</span>
       </div>
+
+  </div>
+  <div class="table-wrap">
+    <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
+      <tbody>
+        <tr *ngFor="let row of header">
+          <th *ngFor="let title of row">
+            {{title}}
+          </th>
+        </tr>
+
+        <tr *ngFor="let row of data">
+          <td *ngFor="let cell of row">
+            {{cell}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!data">
+      <span>No data to show</span>
     </div>
     <br />
   

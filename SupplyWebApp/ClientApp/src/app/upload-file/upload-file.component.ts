@@ -11,8 +11,10 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class UploadFileComponent implements OnInit {
+  sheet: [][];
   header: [][];
   data: [][];
+  x: [][];
   baseUrl: string;
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
@@ -20,6 +22,9 @@ export class UploadFileComponent implements OnInit {
 
   //type of file
   typeOfFile: string = "F_01";
+  display: boolean = false;
+  to: string = '2022-01-01'; 
+  from: string = '2022-01-01';
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
     this.baseUrl = baseUrl;
@@ -29,15 +34,27 @@ export class UploadFileComponent implements OnInit {
     
   };
 
+
+ openDatePicker() {
+   //this.display = true;
+   this.display = !this.display;
+   
+ }
   reset() {
     // We will clear the value of the input 
     // field using the reference variable.
 
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
+    this.header = [[], []];
   }
 
   upload(files) {
+    
+    console.log(this.from);
+    console.log(this.to);
+
+
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
       return;
@@ -51,7 +68,7 @@ export class UploadFileComponent implements OnInit {
 
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
       reportProgress: true,
-      params: new HttpParams().set('typeOfFile', this.typeOfFile)
+      params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from',this.from).set('to',this.to)
     });
 
     this.http.request(uploadReq).subscribe(event => {
@@ -94,10 +111,12 @@ export class UploadFileComponent implements OnInit {
 
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
-      this.data = (XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      this.sheet = (XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      var headerEnd = this.typeOfFile == "F_02" ? 8 : 1
 
-      let x = this.data.slice(1);
-      console.log(x);
+      this.data = this.sheet.slice(headerEnd);
+      this.header = this.sheet.slice(0, headerEnd);
+      //console.log(x);
 
     };
 

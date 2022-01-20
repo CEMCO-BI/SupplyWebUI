@@ -5,24 +5,20 @@
 .float-child {
     float: left;
     width: 50%;
-    background-color: aqua;
 }
 
 .float-child1 {
   float: left;
   width: 33%;
-  background-color: aquamarine;
 }
 
 .float-child2 {
   float: left;
   width: 33%;
-  background-color: rgb(0, 255, 179);
 }
 
 .float-child3 {
   float: left;
   width: 33%;
-  background-color: aquamarine;
 }
 

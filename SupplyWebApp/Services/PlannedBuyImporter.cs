@@ -67,14 +67,14 @@ namespace SupplyWebApp.Services
                                 Location = _reader.GetString(2)
                             };
 
-                            var salesForecastFromDatabase = DataContext.SalesForecast
+                            var plannedBuyFromDatabase = DataContext.PlannedBuy
                                 .Where(sf => sf.Year == plannedBuy.Year
                                 && sf.Month == plannedBuy.Month
                                 && sf.Location.Equals(plannedBuy.Location)).FirstOrDefault();
 
-                            if (salesForecastFromDatabase != null)
+                            if (plannedBuyFromDatabase != null)
                             {
-                                salesForecastFromDatabase.Amount = plannedBuy.Amount;
+                                plannedBuyFromDatabase.Amount = plannedBuy.Amount;
                             }
                             else
                             {

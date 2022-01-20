@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace SupplyWebApp.Models
 {
+    [Table("SalesForecast", Schema = "Upload")]
+
     public class SalesForecast
     {
         [Key]

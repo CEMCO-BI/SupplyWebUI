@@ -6,7 +6,7 @@
       <!-- there can be 2 ways of fetching: 1. the value you can just use id for div and use id.value and pass that value using a function
       and set that value as this.typeof = val -->
       <div class="float-child1">
-        <input [(ngModel)]="typeOfFile" type="radio" value="F_01" checked="true" name="salesForecast">
+        <input [(ngModel)]="typeOfFile" type="radio" value="F_01" name="salesForecast" checked />
         <label for="salesForecast">Sales Forecast</label>
       </div>
 
@@ -17,7 +17,7 @@
 
       <div class="float-child3">
         <input [(ngModel)]="typeOfFile" type="radio" value="F_03" name="plannedBuy">
-        <label for="plannedBuy">Planned Buy</label>
+        <label for="plannedBuy">Planned Buy/ Transfers</label>
       </div>
 
       <!--filetype : {{typeOfFile}}-->

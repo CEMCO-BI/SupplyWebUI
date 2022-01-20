@@ -19,7 +19,7 @@ export class UploadFileComponent implements OnInit {
   InputVar: ElementRef;
 
   //type of file
-  typeOfFile: string = 'default';
+  typeOfFile: string = "F_01";
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
     this.baseUrl = baseUrl;
@@ -57,7 +57,8 @@ export class UploadFileComponent implements OnInit {
     this.http.request(uploadReq).subscribe(event => {
       if (event instanceof HttpResponse) {
         if (event.body && event.status == 200)
-          this.toastr.success("File upload successful.", "Response", { positionClass: 'toast-bottom-center' });
+          //this.toastr.success("File upload successful.", "Response", { positionClass: 'toast-bottom-center' });
+          console.log(event);
       }
     });
   }

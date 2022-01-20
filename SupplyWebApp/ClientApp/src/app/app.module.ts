@@ -25,8 +25,8 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'upload-file', component: UploadFileComponent }
+      { path: '', component: UploadFileComponent, pathMatch: 'full' }
+     // { path: 'upload-file', component: UploadFileComponent }
     ]),
     BrowserAnimationsModule,
     ToastrModule.forRoot({

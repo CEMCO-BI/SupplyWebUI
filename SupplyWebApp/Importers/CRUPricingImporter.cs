@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SupplyWebApp.Services
 {
-    public class CRUPricingImporter : ImportService
+    public class CRUPricingImporter : Importer
     {
         public CRUPricingImporter()
         {
@@ -26,7 +26,7 @@ namespace SupplyWebApp.Services
 
         public static void RegisterImporter()
         {
-            FileImporter.RegisterImporter(Enums.FileNames.F_02, typeof(CRUPricingImporter));
+            ImportService.RegisterImporter(Enums.FileNames.F_02, typeof(CRUPricingImporter));
         }
 
         public override void Import(IFormFile file)

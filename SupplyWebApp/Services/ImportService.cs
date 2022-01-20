@@ -1,35 +1,39 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using SupplyWebApp.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static SupplyWebApp.Helpers.Enums;
-using Microsoft.Extensions.Configuration;
-using ExcelDataReader;
 
 namespace SupplyWebApp.Services
 {
-    public abstract class ImportService
+    public sealed class ImportService
     {
-        public DataContext DataContext;
-        protected IHostEnvironment _hostingEnvironment;
-        protected IExcelDataReader _reader;
-        protected int _dataStartRow = 2;
+        private static IDictionary<FileNames, Type> _fileImporters = new Dictionary<FileNames, Type>();
+        private DataContext _dataContext;
 
-        public virtual void Import(IFormFile file)
+        public ImportService(DataContext dataContext)
         {
-
+            _dataContext = dataContext;
         }
 
-        public void AdvanceToDataRow()
+        public static void RegisterImporter(FileNames file, Type reportImporter)
         {
-            for(int i = 1; i < _dataStartRow; i++)
-            {
-                _reader.Read();
-            }
+            _fileImporters.Add(file, reportImporter);
         }
+
+        public void Import(FileNames fileName, IFormFile file)
+        {
+            CreateImporter(fileName).Import(file);
+        }
+
+        private Importer CreateImporter(FileNames fileName)
+        {
+            Importer service = (Importer)Activator.CreateInstance(_fileImporters[fileName]);
+            service.DataContext = _dataContext;
+            return service;
+        }
+
     }
 }

@@ -41,7 +41,7 @@ namespace SupplyWebApp
             Assembly.GetExecutingAssembly()
                     .GetTypes()
                     .Where(t => String.Equals(t.Namespace, "SupplyWebApp.Services", StringComparison.Ordinal))
-                    .Where(t => t.IsPublic && !t.IsAbstract && !t.Name.Equals("FileImporter"))
+                    .Where(t => t.IsPublic && !t.IsAbstract && !t.Name.Equals("ImportService"))
                     .ToList()
                     .ForEach(t => t.GetMethod("RegisterImporter").Invoke(null, null));
         }

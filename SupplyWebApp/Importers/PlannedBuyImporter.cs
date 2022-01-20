@@ -16,21 +16,21 @@ using System.Threading.Tasks;
 
 namespace SupplyWebApp.Services
 {
-    public class SalesForecastImporter : ImportService
+    public class PlannedBuyImporter : Importer
     {
-        public SalesForecastImporter()
+        public PlannedBuyImporter()
         {
             _hostingEnvironment = new HostingEnvironment { EnvironmentName = Environments.Development };
         }
 
         public static void RegisterImporter()
         {
-            FileImporter.RegisterImporter(Enums.FileNames.F_01, typeof(SalesForecastImporter));
+            ImportService.RegisterImporter(Enums.FileNames.F_03, typeof(PlannedBuyImporter));
         }
 
         public override void Import(IFormFile file)
         {
-            SalesForecast salesForecast;
+            PlannedBuy plannedBuy;
             string message = "";
 
             try
@@ -60,25 +60,25 @@ namespace SupplyWebApp.Services
 
                         while (_reader.Read())
                         {
-                            salesForecast = new SalesForecast
+                            plannedBuy = new PlannedBuy
                             {
                                 Year = (int)_reader.GetDouble(0),
                                 Month = (int)_reader.GetDouble(1),
                                 Location = _reader.GetString(2)
                             };
 
-                            var salesForecastFromDatabase = DataContext.SalesForecast
-                                .Where(sf => sf.Year == salesForecast.Year
-                                && sf.Month == salesForecast.Month
-                                && sf.Location.Equals(salesForecast.Location)).FirstOrDefault();
+                            var plannedBuyFromDatabase = DataContext.PlannedBuy
+                                .Where(sf => sf.Year == plannedBuy.Year
+                                && sf.Month == plannedBuy.Month
+                                && sf.Location.Equals(plannedBuy.Location)).FirstOrDefault();
 
-                            if (salesForecastFromDatabase != null)
+                            if (plannedBuyFromDatabase != null)
                             {
-                                salesForecastFromDatabase.Amount = salesForecast.Amount;
+                                plannedBuyFromDatabase.Amount = plannedBuy.Amount;
                             }
                             else
                             {
-                                DataContext.SalesForecast.Add(salesForecast);
+                                DataContext.PlannedBuy.Add(plannedBuy);
                             }
 
                             int output = DataContext.SaveChanges();

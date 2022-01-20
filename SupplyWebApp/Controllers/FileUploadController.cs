@@ -33,7 +33,7 @@ namespace SupplyWebApp.Controllers
             var formData = Request.Body;
             string message = "";
 
-            FileImporter fileImporter = new FileImporter(_dataContext);
+            ImportService fileImporter = new ImportService(_dataContext);
 
             string typeOfFile = Request.Query["typeOfFile"].ToString();
 

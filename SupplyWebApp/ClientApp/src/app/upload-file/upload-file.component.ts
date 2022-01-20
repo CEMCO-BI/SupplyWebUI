@@ -37,13 +37,16 @@ export class UploadFileComponent implements OnInit {
 
  openDatePicker() {
    //this.display = true;
-   this.display = !this.display;
+   this.display = true;
+   this.InputVar.nativeElement.value = "";
+    this.data = [[], []];
+    this.header = [[], []];
    
  }
   reset() {
     // We will clear the value of the input 
     // field using the reference variable.
-
+    this.display = false
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
     this.header = [[], []];

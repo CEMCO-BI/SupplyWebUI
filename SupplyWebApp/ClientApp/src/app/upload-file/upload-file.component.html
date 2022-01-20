@@ -11,6 +11,7 @@
       </div>
 
       <div class="float-child2">
+        <input [(ngModel)]="typeOfFile" type="radio" value="F_02" name="cru" (click)="openDatePicker()">
         <input [(ngModel)]="typeOfFile" type="radio" value="F_02" name="fileTypeRadioButton" id="cru" (change)="reset()" (click)="openDatePicker()">
         <label for="cru">CRU Pricing</label>
 

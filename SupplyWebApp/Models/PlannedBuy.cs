@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SupplyWebApp.Models
 {
-    [Table("PlannedBuy", Schema = "Upload")]
+    [Table("PlannedBuy", Schema = "dbo")]
 
     public class PlannedBuy
     {

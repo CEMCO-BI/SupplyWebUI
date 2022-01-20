@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using static SupplyWebApp.Helpers.Enums;
 using Microsoft.Extensions.Configuration;
 using ExcelDataReader;
+using SupplyWebApp.Models;
 
 namespace SupplyWebApp.Services
 {
@@ -18,10 +19,12 @@ namespace SupplyWebApp.Services
         protected IHostEnvironment _hostingEnvironment;
         protected IExcelDataReader _reader;
         protected int _dataStartRow = 2;
+        protected ImportResult _importResult = new ImportResult();
 
-        public virtual void Import(IFormFile file)
+        public virtual ImportResult Import(IFormFile file)
         {
-
+            _importResult.Successful = true;
+            return _importResult;
         }
 
         public void AdvanceToDataRow()

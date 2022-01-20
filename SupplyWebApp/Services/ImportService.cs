@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SupplyWebApp.Data;
+using SupplyWebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,9 @@ namespace SupplyWebApp.Services
             _fileImporters.Add(file, reportImporter);
         }
 
-        public void Import(FileNames fileName, IFormFile file)
+        public ImportResult Import(FileNames fileName, IFormFile file)
         {
-            CreateImporter(fileName).Import(file);
+            return CreateImporter(fileName).Import(file);
         }
 
         private Importer CreateImporter(FileNames fileName)

@@ -30,100 +30,73 @@ namespace SupplyWebApp.Services
 
         public override void Import(IFormFile file)
         {
-            DataSet dataSetFromExcel = new DataSet();
-            IExcelDataReader reader = null;
+            SalesForecast salesForecast;
             string message = "";
 
             try
             {
-                string path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location.Substring(0, Assembly.GetEntryAssembly().Location.IndexOf("bin\\"))), Constants.FILE_UPLOAD_FOLDER);
-
-                if (!Directory.Exists(path))
+                if (file != null && file.Length > 0)
                 {
-                    Directory.CreateDirectory(path);
-                }
-
-                if (file.Length > 0)
-                {
-                    string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    string fullPath = Path.Combine(path, fileName);
-
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    using (var stream = new MemoryStream())
                     {
                         file.CopyTo(stream);
 
-                        if (file != null)
+                        stream.Position = 0;
+
+                        if (file.FileName.EndsWith(Constants.FILE_EXTENSION_XLS))
                         {
-                            if (file.FileName.EndsWith(".xls"))
-                            {
-                                reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                            }
-                            else if (file.FileName.EndsWith(".xlsx"))
-                            {
-                                reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                            }
-                            else
-                            {
-                                message = "The file format is not supported.";
-                            }
-
-                            dataSetFromExcel = reader.AsDataSet();
-                            reader.Close();
-
-                            if (dataSetFromExcel != null && dataSetFromExcel.Tables.Count > 0)
-                            {
-                                DataTable dtSalesForecast = dataSetFromExcel.Tables[0];
-
-                                SalesForecast salesForecast;
-
-                                for (int i = 2; i < dtSalesForecast.Rows.Count; i++)
-                                {
-
-                                    salesForecast = new SalesForecast
-                                    {
-                                        Year = Convert.ToInt32(dtSalesForecast.Rows[i][0]),
-                                        Month = Convert.ToInt32(dtSalesForecast.Rows[i][1]),
-                                        Location = Convert.ToString(dtSalesForecast.Rows[i][2]),
-                                        Amount = Convert.ToInt64(dtSalesForecast.Rows[i][3])
-                                    };
-
-                                    var salesForecastFromDatabase = DataContext.SalesForecast
-                                        .Where(sf => sf.Year == salesForecast.Year
-                                        && sf.Month == salesForecast.Month
-                                        && sf.Location.Equals(salesForecast.Location)).FirstOrDefault();
-
-                                    if (salesForecastFromDatabase != null)
-                                    {
-                                        salesForecastFromDatabase.Amount = salesForecast.Amount;
-                                    }
-                                    else
-                                    {
-                                        DataContext.SalesForecast.Add(salesForecast);
-                                    }
-                                }
-
-                                int output = DataContext.SaveChanges();
-
-                                if (output > 0)
-                                {
-                                    message = "The Excel file has been successfully uploaded.";
-                                }
-                                else
-                                {
-                                    message = "Something Went Wrong!, The Excel file uploaded has fiald.";
-                                }
-                            }
-                            else
-                            {
-                                message = "Selected file is empty.";
-                                //return HttpContext.Response.StatusCode = 500 ;
-                            }
+                            _reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                        }
+                        else if (file.FileName.EndsWith(Constants.FILE_EXTENSION_XLSX))
+                        {
+                            _reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
                         }
                         else
                         {
-                            message = "Invalid File.";
+                            message = "The file format is not supported.";
+                        }
+
+                        AdvanceToDataRow();
+
+                        while (_reader.Read())
+                        {
+                            salesForecast = new SalesForecast
+                            {
+                                Year = (int)_reader.GetDouble(0),
+                                Month = (int)_reader.GetDouble(1),
+                                Location = _reader.GetString(2)
+                            };
+
+                            var salesForecastFromDatabase = DataContext.SalesForecast
+                                .Where(sf => sf.Year == salesForecast.Year
+                                && sf.Month == salesForecast.Month
+                                && sf.Location.Equals(salesForecast.Location)).FirstOrDefault();
+
+                            if (salesForecastFromDatabase != null)
+                            {
+                                salesForecastFromDatabase.Amount = salesForecast.Amount;
+                            }
+                            else
+                            {
+                                DataContext.SalesForecast.Add(salesForecast);
+                            }
+
+                            int output = DataContext.SaveChanges();
+
+                            if (output > 0)
+                            {
+                                message = "The Excel file has been successfully uploaded.";
+                            }
+                            else
+                            {
+                                message = "Something Went Wrong!, The Excel file uploaded has fiald.";
+                            }
                         }
                     }
+                }
+                else
+                {
+                    message = "Invalid or Empty File.";
                 }
             }
             catch (Exception ex)

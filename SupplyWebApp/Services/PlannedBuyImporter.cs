@@ -76,7 +76,7 @@ namespace SupplyWebApp.Services
 
                                 PlannedBuy plannedBuy;
 
-                                for (int i = 2; i < dtSalesForecast.Rows.Count; i++)
+                                for (int i = _dataStartRow; i < dtSalesForecast.Rows.Count; i++)
                                 {
 
                                     plannedBuy = new PlannedBuy

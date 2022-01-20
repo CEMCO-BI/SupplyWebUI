@@ -20,6 +20,9 @@ export class UploadFileComponent implements OnInit {
 
   //type of file
   typeOfFile: string = "F_01";
+  display: boolean = false;
+  to: string = '2022-01-01'; 
+  from: string = '2022-01-01';
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
     this.baseUrl = baseUrl;
@@ -29,6 +32,12 @@ export class UploadFileComponent implements OnInit {
     
   };
 
+
+ openDatePicker() {
+   //this.display = true;
+   this.display = !this.display;
+   
+ }
   reset() {
     // We will clear the value of the input 
     // field using the reference variable.
@@ -38,6 +47,11 @@ export class UploadFileComponent implements OnInit {
   }
 
   upload(files) {
+    
+    console.log(this.from);
+    console.log(this.to);
+
+
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
       return;
@@ -51,7 +65,7 @@ export class UploadFileComponent implements OnInit {
 
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
       reportProgress: true,
-      params: new HttpParams().set('typeOfFile', this.typeOfFile)
+      params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from',this.from).set('to',this.to)
     });
 
     this.http.request(uploadReq).subscribe(event => {

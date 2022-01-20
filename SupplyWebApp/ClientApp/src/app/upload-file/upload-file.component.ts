@@ -55,10 +55,12 @@ export class UploadFileComponent implements OnInit {
     });
 
     this.http.request(uploadReq).subscribe(event => {
+      console.log(event);
       if (event instanceof HttpResponse) {
-        if (event.body && event.status == 200)
-          //this.toastr.success("File upload successful.", "Response", { positionClass: 'toast-bottom-center' });
-          console.log(event);
+        if (event.status == 200)
+          this.toastr.warning("", " Uploading ...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
+        setTimeout(() => this.toastr.success("", " Uploaded successfully", { positionClass: 'toast-bottom-center', timeOut: 500, progressBar: false }), 2500);
+
       }
     });
   }

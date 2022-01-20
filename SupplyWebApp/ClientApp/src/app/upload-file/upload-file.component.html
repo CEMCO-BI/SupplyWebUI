@@ -1,51 +1,54 @@
 <form (ngSubmit)="upload(file.files)">
 
-  <div class="form-group">
-    <h5>Select File Type</h5>
-    <div class="float-container">
-      <!-- there can be 2 ways of fetching: 1. the value you can just use id for div and use id.value and pass that value using a function
-      and set that value as this.typeof = val -->
-      <div class="float-child1">
-        <input [(ngModel)]="typeOfFile" type="radio" value="F_01" name="salesForecast" checked (change)="reset()"/>
-        <label for="salesForecast">Sales Forecast</label>
+    <div class="form-group">
+      <h5>Select File Type</h5>
+      <div class="float-container">
+        <!-- there can be 2 ways of fetching: 1. the value you can just use id for div and use id.value and pass that value using a function
+        and set that value as this.typeof = val -->
+        <div class="float-child1">
+          <input [(ngModel)]="typeOfFile" type="radio" value="F_01" name="salesForecast" checked (change)="reset()"/>
+          <label for="salesForecast">Sales Forecast</label>
+        </div>
+  
+        <div class="float-child2">
+          <input [(ngModel)]="typeOfFile" type="radio" value="F_02" name="cru" (change)="reset()">
+          <label for="cru">CRU Pricing</label>
+        </div>
+  
+        <div class="float-child3">
+          <input [(ngModel)]="typeOfFile" type="radio" value="F_03" name="plannedBuy" (change)="reset()">
+          <label for="plannedBuy">Planned Buy/ Transfers</label>
+        </div>
+  
+        <!--filetype : {{typeOfFile}}-->
       </div>
-
-      <div class="float-child2">
-        <input [(ngModel)]="typeOfFile" type="radio" value="F_02" name="cru" (change)="reset()">
-        <label for="cru">CRU Pricing</label>
+  
+      <label for="picture">Select File</label>
+      <div class="custom-file">
+        <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)" />
+        <label class="custom-file-label" for="customFile">Choose file</label>
       </div>
-
-      <div class="float-child3">
-        <input [(ngModel)]="typeOfFile" type="radio" value="F_03" name="plannedBuy" (change)="reset()">
-        <label for="plannedBuy">Planned Buy/ Transfers</label>
+    </div>
+    <div class="table-wrap">
+      <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
+        <tbody>
+          <tr *ngFor="let row of data">
+            <td *ngFor="let cell of row">
+              {{cell}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="!data">
+        <span>No data to show</span>
       </div>
-
-      <!--filetype : {{typeOfFile}}-->
     </div>
-
-    <label for="picture">Select File</label>
-    <div class="custom-file">
-      <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)" />
-      <label class="custom-file-label" for="customFile">Choose file</label>
-    </div>
-  </div>
-  <div class="table-wrap">
-    <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
-      <tbody>
-        <tr *ngFor="let row of data">
-          <td *ngFor="let cell of row">
-            {{cell}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="!data">
-      <span>No data to show</span>
-    </div>
-  </div>
-  <br />
-
-  <input type="submit" class="btn btn-primary" value="Upload" />
-  <input type="reset" class="btn btn-default" value="Cancel" (click)="reset()" />
-
-</form>
+    <br />
+  
+   
+      <input type="submit" class="btn btn-primary" value="Upload" />
+      <input type="reset" class="btn btn-default" value="Cancel" (click)="reset()" />
+  
+    
+  </form>
+  

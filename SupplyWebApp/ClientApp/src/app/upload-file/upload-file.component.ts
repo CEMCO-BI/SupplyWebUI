@@ -59,7 +59,10 @@ export class UploadFileComponent implements OnInit {
       if (event instanceof HttpResponse) {
         if (event.status == 200)
           this.toastr.warning("", " Uploading ...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
-        setTimeout(() => this.toastr.success("", " Uploaded successfully", { positionClass: 'toast-bottom-center', timeOut: 500, progressBar: false }), 2500);
+        setTimeout(() => {
+          this.toastr.success("", " Uploaded successfully", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+          this.reset();
+        }, 2500);
 
       }
     });

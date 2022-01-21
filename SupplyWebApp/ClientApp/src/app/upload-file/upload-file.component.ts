@@ -125,7 +125,7 @@ export class UploadFileComponent implements OnInit {
 
       isValidFile = this.checkFileValidation();
       if (!isValidFile) {
-        this.toastr.error('Please select appropriate file for File Type');
+        this.toastr.error('Their is column mismatch in selected file. Please select appropriate file for File Type');
         this.reset();
       }
       console.log(isValidFile);

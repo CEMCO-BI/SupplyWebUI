@@ -52,7 +52,7 @@ namespace SupplyWebApp.Controllers
 
             if (!importResult.Successful)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, importResult.Message);
+                return this.StatusCode(StatusCodes.Status500InternalServerError, importResult);
             }
             else
             {

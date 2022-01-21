@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SupplyWebApp.Models
 {
-    [Table("PlannedBuy", Schema = "dbo")]
+    [Table("PlannedBuy", Schema = "Upload")]
 
     public class PlannedBuy
     {
@@ -18,6 +18,6 @@ namespace SupplyWebApp.Models
         public int Year { get; set; }
         public int Month { get; set; }
         public string Location { get; set; }
-        public float Amount { get; set; }
+        public double Amount { get; set; }
     }
 }

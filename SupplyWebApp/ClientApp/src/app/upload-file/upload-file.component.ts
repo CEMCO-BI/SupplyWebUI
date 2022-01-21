@@ -48,6 +48,8 @@ export class UploadFileComponent implements OnInit {
   reset() {
     // We will clear the value of the input 
     // field using the reference variable.
+    document.getElementById("uploadbut").blur();
+    document.getElementById("resetbut").blur();
     this.display = false
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
@@ -55,7 +57,7 @@ export class UploadFileComponent implements OnInit {
   }
 
   upload(files) {
-    this.toastr.info("Please wait! While your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
+    
 
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
@@ -74,6 +76,7 @@ export class UploadFileComponent implements OnInit {
     });
 
     this.http.request(uploadReq).subscribe(event => {
+      this.toastr.info("Please wait! While your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
       if (event instanceof HttpResponse) {
         console.log(event);
         if (event.status == 200) {
@@ -83,7 +86,7 @@ export class UploadFileComponent implements OnInit {
           }, 2500);
         } else if (event.status == 500) {
           setTimeout(() => {
-            this.toastr.success("Upload failed due to internal server error, please contact support.", " Uploaded failed...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+            this.toastr.error("Upload failed due to internal server error, please contact support.", " Uploaded failed...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
           }, 2500);
         }
       }

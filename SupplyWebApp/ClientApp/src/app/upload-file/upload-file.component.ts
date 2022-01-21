@@ -56,10 +56,6 @@ export class UploadFileComponent implements OnInit {
 
   upload(files) {
     
-    console.log(this.from);
-    console.log(this.to);
-
-
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
       return;
@@ -77,7 +73,6 @@ export class UploadFileComponent implements OnInit {
     });
 
     this.http.request(uploadReq).subscribe(event => {
-      console.log(event);
       if (event instanceof HttpResponse) {
         if (event.status == 200)
           this.toastr.info("", " Uploading ...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
@@ -85,7 +80,6 @@ export class UploadFileComponent implements OnInit {
           this.toastr.success("", " Uploaded successfully", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
           this.reset();
         }, 2500);
-
       }
     });
   }
@@ -108,7 +102,6 @@ export class UploadFileComponent implements OnInit {
     reader.onload = (e: any) => {
       let isValidFile: boolean
       
-
       const bstr: string = e.target.result;
 
       const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
@@ -117,7 +110,7 @@ export class UploadFileComponent implements OnInit {
 
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
-      this.sheet = (XLSX.utils.sheet_to_json(ws, { header: 1 }));
+      this.sheet = (XLSX.utils.sheet_to_json(ws, { header: 1, raw:false }));
       var headerEnd = this.typeOfFile == GlobalConstants.F_02 ? 8 : 1
 
       this.data = this.sheet.slice(headerEnd);
@@ -125,10 +118,9 @@ export class UploadFileComponent implements OnInit {
 
       isValidFile = this.checkFileValidation();
       if (!isValidFile) {
-        this.toastr.error('Please select appropriate file for File Type');
+        this.toastr.error('Their is column mismatch in selected file. Please select appropriate file for File Type');
         this.reset();
       }
-      console.log(isValidFile);
     };
 
     reader.readAsBinaryString(target.files[0]);

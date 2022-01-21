@@ -31,7 +31,7 @@ namespace SupplyWebApp.Services
         public override ImportResult Import(IFormFile file)
         {
             PlannedBuy plannedBuy;
-            string message = "";
+            
 
             try
             {
@@ -87,22 +87,28 @@ namespace SupplyWebApp.Services
 
                             if (output > 0)
                             {
-                                message = "The Excel file has been successfully uploaded.";
+                                _importResult.Successful = true;
+                                _importResult.Message = "The Excel file has been successfully uploaded.";
+                                
                             }
                             else
                             {
-                                message = "Something Went Wrong!, The Excel file uploaded has fiald.";
+                                _importResult.Successful = false;
+                                _importResult.Message = "Something Went Wrong!, The Excel file uploaded has failed.";
                             }
                         }
                     }
                 }
                 else
                 {
-                    message = "Invalid or Empty File.";
+                    _importResult.Successful = false;
+                    _importResult.Message = "Invalid or Empty File.";
                 }
             }
             catch (Exception ex)
             {
+                 _importResult.Successful = false;
+                _importResult.Message = "Error occurred - " + ex.Message;
             }
             return _importResult;
         }

@@ -3,6 +3,7 @@ import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angula
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { ToastrService } from 'ngx-toastr';
+import { GlobalConstants } from '../common/global-constant';
 
 @Component({
   selector: 'app-upload-file',
@@ -105,7 +106,6 @@ export class UploadFileComponent implements OnInit {
     const reader: FileReader = new FileReader();
 
     reader.onload = (e: any) => {
-      let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount'], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount']];
       let isValidFile: boolean
       
 
@@ -118,46 +118,50 @@ export class UploadFileComponent implements OnInit {
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
       this.sheet = (XLSX.utils.sheet_to_json(ws, { header: 1 }));
-      var headerEnd = this.typeOfFile == "F_02" ? 8 : 1
+      var headerEnd = this.typeOfFile == GlobalConstants.F_02 ? 8 : 1
 
       this.data = this.sheet.slice(headerEnd);
       this.header = this.sheet.slice(0, headerEnd);
 
-      if (this.typeOfFile == "F_01" && this.fileName.indexOf("Sales Forecast") > 0) {
-        for (var i = 0; i < 3; i++) {
-          if (this.header[0][i] == fileColumnHeader[0][i])
-            isValidFile = true;
-          else
-            isValidFile = false
-        }
-      }
-      else if (this.typeOfFile == "F_02" && this.fileName.indexOf("CRU Pricing") > 0) {
-        for (var i = 0; i < 5; i++) {
-          if (this.header[0][i] == fileColumnHeader[1][i])
-            isValidFile = true;
-          else
-            isValidFile = false
-        }
-      }
-      else if (this.typeOfFile == "F_03" && this.fileName.indexOf("Planned Buy") > 0) {
-        for (var i = 0; i < 3; i++) {
-          if (this.header[0][i] == fileColumnHeader[2][i])
-            isValidFile = true;
-          else
-            isValidFile = false
-        }
-      }
-
+      isValidFile = this.checkFileValidation();
       if (!isValidFile) {
         this.toastr.error('Please select appropriate file for File Type');
         this.reset();
       }
-      
       console.log(isValidFile);
-      
     };
 
     reader.readAsBinaryString(target.files[0]);
+  }
 
+  checkFileValidation(): boolean {
+    let isValidFile: boolean
+    let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount'], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount']];
+
+    if (this.typeOfFile == GlobalConstants.F_01 && this.fileName.indexOf(GlobalConstants.SalesForecast) > 0) {
+      for (var i = 0; i < 3; i++) {
+        if (this.header[0][i] == fileColumnHeader[0][i])
+          isValidFile = true;
+        else
+          isValidFile = false
+      }
+    }
+    else if (this.typeOfFile == GlobalConstants.F_02 && this.fileName.indexOf(GlobalConstants.CRUPricing) > 0) {
+      for (var i = 0; i < 5; i++) {
+        if (this.header[0][i] == fileColumnHeader[1][i])
+          isValidFile = true;
+        else
+          isValidFile = false
+      }
+    }
+    else if (this.typeOfFile == GlobalConstants.F_03 && this.fileName.indexOf(GlobalConstants.PlannedBuy) > 0) {
+      for (var i = 0; i < 3; i++) {
+        if (this.header[0][i] == fileColumnHeader[2][i])
+          isValidFile = true;
+        else
+          isValidFile = false
+      }
+    }
+    return isValidFile;
   }
 }

@@ -95,7 +95,7 @@ namespace SupplyWebApp.Services
                         }
                         else
                         {
-                            message = "Something Went Wrong!, The Excel file uploaded has field.";
+                            message = "Something Went Wrong!, The Excel file upload has failed.";
                         }
                     }
                 }

@@ -12,12 +12,14 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { UploadFileComponent } from './upload-file/upload-file.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
     UploadFileComponent
+    
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,6 +28,7 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: UploadFileComponent, pathMatch: 'full' }
+      //{ path: 'crupricing', component: CRUPricingComponent }
      // { path: 'upload-file', component: UploadFileComponent }
     ]),
     BrowserAnimationsModule,

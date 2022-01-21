@@ -28,10 +28,9 @@ namespace SupplyWebApp.Services
             ImportService.RegisterImporter(Enums.FileNames.F_01, typeof(SalesForecastImporter));
         }
 
-        public override void Import(IFormFile file)
+        public override ImportResult Import(IFormFile file)
         {
             SalesForecast salesForecast;
-            string message = "";
 
             try
             {
@@ -53,7 +52,7 @@ namespace SupplyWebApp.Services
                         }
                         else
                         {
-                            message = "The file format is not supported.";
+                            _importResult.Error = "The file format is not supported.";
                         }
 
                         AdvanceToDataRow();
@@ -85,23 +84,29 @@ namespace SupplyWebApp.Services
 
                             if (output > 0)
                             {
-                                message = "The Excel file has been successfully uploaded.";
+                                _importResult.Successful = true;
+                                _importResult.Error = "The Excel file has been successfully uploaded.";
                             }
                             else
                             {
-                                message = "Something Went Wrong!, The Excel file uploaded has fiald.";
+                                _importResult.Successful = false;
+                                _importResult.Error = "Something Went Wrong!, The Excel file uploaded has fiald.";
                             }
                         }
                     }
                 }
                 else
                 {
-                    message = "Invalid or Empty File.";
+                    _importResult.Successful = false;
+                    _importResult.Error = "Invalid or Empty File.";
                 }
             }
             catch (Exception ex)
             {
+                _importResult.Successful = false;
+                _importResult.Error = "Error occurred - " + ex.Message;
             }
+            return _importResult;
         }
     }
 }

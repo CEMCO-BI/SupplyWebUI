@@ -1,37 +1,49 @@
-<form (ngSubmit)="upload(file.files)">
+<form class="form-horizontal" (ngSubmit)="upload(file.files)">
 
-    <div class="form-group">
-      <h5>Select File Type</h5>
-      <div class="float-container">
-        <!-- there can be 2 ways of fetching: 1. the value you can just use id for div and use id.value and pass that value using a function
-        and set that value as this.typeof = val -->
-        <div class="float-child1">
-          <input [(ngModel)]="typeOfFile" type="radio" value="F_01" name="salesForecast" checked (change)="reset()"/>
-          <label for="salesForecast">Sales Forecast</label>
-        </div>
-  
-        <div class="float-child2">
-          <input [(ngModel)]="typeOfFile" type="radio" value="F_02" name="cru" (change)="reset()">
-          <label for="cru">CRU Pricing</label>
-        </div>
-  
-        <div class="float-child3">
-          <input [(ngModel)]="typeOfFile" type="radio" value="F_03" name="plannedBuy" (change)="reset()">
-          <label for="plannedBuy">Planned Buy/ Transfers</label>
-        </div>
-  
-        <!--filetype : {{typeOfFile}}-->
+  <div class="form-group">
+    <label class="control-label mr-1">Select File type:</label>
+    <!-- there can be 2 ways of fetching: 1. the value you can just use id for div and use id.value and pass that value using a function
+  and set that value as this.typeof = val -->
+    <div class="custom-control custom-radio custom-control-inline">
+      <input [(ngModel)]="typeOfFile" class="custom-control-input" type="radio" value="F_01" name="fileTypeRadioButton" id="salesForecast" checked (change)="reset()" />
+      <label class="custom-control-label" for="salesForecast">Sales Forecast</label>
+    </div>
+
+    <div class="custom-control custom-radio custom-control-inline">
+      <input [(ngModel)]="typeOfFile" class="custom-control-input" type="radio" value="F_02" id="cru" name="fileTypeRadioButton" (click)="openDatePicker()">
+      <label class="custom-control-label" for="cru">CRU Pricing</label>
+    </div>
+
+    <div class="custom-control custom-radio custom-control-inline">
+      <input [(ngModel)]="typeOfFile" class="custom-control-input" type="radio" name="fileTypeRadioButton" value="F_03" id="plannedBuy" (change)="reset()">
+      <label class="custom-control-label" for="plannedBuy">Planned Buy/Transfers</label>
+    </div>
+
+    <div class="custom-file">
+      <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)" class="form-control-file" />
+      <label class="custom-file-label" for="customFile">Choose file</label>
+    </div>
+
+    <div id="datepicker-parent" *ngIf="display">
+      <div id="datepicker-child1">
+        <label for="from">From:</label>
+        <input class="form-control" [(ngModel)]="from" type="date" value=$event.target.value name="from">
       </div>
-  
-      <label for="picture">Select File</label>
-      <div class="custom-file">
-        <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)" />
-        <label class="custom-file-label" for="customFile">Choose file</label>
+      <div id="datepicker-child2">
+        <label for="to">To:</label>
+        <input class="form-control" [(ngModel)]="to" type="date" value=$event.target.value name="to">
       </div>
     </div>
+
     <div class="table-wrap">
       <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
         <tbody>
+          <tr *ngFor="let row of header">
+            <th *ngFor="let title of row">
+              {{title}}
+            </th>
+          </tr>
+
           <tr *ngFor="let row of data">
             <td *ngFor="let cell of row">
               {{cell}}
@@ -39,16 +51,14 @@
           </tr>
         </tbody>
       </table>
-      <div *ngIf="!data">
-        <span>No data to show</span>
-      </div>
     </div>
-    <br />
-  
-   
-      <input type="submit" class="btn btn-primary" value="Upload" />
-      <input type="reset" class="btn btn-default" value="Cancel" (click)="reset()" />
-  
     
-  </form>
-  
+    <br />
+
+    <div class="text-center">
+      <input type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
+      <input type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+    </div>
+  </div>
+
+</form>

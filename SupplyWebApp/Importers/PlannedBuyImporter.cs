@@ -28,7 +28,7 @@ namespace SupplyWebApp.Services
             ImportService.RegisterImporter(Enums.FileNames.F_03, typeof(PlannedBuyImporter));
         }
 
-        public override void Import(IFormFile file)
+        public override ImportResult Import(IFormFile file)
         {
             PlannedBuy plannedBuy;
             string message = "";
@@ -102,6 +102,7 @@ namespace SupplyWebApp.Services
             catch (Exception ex)
             {
             }
+            return _importResult;
         }
     }
 }

@@ -5,7 +5,6 @@
 .float-child {
     float: left;
     width: 50%;
-    background-color: aqua;
 }
 
 .float-child1 {
@@ -23,3 +22,12 @@
   width: 33%;
 }
 
+.center {
+  margin: auto;
+  width: 50%;
+}
+
+.table-wrap {
+  height: 400px;
+  overflow-y: auto;
+}

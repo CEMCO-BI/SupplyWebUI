@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace SupplyWebApp.Models
 {
+    [Table("CRUPricing", Schema = "dbo")]
+
     public class CRUPricing
     {
         [Key]

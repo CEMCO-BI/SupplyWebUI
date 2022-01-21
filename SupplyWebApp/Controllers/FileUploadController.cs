@@ -29,9 +29,8 @@ namespace SupplyWebApp.Controllers
         [Route("upload")]
         public async Task<IActionResult> Upload()
         {
+            ImportResult importResult = null;
             var file = Request.Form.Files[0];
-            var formData = Request.Body;
-            string message = "";
 
             ImportService fileImporter = new ImportService(_dataContext);
 
@@ -40,18 +39,18 @@ namespace SupplyWebApp.Controllers
             switch (typeOfFile)
             {
                 case "F_01":
-                    fileImporter.Import(Enums.FileNames.F_01, file);
+                    importResult = fileImporter.Import(Enums.FileNames.F_01, file);
                     break;
                 case "F_02":
-                    fileImporter.Import(Enums.FileNames.F_02, file);
+                    importResult = fileImporter.Import(Enums.FileNames.F_02, file);
                     break;
                 case "F_03":
-                    fileImporter.Import(Enums.FileNames.F_03, file);
+                    importResult = fileImporter.Import(Enums.FileNames.F_03, file);
                     break;
             }
 
 
-            return Ok();
+            return Ok(importResult);
         }
     }
 }

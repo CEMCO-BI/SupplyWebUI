@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace SupplyWebApp.Models
 {
+    [Table("SalesForecast", Schema = "dbo")]
+
     public class SalesForecast
     {
         [Key]

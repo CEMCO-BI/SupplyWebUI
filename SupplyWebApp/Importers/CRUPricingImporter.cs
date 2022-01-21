@@ -29,7 +29,7 @@ namespace SupplyWebApp.Services
             ImportService.RegisterImporter(Enums.FileNames.F_02, typeof(CRUPricingImporter));
         }
 
-        public override void Import(IFormFile file)
+        public override ImportResult Import(IFormFile file)
         {
             CRUPricing cruPricing;
             string message = "";
@@ -107,6 +107,7 @@ namespace SupplyWebApp.Services
             catch (Exception ex)
             {
             }
+            return _importResult;
         }
     }
 }

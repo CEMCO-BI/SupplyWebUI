@@ -64,7 +64,8 @@ namespace SupplyWebApp.Services
                             {
                                 Year = (int)_reader.GetDouble(0),
                                 Month = (int)_reader.GetDouble(1),
-                                Location = _reader.GetString(2)
+                                Location = _reader.GetString(2),
+                                Amount = _reader.GetDouble(3)
                             };
 
                             var salesForecastFromDatabase = DataContext.SalesForecast

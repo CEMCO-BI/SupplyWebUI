@@ -36,7 +36,6 @@ export class UploadFileComponent implements OnInit {
 
   };
 
-
   openDatePicker() {
     //this.display = true;
     this.display = true;
@@ -48,8 +47,8 @@ export class UploadFileComponent implements OnInit {
   reset() {
     // We will clear the value of the input 
     // field using the reference variable.
-    document.getElementById("uploadbut").blur();
-    document.getElementById("resetbut").blur();
+    document.getElementById("btnUpload").blur();
+    document.getElementById("btnReset").blur();
     this.display = false
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
@@ -57,8 +56,6 @@ export class UploadFileComponent implements OnInit {
   }
 
   upload(files) {
-    
-
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
       return;

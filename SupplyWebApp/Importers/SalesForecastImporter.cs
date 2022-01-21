@@ -52,7 +52,8 @@ namespace SupplyWebApp.Services
                         }
                         else
                         {
-                            _importResult.Error = "The file format is not supported.";
+                            _importResult.Successful = false;
+                            _importResult.Message = "The file format is not supported.";
                         }
 
                         AdvanceToDataRow();
@@ -85,12 +86,12 @@ namespace SupplyWebApp.Services
                             if (output > 0)
                             {
                                 _importResult.Successful = true;
-                                _importResult.Error = "The Excel file has been successfully uploaded.";
+                                _importResult.Message = "The Excel file has been successfully uploaded.";
                             }
                             else
                             {
                                 _importResult.Successful = false;
-                                _importResult.Error = "Something Went Wrong!, The Excel file uploaded has fiald.";
+                                _importResult.Message = "Something Went Wrong!, The Excel file uploaded has failed.";
                             }
                         }
                     }
@@ -98,14 +99,15 @@ namespace SupplyWebApp.Services
                 else
                 {
                     _importResult.Successful = false;
-                    _importResult.Error = "Invalid or Empty File.";
+                    _importResult.Message = "Invalid or Empty File.";
                 }
             }
             catch (Exception ex)
             {
                 _importResult.Successful = false;
-                _importResult.Error = "Error occurred - " + ex.Message;
+                _importResult.Message = "Error occurred - " + ex.Message;
             }
+
             return _importResult;
         }
     }

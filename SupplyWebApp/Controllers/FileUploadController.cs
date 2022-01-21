@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using SupplyWebApp.Helpers;
 using SupplyWebApp.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace SupplyWebApp.Controllers
 {
@@ -49,8 +50,15 @@ namespace SupplyWebApp.Controllers
                     break;
             }
 
+            if (!importResult.Successful)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, importResult.Message);
+            }
+            else
+            {
+                return Ok(importResult);
+            }
 
-            return Ok(importResult);
         }
     }
 }

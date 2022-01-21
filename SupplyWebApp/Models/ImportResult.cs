@@ -8,6 +8,6 @@ namespace SupplyWebApp.Models
     public class ImportResult
     {
         public bool Successful { get; set; }
-        public string Error { get; set; }
+        public string Message { get; set; }
     }
 }

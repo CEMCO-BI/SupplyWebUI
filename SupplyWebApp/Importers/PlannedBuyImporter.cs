@@ -53,7 +53,8 @@ namespace SupplyWebApp.Services
                         }
                         else
                         {
-                            message = "The file format is not supported.";
+                            _importResult.Successful = false;
+                            _importResult.Message = "The file format is not supported.";
                         }
 
                         AdvanceToDataRow();

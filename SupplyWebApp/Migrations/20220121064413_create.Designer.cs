@@ -10,8 +10,8 @@ using SupplyWebApp.Data;
 namespace SupplyWebApp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220120064858_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220121064413_create")]
+    partial class create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,7 +48,7 @@ namespace SupplyWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CRUPricing");
+                    b.ToTable("CRUPricing","Upload");
                 });
 
             modelBuilder.Entity("SupplyWebApp.Models.PlannedBuy", b =>
@@ -58,8 +58,8 @@ namespace SupplyWebApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
@@ -72,7 +72,7 @@ namespace SupplyWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PlannedBuy");
+                    b.ToTable("PlannedBuy","Upload");
                 });
 
             modelBuilder.Entity("SupplyWebApp.Models.SalesForecast", b =>
@@ -82,8 +82,8 @@ namespace SupplyWebApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
@@ -96,7 +96,7 @@ namespace SupplyWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SalesForecast");
+                    b.ToTable("SalesForecast","Upload");
                 });
 #pragma warning restore 612, 618
         }

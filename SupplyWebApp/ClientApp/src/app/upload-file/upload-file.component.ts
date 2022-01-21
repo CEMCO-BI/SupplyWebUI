@@ -73,14 +73,25 @@ export class UploadFileComponent implements OnInit {
     });
 
     this.http.request(uploadReq).subscribe(event => {
-      if (event instanceof HttpResponse) {
-        if (event.status == 200)
-          this.toastr.info("", " Uploading ...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
-        setTimeout(() => {
-          this.toastr.success("", " Uploaded successfully", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
-          this.reset();
-        }, 2500);
+      console.log(event);
+     
+      if (event instanceof HttpResponse  && event.status == 200) {
+       
+        
+            this.toastr.info("", " Uploading ...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
+            setTimeout(() => {
+              this.toastr.success("", " Uploaded successfully", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+              this.reset();
+            }, 2500);
+      }else{
+       
+        this.toastr.info("","The Upload has failed please try again", {  positionClass: 'toast-bottom-center', progressBar: false, timeOut:2000  });
       }
+      
+          
+       
+
+      
     });
   }
 

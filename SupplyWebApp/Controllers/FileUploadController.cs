@@ -44,7 +44,7 @@ namespace SupplyWebApp.Controllers
             switch (typeOfFile)
             {
                 case "F_01":
-                Console.WriteLine("---------F01----------");
+                
                     importResult = _fileImporter.Import(Enums.FileNames.F_01, file);
                     break;
                 case "F_02":
@@ -57,7 +57,7 @@ namespace SupplyWebApp.Controllers
 
             if (!importResult.Successful)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, importResult);
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "500");
             }
             else
             {

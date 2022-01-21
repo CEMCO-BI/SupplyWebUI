@@ -53,7 +53,8 @@ namespace SupplyWebApp.Services
                         }
                         else
                         {
-                            message = "The file format is not supported.";
+                            _importResult.Successful = false;
+                            _importResult.Message = "The file format is not supported.";
                         }
 
                         AdvanceToDataRow();
@@ -64,7 +65,8 @@ namespace SupplyWebApp.Services
                             {
                                 Year = (int)_reader.GetDouble(0),
                                 Month = (int)_reader.GetDouble(1),
-                                Location = _reader.GetString(2)
+                                Location = _reader.GetString(2),
+                                Amount = _reader.GetDouble(3)
                             };
 
                             var plannedBuyFromDatabase = DataContext.PlannedBuy

@@ -3,12 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SupplyWebApp.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "Upload");
+
             migrationBuilder.CreateTable(
                 name: "CRUPricing",
+                schema: "Upload",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -27,6 +31,7 @@ namespace SupplyWebApp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "PlannedBuy",
+                schema: "Upload",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -34,7 +39,7 @@ namespace SupplyWebApp.Migrations
                     Year = table.Column<int>(nullable: false),
                     Month = table.Column<int>(nullable: false),
                     Location = table.Column<string>(nullable: true),
-                    Amount = table.Column<float>(nullable: false)
+                    Amount = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,6 +48,7 @@ namespace SupplyWebApp.Migrations
 
             migrationBuilder.CreateTable(
                 name: "SalesForecast",
+                schema: "Upload",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -50,7 +56,7 @@ namespace SupplyWebApp.Migrations
                     Year = table.Column<int>(nullable: false),
                     Month = table.Column<int>(nullable: false),
                     Location = table.Column<string>(nullable: true),
-                    Amount = table.Column<float>(nullable: false)
+                    Amount = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,13 +67,16 @@ namespace SupplyWebApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CRUPricing");
+                name: "CRUPricing",
+                schema: "Upload");
 
             migrationBuilder.DropTable(
-                name: "PlannedBuy");
+                name: "PlannedBuy",
+                schema: "Upload");
 
             migrationBuilder.DropTable(
-                name: "SalesForecast");
+                name: "SalesForecast",
+                schema: "Upload");
         }
     }
 }

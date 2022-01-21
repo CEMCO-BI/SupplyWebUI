@@ -30,12 +30,11 @@ namespace SupplyWebApp.Controllers
 
         [HttpPost]
         [Route("upload")]
-        public IActionResult Upload()
+        public async Task<IActionResult> Upload()
         {
             ImportResult importResult = null;
 
             var file = Request.Form.Files[0];
-
             string typeOfFile = Request.Query["typeOfFile"].ToString();
 
             GlobalVars.FromDate = Request.Query["from"].ToString();
@@ -44,7 +43,6 @@ namespace SupplyWebApp.Controllers
             switch (typeOfFile)
             {
                 case "F_01":
-                
                     importResult = _fileImporter.Import(Enums.FileNames.F_01, file);
                     break;
                 case "F_02":
@@ -63,7 +61,6 @@ namespace SupplyWebApp.Controllers
             {
                 return Ok(importResult);
             }
-
         }
     }
 }

@@ -23,7 +23,6 @@ namespace SupplyWebApp.Services
 
         public virtual ImportResult Import(IFormFile file)
         {
-            _importResult.Successful = true;
             return _importResult;
         }
 

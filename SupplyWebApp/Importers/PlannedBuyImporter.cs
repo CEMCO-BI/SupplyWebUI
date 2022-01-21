@@ -82,20 +82,14 @@ namespace SupplyWebApp.Services
                             {
                                 DataContext.PlannedBuy.Add(plannedBuy);
                             }
+                        }
 
-                            int output = DataContext.SaveChanges();
+                        int output = DataContext.SaveChanges();
 
-                            if (output > 0)
-                            {
-                                _importResult.Successful = true;
-                                _importResult.Message = "The Excel file has been successfully uploaded.";
-                                
-                            }
-                            else
-                            {
-                                _importResult.Successful = false;
-                                _importResult.Message = "Something Went Wrong!, The Excel file uploaded has failed.";
-                            }
+                        if (output > 0)
+                        {
+                            _importResult.Successful = true;
+                            _importResult.Message = "The Excel file has been successfully uploaded.";
                         }
                     }
                 }

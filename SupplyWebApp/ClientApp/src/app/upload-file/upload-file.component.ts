@@ -25,22 +25,22 @@ export class UploadFileComponent implements OnInit {
   //type of file
   typeOfFile: string = "F_01";
   display: boolean = false;
-  to: string = '2022-01-01'; 
+  to: string = '2022-01-01';
   from: string = '2022-01-01';
-  
+
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
     this.baseUrl = baseUrl;
   }
 
   ngOnInit(): void {
-    
+
   };
 
 
- openDatePicker() {
-   //this.display = true;
-   this.display = true;
-   this.InputVar.nativeElement.value = "";
+  openDatePicker() {
+    //this.display = true;
+    this.display = true;
+    this.InputVar.nativeElement.value = "";
     this.data = [[], []];
     this.header = [[], []];
   }
@@ -55,7 +55,8 @@ export class UploadFileComponent implements OnInit {
   }
 
   upload(files) {
-    
+    this.toastr.info("Please wait! While your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
+
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
       return;
@@ -69,36 +70,30 @@ export class UploadFileComponent implements OnInit {
 
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
       reportProgress: true,
-      params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from',this.from).set('to',this.to)
+      params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     });
 
     this.http.request(uploadReq).subscribe(event => {
-      console.log(event);
-     
-      if (event instanceof HttpResponse  && event.status == 200) {
-       
-        
-            this.toastr.info("", " Uploading ...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
-            setTimeout(() => {
-              this.toastr.success("", " Uploaded successfully", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
-              this.reset();
-            }, 2500);
-      }else{
-       
-        this.toastr.info("","The Upload has failed please try again", {  positionClass: 'toast-bottom-center', progressBar: false, timeOut:2000  });
+      if (event instanceof HttpResponse) {
+        console.log(event);
+        if (event.status == 200) {
+          setTimeout(() => {
+            this.toastr.success("Your file has been uploaded successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+            this.reset();
+          }, 2500);
+        } else if (event.status == 500) {
+          setTimeout(() => {
+            this.toastr.success("Upload failed due to internal server error, please contact support.", " Uploaded failed...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+          }, 2500);
+        }
       }
-      
-          
-       
-
-      
     });
   }
 
   onFileChange(evt: any, file) {
-    
+
     const target: DataTransfer = <DataTransfer>(evt.target);
- 
+
     if (target.files.length !== 1) {
       this.toastr.error('Cannot upload multiple files');
     }
@@ -112,7 +107,7 @@ export class UploadFileComponent implements OnInit {
 
     reader.onload = (e: any) => {
       let isValidFile: boolean
-      
+
       const bstr: string = e.target.result;
 
       const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
@@ -121,7 +116,7 @@ export class UploadFileComponent implements OnInit {
 
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
-      this.sheet = (XLSX.utils.sheet_to_json(ws, { header: 1, raw:false }));
+      this.sheet = (XLSX.utils.sheet_to_json(ws, { header: 1, raw: false }));
       var headerEnd = this.typeOfFile == GlobalConstants.F_02 ? 8 : 1
 
       this.data = this.sheet.slice(headerEnd);

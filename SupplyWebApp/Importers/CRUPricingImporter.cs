@@ -32,7 +32,7 @@ namespace SupplyWebApp.Services
         public override ImportResult Import(IFormFile file)
         {
             CRUPricing cruPricing;
-           
+
             try
             {
                 if (file != null && file.Length > 0)
@@ -94,13 +94,8 @@ namespace SupplyWebApp.Services
 
                         if (output > 0)
                         {
-                           _importResult.Successful = true;
-                                _importResult.Message = "The Excel file has been successfully uploaded.";
-                        }
-                        else
-                        {
-                            _importResult.Successful = false;
-                                _importResult.Message = "Something Went Wrong!, The Excel file uploaded has failed.";
+                            _importResult.Successful = true;
+                            _importResult.Message = "The Excel file has been successfully uploaded.";
                         }
                     }
                 }

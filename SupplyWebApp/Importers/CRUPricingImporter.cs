@@ -70,20 +70,23 @@ namespace SupplyWebApp.Services
                                 Week5 = Convert.ToDouble(string.IsNullOrWhiteSpace(_reader.GetValue(5)?.ToString()) ? "0" : _reader.GetValue(5).ToString().Replace("-", "0")),
                             };
 
-                            var cruPricingFromDatabase = DataContext.CRUPricing
+                            if (cruPricing.Date >= Convert.ToDateTime(GlobalVars.FromDate) && cruPricing.Date <= Convert.ToDateTime(GlobalVars.ToDate))
+                            {
+                                var cruPricingFromDatabase = DataContext.CRUPricing
                                 .Where(sf => sf.Date == cruPricing.Date).FirstOrDefault();
 
-                            if (cruPricingFromDatabase != null)
-                            {
-                                cruPricingFromDatabase.Week1 = cruPricing.Week1;
-                                cruPricingFromDatabase.Week2 = cruPricing.Week2;
-                                cruPricingFromDatabase.Week3 = cruPricing.Week3;
-                                cruPricingFromDatabase.Week4 = cruPricing.Week4;
-                                cruPricingFromDatabase.Week5 = cruPricing.Week5;
-                            }
-                            else
-                            {
-                                DataContext.CRUPricing.Add(cruPricing);
+                                if (cruPricingFromDatabase != null)
+                                {
+                                    cruPricingFromDatabase.Week1 = cruPricing.Week1;
+                                    cruPricingFromDatabase.Week2 = cruPricing.Week2;
+                                    cruPricingFromDatabase.Week3 = cruPricing.Week3;
+                                    cruPricingFromDatabase.Week4 = cruPricing.Week4;
+                                    cruPricingFromDatabase.Week5 = cruPricing.Week5;
+                                }
+                                else
+                                {
+                                    DataContext.CRUPricing.Add(cruPricing);
+                                }
                             }
                         }
 

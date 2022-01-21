@@ -105,6 +105,7 @@ namespace SupplyWebApp.Services
             }
             catch (Exception ex)
             {
+                Console.WriteLine("catch block ---------");
                 _importResult.Successful = false;
                 _importResult.Message = "Error occurred - " + ex.Message;
             }

@@ -20,33 +20,37 @@ namespace SupplyWebApp.Controllers
     public class FileUploadController : ControllerBase
     {
         private DataContext _dataContext;
+        private ImportService _fileImporter;
 
         public FileUploadController(DataContext context)
         {
             _dataContext = context;
+            _fileImporter =  new ImportService(context);
         }
 
         [HttpPost]
         [Route("upload")]
-        public async Task<IActionResult> Upload()
+        public IActionResult Upload()
         {
             ImportResult importResult = null;
+
             var file = Request.Form.Files[0];
 
-            ImportService fileImporter = new ImportService(_dataContext);
-
             string typeOfFile = Request.Query["typeOfFile"].ToString();
+
+            GlobalVars.FromDate = Request.Query["from"].ToString();
+            GlobalVars.ToDate = Request.Query["to"].ToString();
 
             switch (typeOfFile)
             {
                 case "F_01":
-                    importResult = fileImporter.Import(Enums.FileNames.F_01, file);
+                    importResult = _fileImporter.Import(Enums.FileNames.F_01, file);
                     break;
                 case "F_02":
-                    importResult = fileImporter.Import(Enums.FileNames.F_02, file);
+                    importResult = _fileImporter.Import(Enums.FileNames.F_02, file);
                     break;
                 case "F_03":
-                    importResult = fileImporter.Import(Enums.FileNames.F_03, file);
+                    importResult = _fileImporter.Import(Enums.FileNames.F_03, file);
                     break;
             }
 

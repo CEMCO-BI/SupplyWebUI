@@ -31,3 +31,9 @@
   height: 400px;
   overflow-y: auto;
 }
+
+th {
+  position: sticky;
+  top: 0;
+  background: #babcbd;
+}

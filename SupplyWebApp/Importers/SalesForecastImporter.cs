@@ -13,11 +13,15 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
+using FluentValidation;
+using System.ComponentModel;
+using FluentValidation.Results;
 
 namespace SupplyWebApp.Services
 {
     public class SalesForecastImporter : Importer
     {
+        BindingList<String> errors = new BindingList<string>();
         public SalesForecastImporter()
         {
             _hostingEnvironment = new HostingEnvironment { EnvironmentName = Environments.Development };
@@ -67,7 +71,16 @@ namespace SupplyWebApp.Services
                                 Location = _reader.GetString(2),
                                 Amount = _reader.GetDouble(3)
                             };
+                        SalesForecastValidator sfv = new SalesForecastValidator();
+                        var results = sfv.Validate(salesForecast);
 
+                        if(results.IsValid == false){
+                                foreach (ValidationFailure failure in results.Errors)
+                                {
+                                    Console.WriteLine(failure.ErrorMessage);
+                                    errors.Add(failure.ErrorMessage);
+                            }
+                        }
                             var salesForecastFromDatabase = DataContext.SalesForecast
                                 .Where(sf => sf.Year == salesForecast.Year
                                 && sf.Month == salesForecast.Month

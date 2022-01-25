@@ -11,9 +11,9 @@ using Microsoft.Extensions.Configuration;
 using ExcelDataReader;
 using SupplyWebApp.Models;
 
-namespace SupplyWebApp.Services
-{
-    public class SalesForecastValidator : AbstractValidator<SalesForecast>
+
+
+    public class SalesForecastValidator :  AbstractValidator<SalesForecast>
     {
        public SalesForecastValidator()
        {
@@ -52,4 +52,3 @@ namespace SupplyWebApp.Services
            return false;
        }
     }
-}

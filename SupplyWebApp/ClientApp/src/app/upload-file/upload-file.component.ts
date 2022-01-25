@@ -27,6 +27,7 @@ export class UploadFileComponent implements OnInit {
   display: boolean = false;
   to: string = '2022-01-01';
   from: string = '2022-01-01';
+  validateOrUpload: string = 'validate';
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
     this.baseUrl = baseUrl;
@@ -36,6 +37,12 @@ export class UploadFileComponent implements OnInit {
 
   };
 
+  ValidateOrUpload(){
+      this.validateOrUpload = 'validate';
+  }
+  UploadOrValidate(){
+    this.validateOrUpload = 'upload';
+  }
   openDatePicker() {
     //this.display = true;
     this.display = true;
@@ -58,6 +65,8 @@ export class UploadFileComponent implements OnInit {
   upload(files) {
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
+      document.getElementById("btnUpload").blur();
+      document.getElementById("btnValidate").blur();
       return;
     }
     const formData = new FormData();
@@ -67,11 +76,36 @@ export class UploadFileComponent implements OnInit {
     }
 
 
-    const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
+   if(this.validateOrUpload == 'validate'){
+     // post request for validation purpose
+     
+    const validateReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/validate', formData, {
       reportProgress: true,
       params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     });
 
+    this.http.request(validateReq).subscribe(event => {
+      this.toastr.info("Please wait! While your file is being validated.", " Validation in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
+      if (event instanceof HttpResponse) {
+        console.log(event);
+        if (event.status == 200) {
+          setTimeout(() => {
+            this.toastr.success("Your file has been validated successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+            this.reset();
+          }, 2500);
+        } else if (event.status == 500) {
+          setTimeout(() => {
+            this.toastr.error("Upload failed due to internal server error, please contact support.", " Uploaded failed...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+          }, 2500);
+        }
+      }
+    });
+   }else if(this.validateOrUpload == 'upload'){
+        // post request for upload purpose
+    const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
+      reportProgress: true,
+      params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
+    });
     this.http.request(uploadReq).subscribe(event => {
       this.toastr.info("Please wait! While your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
       if (event instanceof HttpResponse) {
@@ -88,6 +122,9 @@ export class UploadFileComponent implements OnInit {
         }
       }
     });
+   }
+
+    
   }
 
   onFileChange(evt: any, file) {

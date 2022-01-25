@@ -19,9 +19,21 @@
       <label class="custom-control-label" for="plannedBuy">Planned Buy/Transfers</label>
     </div>
 
-    <div class="custom-file">
+    <!-- <div class="custom-file">
       <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)" class="form-control-file" />
       <label class="custom-file-label" for="customFile">Choose file</label>
+     
+    </div> -->
+    <div class="container">
+      <div class="row">
+        <div class="col-10">
+          <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)" class="form-control-file" />
+          <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+        <div class="col-sm">
+          <input id="btnValidate" type="submit" class="btn btn-outline-info mr-1" value="Validate" (click) = ValidateOrUpload()/>
+        </div>
+      </div>
     </div>
 
     <div id="datepicker-parent" *ngIf="display">
@@ -56,8 +68,10 @@
     <br />
 
     <div class="text-center">
-      <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
+      <!-- <input id="btnValidate" type="submit" class="btn btn-outline-info mr-1" value="Validate" /> -->
+      <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" (click) = UploadOrValidate() />
       <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+      {{validateOrUpload}}
     </div>
   </div>
 

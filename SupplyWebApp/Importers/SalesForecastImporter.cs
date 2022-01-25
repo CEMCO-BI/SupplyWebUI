@@ -21,7 +21,8 @@ namespace SupplyWebApp.Services
 {
     public class SalesForecastImporter : Importer
     {
-        BindingList<String> errors = new BindingList<string>();
+        List<String> errors = new List<string>();
+        IDictionary<int, List<String>> listOfErrors = new Dictionary<int, List<String>>();
         public SalesForecastImporter()
         {
             _hostingEnvironment = new HostingEnvironment { EnvironmentName = Environments.Development };
@@ -32,6 +33,7 @@ namespace SupplyWebApp.Services
             ImportService.RegisterImporter(Enums.FileNames.F_01, typeof(SalesForecastImporter));
         }
 
+//step1: take the file.
         public override ImportResult Import(IFormFile file)
         {
             SalesForecast salesForecast;
@@ -61,9 +63,14 @@ namespace SupplyWebApp.Services
                         }
 
                         AdvanceToDataRow();
-
+                        var line = 2;
+//step2: convert each row to object.                        
+                        // here each row is converted into a salesforecast object.
                         while (_reader.Read())
                         {
+                            Console.WriteLine("----------------------------");
+
+
                             salesForecast = new SalesForecast
                             {
                                 Year = (int)_reader.GetDouble(0),
@@ -71,16 +78,45 @@ namespace SupplyWebApp.Services
                                 Location = _reader.GetString(2),
                                 Amount = _reader.GetDouble(3)
                             };
-                        SalesForecastValidator sfv = new SalesForecastValidator();
-                        var results = sfv.Validate(salesForecast);
+//step3:pass each row for validation.
+                            // each object is passed to Validator for validation. 
+                            SalesForecastValidator sfv = new SalesForecastValidator();
+                            var results = sfv.Validate(salesForecast);
 
-                        if(results.IsValid == false){
+//step4: store the errors in each row in a list
+                            if (results.IsValid == false)
+                            {
                                 foreach (ValidationFailure failure in results.Errors)
                                 {
-                                    Console.WriteLine(failure.ErrorMessage);
+                                    // errors is a list. all generated errors are added to it.
                                     errors.Add(failure.ErrorMessage);
+                                }
+//step5: Add the line and the listOf Errors to a dictionary.                                 
+                                listOfErrors.Add(line,errors);
                             }
-                        }
+                            //try printing the errors with specific row.
+                            /*
+                            foreach (var error in results.Errors)
+                           {
+                               Console.WriteLine(error + " =>"+line);
+                           }
+                            */
+
+
+
+//step6: Pass this dictionary as JSON Object
+                            /* if(!dictionary.isEmpty){
+
+                                      return dictionary in json format
+                              }*/
+
+
+
+
+
+
+
+                            // code to check if data already exists.
                             var salesForecastFromDatabase = DataContext.SalesForecast
                                 .Where(sf => sf.Year == salesForecast.Year
                                 && sf.Month == salesForecast.Month
@@ -94,6 +130,7 @@ namespace SupplyWebApp.Services
                             {
                                 DataContext.SalesForecast.Add(salesForecast);
                             }
+                            line++;
                         }
 
                         int output = DataContext.SaveChanges();

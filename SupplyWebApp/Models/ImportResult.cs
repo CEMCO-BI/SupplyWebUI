@@ -9,5 +9,9 @@ namespace SupplyWebApp.Models
     {
         public bool Successful { get; set; } = true;
         public string Message { get; set; }
+        
+       public List<ValidationError> ErrorList = new List<ValidationError>();
+
+      // public IDictionary<int,List<string>> ErrorList = new Dictionary<int,List<string>>();
     }
 }

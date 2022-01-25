@@ -21,6 +21,8 @@ namespace SupplyWebApp.Services
         protected int _dataStartRow = 2;
         protected ImportResult _importResult = new ImportResult();
 
+     
+
         public virtual ImportResult Import(IFormFile file)
         {
             return _importResult;

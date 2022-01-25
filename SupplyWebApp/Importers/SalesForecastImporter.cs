@@ -16,13 +16,15 @@ using System.Threading.Tasks;
 using FluentValidation;
 using System.ComponentModel;
 using FluentValidation.Results;
+using Newtonsoft.Json;
 
 namespace SupplyWebApp.Services
 {
     public class SalesForecastImporter : Importer
     {
-        List<String> errors = new List<string>();
-        IDictionary<int, List<String>> listOfErrors = new Dictionary<int, List<String>>();
+       
+       
+        
         public SalesForecastImporter()
         {
             _hostingEnvironment = new HostingEnvironment { EnvironmentName = Environments.Development };
@@ -37,6 +39,7 @@ namespace SupplyWebApp.Services
         public override ImportResult Import(IFormFile file)
         {
             SalesForecast salesForecast;
+
 
             try
             {
@@ -68,8 +71,9 @@ namespace SupplyWebApp.Services
                         // here each row is converted into a salesforecast object.
                         while (_reader.Read())
                         {
+                           
                             Console.WriteLine("----------------------------");
-
+                                    
 
                             salesForecast = new SalesForecast
                             {
@@ -83,40 +87,21 @@ namespace SupplyWebApp.Services
                             SalesForecastValidator sfv = new SalesForecastValidator();
                             var results = sfv.Validate(salesForecast);
 
-//step4: store the errors in each row in a list
+//step4: store the errors from each row in a list.
                             if (results.IsValid == false)
                             {
+                                
                                 foreach (ValidationFailure failure in results.Errors)
                                 {
-                                    // errors is a list. all generated errors are added to it.
-                                    errors.Add(failure.ErrorMessage);
+
+                                    ValidationError v_error = new ValidationError(line, failure.ErrorMessage);
+                                    _importResult.ErrorList.Add(v_error);
+                                    
+                                     
                                 }
-//step5: Add the line and the listOf Errors to a dictionary.                                 
-                                listOfErrors.Add(line,errors);
                             }
-                            //try printing the errors with specific row.
-                            /*
-                            foreach (var error in results.Errors)
-                           {
-                               Console.WriteLine(error + " =>"+line);
-                           }
-                            */
 
-
-
-//step6: Pass this dictionary as JSON Object
-                            /* if(!dictionary.isEmpty){
-
-                                      return dictionary in json format
-                              }*/
-
-
-
-
-
-
-
-                            // code to check if data already exists.
+// code to check if data already exists.
                             var salesForecastFromDatabase = DataContext.SalesForecast
                                 .Where(sf => sf.Year == salesForecast.Year
                                 && sf.Month == salesForecast.Month
@@ -131,7 +116,14 @@ namespace SupplyWebApp.Services
                                 DataContext.SalesForecast.Add(salesForecast);
                             }
                             line++;
+                            
                         }
+
+// ALL OF THE ERRORS:
+// STORING: 1. ALL Errors   2.Successful(boolean)              3.Message. into result variable below.
+                        string result = JsonConvert.SerializeObject(_importResult);
+                        Console.WriteLine("------ALL ERRORS-----");
+                        Console.WriteLine(result);
 
                         int output = DataContext.SaveChanges();
 
@@ -150,7 +142,7 @@ namespace SupplyWebApp.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("catch block ---------");
+                Console.WriteLine("catch block --------- "+ex.Message);
                 _importResult.Successful = false;
                 _importResult.Message = "Error occurred - " + ex.Message;
             }

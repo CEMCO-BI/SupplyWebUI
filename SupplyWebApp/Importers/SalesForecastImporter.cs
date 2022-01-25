@@ -36,7 +36,7 @@ namespace SupplyWebApp.Services
         }
 
 //step1: take the file.
-        public override ImportResult Import(IFormFile file)
+        public override string Import(IFormFile file)
         {
             SalesForecast salesForecast;
 
@@ -125,6 +125,10 @@ namespace SupplyWebApp.Services
                         Console.WriteLine("------ALL ERRORS-----");
                         Console.WriteLine(result);
 
+                        if( _importResult.ErrorList.Count() != 0){
+                            return result;
+                        }
+
                         int output = DataContext.SaveChanges();
 
                         if (output > 0)
@@ -147,7 +151,7 @@ namespace SupplyWebApp.Services
                 _importResult.Message = "Error occurred - " + ex.Message;
             }
 
-            return _importResult;
+            return result;
         }
     }
 }

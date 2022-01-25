@@ -32,7 +32,8 @@ namespace SupplyWebApp.Controllers
         [Route("upload")]
         public async Task<IActionResult> Upload()
         {
-            ImportResult importResult = null;
+            //ImportResult importResult = null;
+            string importResult =null;
 
             var file = Request.Form.Files[0];
             string typeOfFile = Request.Query["typeOfFile"].ToString();
@@ -45,7 +46,7 @@ namespace SupplyWebApp.Controllers
                 // same import method to validate or to upload.
                 case "F_01":
                 // this should take json data as return value.
-                    importResult = _fileImporter.Import(Enums.FileNames.F_01, file);
+                  importResult = _fileImporter.Import(Enums.FileNames.F_01, file);
                     break;
                 case "F_02":
                     importResult = _fileImporter.Import(Enums.FileNames.F_02, file);
@@ -55,14 +56,7 @@ namespace SupplyWebApp.Controllers
                     break;
             }
 
-            if (!importResult.Successful)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "500");
-            }
-            else
-            {
-                return Ok(importResult);
-            }
+           return Ok(importResult);
         }
 
         //------------------------------------
@@ -72,10 +66,11 @@ namespace SupplyWebApp.Controllers
         public async Task<IActionResult> validate()
         {
             Console.WriteLine("------------validate-------------");
-            ImportResult importResult = null;
+            string importResult = null;
 
             var file = Request.Form.Files[0];
             string typeOfFile = Request.Query["typeOfFile"].ToString();
+            Console.WriteLine("--------"+typeOfFile+"-------");
 
             GlobalVars.FromDate = Request.Query["from"].ToString();
             GlobalVars.ToDate = Request.Query["to"].ToString();
@@ -95,14 +90,7 @@ namespace SupplyWebApp.Controllers
                     break;
             }
 
-            if (!importResult.Successful)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "500");
-            }
-            else
-            {
-                return Ok(importResult);
-            }
+           return Ok(importResult);
         }
     }
 

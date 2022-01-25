@@ -87,7 +87,7 @@ export class UploadFileComponent implements OnInit {
     this.http.request(validateReq).subscribe(event => {
       this.toastr.info("Please wait! While your file is being validated.", " Validation in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
       if (event instanceof HttpResponse) {
-        console.log(event);
+        console.log(event.body);
         if (event.status == 200) {
           setTimeout(() => {
             this.toastr.success("Your file has been validated successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })

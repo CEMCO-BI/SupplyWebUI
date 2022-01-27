@@ -22,13 +22,17 @@
         [ngClass]="{ show: isExpanded }"
       >
     
-      <select class="form-select" id="typeOfFileSelect" [(ngModel)]="typeOfFile">
-        <label class="custom-control-label" for="typeOfFileSelect">Supply</label>
-        <option value="F_01" selected>Supply</option>
-        <option value="F_01" >Sales Forecast</option>
-        <option value="F_02">CRU Planning</option>
-        <option value="F_03">PlannedBuy / Transfers</option>
-      </select>
+    
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         Supply
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" routerLink="/salesforecast">Sales Forecast</a>
+          <a class="dropdown-item"  routerLink="/plannedbuy">PlannedBuy / Transfers</a>
+          <a class="dropdown-item"  routerLink="/crupricing">CRU Planning</a>
+        </div>
+      </div>
     
     
       <!-- <div>

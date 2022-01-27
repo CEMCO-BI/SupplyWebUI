@@ -1,4 +1,12 @@
-.float-container {
+.datepicker-child1{
+    float: left;
+    width: 50%;
+  }
+  .datepicker-child2{
+    float: left;
+    width: 33%;
+  }
+  .float-container {
     width: 50%;
 }
 
@@ -37,7 +45,7 @@ thead {
   position: sticky;
   top: 0;
   background: #babcbd;
-
+  height: 30px;
  
 
 }

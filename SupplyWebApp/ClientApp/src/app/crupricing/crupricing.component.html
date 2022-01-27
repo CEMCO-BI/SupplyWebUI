@@ -1,0 +1,53 @@
+<h4>CRU Pricing</h4>
+<form class="form-horizontal" (ngSubmit)="upload(file.files)">
+
+    <div class="form-group">
+      <!-- <label class="control-label mr-1">Select File type:</label> -->
+      <!-- there can be 2 ways of fetching: 1. the value you can just use id for div and use id.value and pass that value using a function
+    and set that value as this.typeof = val -->
+    
+      <div class="custom-file">
+        <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)" class="form-control-file" />
+        <label class="custom-file-label" for="customFile">Choose file</label>
+      </div>
+  <br><br>
+      <div id="datepicker-parent">
+          <h6 style="float: left; width: 15%;">Update date from :</h6>
+        <div id="datepicker-child1" style="float: left; width: 15%;">
+          <input class="form-control" [(ngModel)]="from" type="date" value=$event.target.value name="from">
+        </div>
+        <h6 style="float: left; width: 5%; margin-left: 3%;">To :</h6>
+        <div id="datepicker-child2" style="float: left; width: 15%;">
+          <input class="form-control" [(ngModel)]="to" type="date" value=$event.target.value name="to">
+        </div>
+      </div>
+  
+      <div class="table-wrap" *ngIf="displayGrid">
+        <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
+          
+          <thead style="height: 100px;">
+            <tr class="first" *ngFor="let row of header">
+              <th *ngFor="let title of row">
+                {{title}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of data">
+              <td *ngFor="let cell of row">
+                {{cell}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <br><br><br>
+  
+      <div class="text-center">
+        <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
+        <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+      </div>
+    </div>
+  
+  </form>
+  

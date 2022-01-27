@@ -12,7 +12,10 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { UploadFileComponent } from './upload-file/upload-file.component';
-import { GlobalConstants } from './common/global-constant'
+import { GlobalConstants } from './common/global-constant';
+import { PlannedBuyComponent } from './planned-buy/planned-buy.component';
+import { SalesForecastComponent } from './sales-forecast/sales-forecast.component';
+import { CRUPricingComponent } from './crupricing/crupricing.component'
 
 
 @NgModule({
@@ -20,7 +23,10 @@ import { GlobalConstants } from './common/global-constant'
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    UploadFileComponent
+    UploadFileComponent,
+    PlannedBuyComponent,
+    SalesForecastComponent,
+    CRUPricingComponent
     
   ],
   imports: [
@@ -29,9 +35,11 @@ import { GlobalConstants } from './common/global-constant'
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
-      { path: '', component: UploadFileComponent, pathMatch: 'full' }
-      //{ path: 'crupricing', component: CRUPricingComponent }
-     // { path: 'upload-file', component: UploadFileComponent }
+      { path: '', component: SalesForecastComponent, pathMatch: 'full' },
+      { path: 'crupricing', component: CRUPricingComponent },
+      { path: 'salesforecast', component: SalesForecastComponent },
+      { path: 'plannedbuy', component: PlannedBuyComponent },
+      { path: 'upload-file', component: UploadFileComponent }
     ]),
     BrowserAnimationsModule,
     ToastrModule.forRoot({

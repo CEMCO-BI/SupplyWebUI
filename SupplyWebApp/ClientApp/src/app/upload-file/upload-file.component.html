@@ -35,15 +35,17 @@
       </div>
     </div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" *ngIf="displayGrid">
       <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
-        <tbody>
-          <tr *ngFor="let row of header">
+        
+        <thead style="height: 100px;">
+          <tr class="first" *ngFor="let row of header">
             <th *ngFor="let title of row">
               {{title}}
             </th>
           </tr>
-
+        </thead>
+        <tbody>
           <tr *ngFor="let row of data">
             <td *ngFor="let cell of row">
               {{cell}}
@@ -52,8 +54,7 @@
         </tbody>
       </table>
     </div>
-    
-    <br />
+    <br><br>
 
     <div class="text-center">
       <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />

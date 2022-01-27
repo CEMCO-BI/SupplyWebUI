@@ -37,7 +37,7 @@
 }
 
 .table-wrap {
-  height: 500px;
+  height: 600px;
   overflow-y: auto;
 }
 
@@ -45,7 +45,7 @@ thead {
   position: sticky;
   top: 0;
   background: #babcbd;
-  height: 30px;
+  height: 20px;
  
 
 }

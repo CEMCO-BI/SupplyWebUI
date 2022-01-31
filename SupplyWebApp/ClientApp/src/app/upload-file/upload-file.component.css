@@ -36,9 +36,14 @@ thead {
   position: sticky;
   top: 0;
   background: #babcbd;
+}
 
- 
-
+.from {
+  float: left; 
+  width: 15%;
+}
+.to {
+  float: left; width: 5%; margin-left: 3%;
 }
 
 

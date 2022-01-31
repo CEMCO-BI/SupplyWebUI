@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { UploadService } from './service/upload.service';
 
 
 import { AppComponent } from './app.component';
@@ -40,7 +41,7 @@ import { GlobalConstants } from './common/global-constant'
       positionClass: 'toast-top-center'
     })
   ],
-  providers: [],
+  providers: [UploadService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

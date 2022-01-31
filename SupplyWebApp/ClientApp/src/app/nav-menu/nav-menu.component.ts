@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  typeOfFile: string = "F_01";
 
   collapse() {
     this.isExpanded = false;

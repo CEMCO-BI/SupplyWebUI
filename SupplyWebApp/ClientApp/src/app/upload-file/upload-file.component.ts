@@ -23,8 +23,9 @@ export class UploadFileComponent implements OnInit {
   InputVar: ElementRef;
 
   //type of file
-  typeOfFile: string = "F_01";
+  typeOfFile: string = "F_01";  
   display: boolean = false;
+  displayGrid: boolean = false;
   to: string = '2022-01-01';
   from: string = '2022-01-01';
 
@@ -49,10 +50,15 @@ export class UploadFileComponent implements OnInit {
     // field using the reference variable.
     document.getElementById("btnUpload").blur();
     document.getElementById("btnReset").blur();
-    this.display = false
+    this.display = false;
+    this.displayGrid = false;
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
     this.header = [[], []];
+
+    if(this.typeOfFile == 'F_02'){
+      this.openDatePicker();
+    }
   }
 
   upload(files) {
@@ -92,6 +98,7 @@ export class UploadFileComponent implements OnInit {
 
   onFileChange(evt: any, file) {
 
+    this.displayGrid = true;
     const target: DataTransfer = <DataTransfer>(evt.target);
 
     if (target.files.length !== 1) {

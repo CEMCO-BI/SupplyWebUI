@@ -3,7 +3,9 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">SupplyWebApp</a>
+      <a class="navbar-brand" [routerLink]="['/']">
+        <img src="https://cemcosteel.com/app/uploads/2019/10/logo.png" alt="CEMCO">
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -19,17 +21,19 @@
         class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
         [ngClass]="{ show: isExpanded }"
       >
-        <!-- <ul class="navbar-nav flex-grow">
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-
-            <a class="nav-link text-dark" [routerLink]="['/upload-file']">Upload</a>
-          </li>
-        </ul> -->
+    
+      <select class="form-select" id="typeOfFileSelect" [(ngModel)]="typeOfFile">
+        <label class="custom-control-label" for="typeOfFileSelect">Supply</label>
+        <option value="F_01" selected>Supply</option>
+        <option value="F_01" >Sales Forecast</option>
+        <option value="F_02">CRU Planning</option>
+        <option value="F_03">PlannedBuy / Transfers</option>
+      </select>
+    
+    
+      <!-- <div>
+        {{typeOfFile}}
+    </div> -->
       </div>
     </div>
   </nav>

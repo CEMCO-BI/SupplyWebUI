@@ -55,6 +55,10 @@ export class UploadFileComponent implements OnInit {
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
     this.header = [[], []];
+
+    if(this.typeOfFile == 'F_02'){
+      this.openDatePicker();
+    }
   }
 
   upload(files) {

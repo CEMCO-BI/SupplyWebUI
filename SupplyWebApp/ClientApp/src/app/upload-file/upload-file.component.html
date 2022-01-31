@@ -1,12 +1,35 @@
-<div class="container">
+<div>
+  <div>
+    <a class="navbar-brand" [routerLink]="['/']">
+      <img src="https://cemcosteel.com/app/uploads/2019/10/logo.png" class="img-responsive" alt="CEMCO">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+      aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>  
+  <div>
+    <select name="typeOfFiles" class="form-select" id="typeOfFileSelect" (change) = "reset()" [(ngModel)]="typeOfFile">
+    <option value="F_01" selected>Supply</option>
+    <option value="F_01" >Sales Forecast</option>
+    <option value="F_02" >CRU Planning</option>
+    <option value="F_03" >PlannedBuy / Transfers</option>
+  </select>
+  </div>
+</div>
+
+
+<div>
   <form class="form-horizontal" (ngSubmit)="upload(file.files)">
+    <div>
+
 
     <div class="form-group">
   
       
   
-       <div >
-        <div class="container logo" style="float: left; width: 50%; padding-top: 5px; padding-bottom: 50px;">
+       <!-- <div >
+        <div class="logo" style="float: left; width: 50%; padding-top: 5px; padding-bottom: 50px;">
           <a class="navbar-brand" [routerLink]="['/']">
             <img src="https://cemcosteel.com/app/uploads/2019/10/logo.png" alt="CEMCO">
           </a>
@@ -16,21 +39,21 @@
           </button>
         </div>  
         <div style="margin-left: 350px; margin-right: 0px; margin-top: 20px; float: left;">
-          <select name="typeOfFiles" class="form-select" id="typeOfFileSelect" [(ngModel)]="typeOfFile"
-        >
+          <select name="typeOfFiles" class="form-select" id="typeOfFileSelect" (change) = "reset()" [(ngModel)]="typeOfFile">
           <option value="F_01" selected>Supply</option>
-          <option value="F_01">Sales Forecast</option>
-          <option value="F_02">CRU Planning</option>
-          <option value="F_03">PlannedBuy / Transfers</option>
+          <option value="F_01" >Sales Forecast</option>
+          <option value="F_02" >CRU Planning</option>
+          <option value="F_03" >PlannedBuy / Transfers</option>
         </select>
-        </div>
+        </div> -->
+        
        
         
       
        </div>
-       <div>
-        <hr style="margin-top: 300px;">
-      </div>
+       <!-- <div style="padding-top: 70px; ">
+        <hr>
+      </div> -->
        
      
       <!-- there can be 2 ways of fetching: 1. the value you can just use id for div and use id.value and pass that value using a function
@@ -50,47 +73,49 @@
         <label class="custom-control-label" for="plannedBuy">Planned Buy/Transfers</label>
       </div> -->
   
-      <div class="custom-file" style="margin-left: 20px;">
-        <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)"
-          class="form-control-file" />
-        <label class="custom-file-label" for="customFile">Choose file</label>
-      </div>
-  
-      <div id="datepicker-parent" *ngIf="display">
-        <div id="datepicker-child1">
-          <label for="from">From:</label>
-          <input class="form-control" [(ngModel)]="from" type="date" value=$event.target.value name="from">
+      <div class="container">
+        <div class="custom-file " >
+          <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)"
+            class="form-control-file" />
+          <label class="custom-file-label" for="customFile">Choose file</label>
         </div>
-        <div id="datepicker-child2">
-          <label for="to">To:</label>
-          <input class="form-control" [(ngModel)]="to" type="date" value=$event.target.value name="to">
+    
+        <div id="datepicker-parent" *ngIf="display">
+          <div id="datepicker-child1">
+            <label for="from">From:</label>
+            <input class="form-control" [(ngModel)]="from" type="date" value=$event.target.value name="from">
+          </div>
+          <div id="datepicker-child2">
+            <label for="to">To:</label>
+            <input class="form-control" [(ngModel)]="to" type="date" value=$event.target.value name="to">
+          </div>
         </div>
-      </div>
-  
-      <div class="table-wrap" *ngIf="displayGrid">
-        <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
-  
-          <thead style="height: 100px;">
-            <tr class="first" *ngFor="let row of header">
-              <th *ngFor="let title of row">
-                {{title}}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of data">
-              <td *ngFor="let cell of row">
-                {{cell}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <br><br>
-  
-      <div class="text-center">
-        <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
-        <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+    
+        <div class="table-wrap" *ngIf="displayGrid">
+          <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
+    
+            <thead style="height: 100px;">
+              <tr class="first" *ngFor="let row of header">
+                <th *ngFor="let title of row">
+                  {{title}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of data">
+                <td *ngFor="let cell of row">
+                  {{cell}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <br><br>
+    
+        <div class="text-center">
+          <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
+          <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+        </div>
       </div>
     </div>
   

@@ -1,6 +1,6 @@
-<div class="container-fluid">
+<div class="container-fluid" style="height:140px">
   <div class="row mt-2" style="padding-top:10px; padding-bottom:10px">
-    <div class="col-lg-10" style="padding-left: 20px;">
+    <div class="col-lg-9" style="padding-left: 20px;">
       <a class="navbar-brand" [routerLink]="['/']">
         <img src="https://cemcosteel.com/app/uploads/2019/10/logo.png" class="img-responsive" alt="CEMCO">
       </a>
@@ -9,8 +9,8 @@
         <span class="navbar-toggler-icon"></span>
       </button> -->
     </div>
-    <div style="padding-top:10px; ">
-      <select style="padding-right: 10px" name="typeOfFiles" class="custom-select" id="typeOfFileSelect" (change)="reset()" [(ngModel)]="typeOfFile">
+    <div style="padding-top:10px;">
+      <select style="padding-right: 10px; width:230px " name="typeOfFiles" class="custom-select" id="typeOfFileSelect" (change)="reset()" [(ngModel)]="typeOfFile">
         <option value="F_01" selected>Supply</option>
         <option value="F_01">Sales Forecast</option>
         <option value="F_02">CRU Pricing</option>
@@ -21,8 +21,6 @@
   </div>
   <hr style="padding-top:50px">
 </div>
-
-<br>
 <div>
   <form class="form-horizontal" (ngSubmit)="upload(file.files)">
 
@@ -50,8 +48,8 @@
 
           <table style="border: 2px solid black; position: sticky; top: 0; width: 100%;" class="container-fluid" cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
 
-            <thead style="height:50px; border:2px solid black">
-              <tr style="height: 50px; border-bottom-width: 2px;" *ngFor="let row of header">
+            <thead style="height:40px; border:2px solid black">
+              <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of header">
                 <th style=" background-color: #80bfff; text-align:center;border-bottom-width: 2px; width: 150px" scope="col" *ngFor="let title of row">
                   {{title}}
                 </th>
@@ -62,7 +60,7 @@
           <table style="border: 2px solid black; width: 100%;  "  cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
 
             <thead style="height:50px; border:2px solid black">
-              <tr style="height: 50px; border-bottom-width: 2px;" *ngFor="let row of data">
+              <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of data">
                 <th style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col" *ngFor="let cell of row">
                   {{cell}}
                 </th>

@@ -1,10 +1,11 @@
 .float-container {
-    width: 50%;
+    
 }
 
 .float-child {
     float: left;
     width: 50%;
+    
 }
 
 .float-child1 {
@@ -32,11 +33,7 @@
   overflow-y: auto;
 }
 
-thead {
-  position: sticky;
-  top: 0;
-  background: #babcbd;
-}
+
 
 .from {
   float: left; 
@@ -45,5 +42,12 @@ thead {
 .to {
   float: left; width: 5%; margin-left: 3%;
 }
+
+table {
+  border-collapse: collapse;
+  border: 2px solid #005282;
+}
+
+
 
 

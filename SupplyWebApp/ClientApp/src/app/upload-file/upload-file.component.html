@@ -47,31 +47,40 @@
 
 
         <div class="table-wrap" *ngIf="displayGrid">
-          <table cellspacing=0 cellpadding=0 class='table table-striped' aria-labelledby="tableLabel" *ngIf="data">
 
-            <thead>
-              <tr style="height:50px" *ngFor="let row of header">
-                <th scope="col" *ngFor="let title of row">
+          <table style="border: 2px solid black; position: sticky; top: 0; width: 100%;" class="container-fluid" cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+
+            <thead style="height:50px; border:2px solid black">
+              <tr style="height: 50px; border-bottom-width: 2px;" *ngFor="let row of header">
+                <th style=" background-color: #80bfff; text-align:center;border-bottom-width: 2px; width: 150px" scope="col" *ngFor="let title of row">
                   {{title}}
                 </th>
               </tr>
             </thead>
-            <tbody>
-              <tr *ngFor="let row of data">
-                <td *ngFor="let cell of row">
-                  {{cell}}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <br><br>
 
-        <div class="text-center">
-          <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
-          <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+          </table>
+          <table style="border: 2px solid black; width: 100%;  "  cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+
+            <thead style="height:50px; border:2px solid black">
+              <tr style="height: 50px; border-bottom-width: 2px;" *ngFor="let row of data">
+                <th style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col" *ngFor="let cell of row">
+                  {{cell}}
+                </th>
+              </tr>
+            </thead>
+
+          </table>
+
         </div>
-      </div>
+      
+
+          <br><br>
+
+          <div class="text-center">
+            <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
+            <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+          </div>
+        </div>
     </div>
   </form>
 </div>

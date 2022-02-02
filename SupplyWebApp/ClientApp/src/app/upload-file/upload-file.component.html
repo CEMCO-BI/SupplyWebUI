@@ -1,33 +1,52 @@
-<div class="container-fluid" style="height:140px">
-  <div class="row mt-2" style="padding-top:10px; padding-bottom:10px">
-    <div class="col-lg-9" style="padding-left: 20px;">
-      <a class="navbar-brand" [routerLink]="['/']">
-        <img src="https://cemcosteel.com/app/uploads/2019/10/logo.png" class="img-responsive" alt="CEMCO">
-      </a>
-      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-      aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
-      <span class="navbar-toggler-icon"></span>
-    </button> -->
-    </div>
-     <div style="padding-top:10px;">
-    <select style="padding-right: 10px; width: 230px; background-color: #cce0ff; color:black; " name="typeOfFiles" class="custom-select" id="typeOfFileSelect" (change)="reset()" [(ngModel)]="typeOfFile">
-
-    <option class="option" value="F_01" selected hidden>Supply</option>
-    <option class="option" value="F_01">Sales Forecast</option>
-    <option class="option" value="F_02">CRU Pricing</option>
-    <option class="option" value="F_03">Planned Buy / Transfers</option>
-  </select>
-    </div>
+<div style="background-color: #99c2ff ">
+  <header >
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+      <div class="container-fluid" style="padding-right: 100px;">
+        <a class="navbar-brand" style="padding-left: 0px;" [routerLink]="['/']">
+          <img src="https://cemcosteel.com/app/uploads/2019/10/logo.png" alt="CEMCO">
+        </a>
+        <button class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target=".navbar-collapse"
+                aria-label="Toggle navigation"
+                [attr.aria-expanded]="isExpanded"
+                (click)="toggle()">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+             [ngClass]="{ show: isExpanded }">
 
 
+          <div class="dropdown col-xs-7">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Supply
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <!--<a class="dropdown-item" routerLink="/salesforecast">Sales Forecast</a>-->
 
+              <a class="dropdown-item" routerLink="/salesforecast/F_01" (click)="reset()">Sales Forecast</a>
+              <a class="dropdown-item" routerLink="/cru/F_02" (click)="reset()">CRU</a>
+              <a class="dropdown-item" routerLink="/plannedbuy/F_03" (click)="reset()">Planned Buy / Transfers</a>
 
-  </div>
-  <hr style="padding-top:50px">
+            </div>
+          </div>
+          <!--<button type="submit" class="parcel-btn weight-option" value="25" (click)="onItemSelector()">
+            <button type="submit" class="parcel-btn weight-option" value="50" (click)="onItemSelector()">
+              <button type="submit" class="parcel-btn weight-option" value="250" (click)="onItemSelector()">-->
+
+        </div>
+      </div>
+    </nav>
+  </header>
 </div>
 
 <div>
   <form class="form-horizontal" (ngSubmit)="upload(file.files)">
+  <!--  <div>
+      {{typeOfFile}}
+    </div>-->
+
 
     <div class="form-group">
       <div class="container" id="typeOf">
@@ -54,12 +73,12 @@
 
         <div class="table-wrap" *ngIf="displayGrid">
 
-          <table style="border: 2px solid black; position: sticky; top: 0; width: 100%;" class="container-fluid" cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+          <table style="border: 2px solid black; position: sticky; top: 0; width: 100%; background-color: #80bfff;" class="container-fluid" cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
 
             <thead style="height:40px; border:2px solid black">
               <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of header">
                 <th style=" background-color: #80bfff; text-align:center;border-bottom-width: 2px; width: 150px" scope="col" *ngFor="let title of row">
-                  {{title}}
+                 {{title}}
                 </th>
               </tr>
             </thead>

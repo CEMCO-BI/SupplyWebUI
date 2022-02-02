@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import * as XLSX from 'xlsx';
 import { ToastrService } from 'ngx-toastr';
 import { GlobalConstants } from '../common/global-constant';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-upload-file',
@@ -23,18 +24,26 @@ export class UploadFileComponent implements OnInit {
   InputVar: ElementRef;
 
   //type of file
-  typeOfFile: string = "F_01";  
+  typeOfFile: string = "F_01";
+  typo: string = "F_01";
   display: boolean = false;
   displayGrid: boolean = false;
   to: string = '2022-01-01';
   from: string = '2022-01-01';
+  
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute) {
     this.baseUrl = baseUrl;
   }
 
   ngOnInit(): void {
+    
 
+    if (this.route.snapshot.params.typo == 'F_02' || this.route.snapshot.params.typo == 'F_03' || this.route.snapshot.params.typo == 'F_01') {
+      this.typeOfFile = this.route.snapshot.params.typo;
+    }
+    console.log(this.typeOfFile);
+    
   };
 
   openDatePicker() {
@@ -48,6 +57,7 @@ export class UploadFileComponent implements OnInit {
   reset() {
     // We will clear the value of the input 
     // field using the reference variable.
+    console.log('reset called');
     document.getElementById("btnUpload").blur();
     document.getElementById("btnReset").blur();
     
@@ -62,6 +72,7 @@ export class UploadFileComponent implements OnInit {
     }
   }
 
+ 
   upload(files) {
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');

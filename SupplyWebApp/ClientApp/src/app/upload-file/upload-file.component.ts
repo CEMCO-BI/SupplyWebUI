@@ -50,6 +50,7 @@ export class UploadFileComponent implements OnInit {
     // field using the reference variable.
     document.getElementById("btnUpload").blur();
     document.getElementById("btnReset").blur();
+    
     this.display = false;
     this.displayGrid = false;
     this.InputVar.nativeElement.value = "";

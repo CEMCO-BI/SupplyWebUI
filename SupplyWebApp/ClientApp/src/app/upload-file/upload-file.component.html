@@ -5,18 +5,33 @@
         <img src="https://cemcosteel.com/app/uploads/2019/10/logo.png" class="img-responsive" alt="CEMCO">
       </a>
       <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-        aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
-        <span class="navbar-toggler-icon"></span>
-      </button> -->
+      aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
+      <span class="navbar-toggler-icon"></span>
+    </button> -->
     </div>
-    <div style="padding-top:10px;">
-      <select style="padding-right: 10px; width:230px " name="typeOfFiles" class="custom-select" id="typeOfFileSelect" (change)="reset()" [(ngModel)]="typeOfFile">
-        <option value="F_01" selected>Supply</option>
-        <option value="F_01">Sales Forecast</option>
-        <option value="F_02">CRU Pricing</option>
-        <option value="F_03">PlannedBuy / Transfers</option>
-      </select>
+    <!-- <div style="padding-top:10px;">
+    <select style="padding-right: 10px; width: 230px; background-color: #cce0ff; color:black; " name="typeOfFiles" class="custom-select" id="typeOfFileSelect" (change)="reset()" [(ngModel)]="typeOfFile">
+
+    <option class="option" value="F_01" selected hidden>Supply</option>
+    <option class="option" value="F_01">Sales Forecast</option>
+    <option class="option" value="F_02">CRU Pricing</option>
+    <option class="option" value="F_03">Planned Buy / Transfers</option>
+  </select>
+    </div>-->
+    <div class="btn-group">
+      <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Action
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#">Separated link</a></li>
+      </ul>
     </div>
+
+
 
   </div>
   <hr style="padding-top:50px">

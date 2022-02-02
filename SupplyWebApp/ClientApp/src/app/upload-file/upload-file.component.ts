@@ -91,8 +91,8 @@ export class UploadFileComponent implements OnInit {
     });
 
     this.http.request(uploadReq).subscribe(event => {
-      this.toastr.info("Please wait! While your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
       if (event instanceof HttpResponse) {
+        this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
         console.log(event);
         if (event.status == 200) {
           setTimeout(() => {

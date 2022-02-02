@@ -9,7 +9,7 @@
       <span class="navbar-toggler-icon"></span>
     </button> -->
     </div>
-    <!-- <div style="padding-top:10px;">
+     <div style="padding-top:10px;">
     <select style="padding-right: 10px; width: 230px; background-color: #cce0ff; color:black; " name="typeOfFiles" class="custom-select" id="typeOfFileSelect" (change)="reset()" [(ngModel)]="typeOfFile">
 
     <option class="option" value="F_01" selected hidden>Supply</option>
@@ -17,30 +17,23 @@
     <option class="option" value="F_02">CRU Pricing</option>
     <option class="option" value="F_03">Planned Buy / Transfers</option>
   </select>
-    </div>-->
-    <div class="btn-group">
-      <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        Action
-      </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">Separated link</a></li>
-      </ul>
     </div>
+
 
 
 
   </div>
   <hr style="padding-top:50px">
 </div>
+
 <div>
   <form class="form-horizontal" (ngSubmit)="upload(file.files)">
 
     <div class="form-group">
-      <div class="container">
+      <div class="container" id="typeOf">
+        <label *ngIf="typeOfFile=='F_01'" for="typeOf"><strong>Sales Forecast</strong></label>
+        <label *ngIf="typeOfFile=='F_02'" for="typeOf"><strong>CRU Pricing</strong></label>
+        <label *ngIf="typeOfFile=='F_03'" for="typeOf"><strong>Planned Buy / Transfers </strong></label>
         <div class="custom-file ">
           <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)"
                  class="form-control-file" />
@@ -72,7 +65,7 @@
             </thead>
 
           </table>
-          <table style="border: 2px solid black; width: 100%;  "  cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+          <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
 
             <thead style="height:50px; border:2px solid black">
               <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of data">
@@ -85,15 +78,15 @@
           </table>
 
         </div>
-      
 
-          <br><br>
 
-          <div class="text-center">
-            <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
-            <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
-          </div>
+        <br><br>
+
+        <div class="text-center">
+          <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
+          <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
         </div>
+      </div>
     </div>
   </form>
 </div>

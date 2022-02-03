@@ -60,7 +60,7 @@ namespace SupplyWebApp.Services
 
                         while (_reader.Read())
                         {
-                            Console.WriteLine("uplaodede-------------");
+                            
                             cruPricing = new CRUPricing
                             {
                                 Date = _reader.GetDateTime(0),
@@ -92,11 +92,11 @@ namespace SupplyWebApp.Services
                         }
 
                         int output = DataContext.SaveChanges();
-                        Console.WriteLine("----"+output+"-----");
+                        
 
                         if (output > 0)
                         {
-                            Console.WriteLine("uplaodede-------------done");
+                            
                             _importResult.Successful = true;
                             _importResult.Message = "The Excel file has been successfully uploaded.";
                         }

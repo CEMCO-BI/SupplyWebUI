@@ -41,8 +41,11 @@ export class UploadFileComponent implements OnInit {
 
     if (this.route.snapshot.params.typo == 'F_02' || this.route.snapshot.params.typo == 'F_03' || this.route.snapshot.params.typo == 'F_01') {
       this.typeOfFile = this.route.snapshot.params.typo;
+      console.log(this.typeOfFile)
     }
-    console.log(this.typeOfFile);
+    if (this.typeOfFile == 'F_02') {
+      this.display = true;
+    }
     
   };
 
@@ -74,6 +77,7 @@ export class UploadFileComponent implements OnInit {
 
  
   upload(files) {
+    console.log('upload called')
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
       return;
@@ -84,13 +88,14 @@ export class UploadFileComponent implements OnInit {
       formData.append(file.name, file);
     }
 
-
+    console.log(this.baseUrl);
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
       reportProgress: true,
       params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     });
 
     this.http.request(uploadReq).subscribe(event => {
+      console.log('uplaoded');
       if (event instanceof HttpResponse) {
         this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
         console.log(event);

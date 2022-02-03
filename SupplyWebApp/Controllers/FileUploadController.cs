@@ -38,15 +38,19 @@ namespace SupplyWebApp.Controllers
             string typeOfFile = Request.Query["typeOfFile"].ToString();
 
             GlobalVars.FromDate = Request.Query["from"].ToString();
+            Console.WriteLine("----"+ GlobalVars.FromDate);
             GlobalVars.ToDate = Request.Query["to"].ToString();
+            Console.WriteLine("----" + GlobalVars.ToDate);
 
             switch (typeOfFile)
             {
                 case "F_01":
+                    Console.WriteLine(typeOfFile);
                     importResult = _fileImporter.Import(Enums.FileNames.F_01, file);
                     break;
                 case "F_02":
-                    importResult = _fileImporter.Import(Enums.FileNames.F_02, file);
+                    Console.WriteLine(typeOfFile);
+                    importResult = _fileImporter.Import(Enums.FileNames.F_02, file); 
                     break;
                 case "F_03":
                     importResult = _fileImporter.Import(Enums.FileNames.F_03, file);

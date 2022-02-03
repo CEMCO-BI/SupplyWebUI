@@ -28,8 +28,8 @@ export class UploadFileComponent implements OnInit {
   typo: string = "F_01";
   display: boolean = false;
   displayGrid: boolean = false;
-  to: string = '2022-01-01';
-  from: string = '2022-01-01';
+  to: null;
+  from: null;
   
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute) {

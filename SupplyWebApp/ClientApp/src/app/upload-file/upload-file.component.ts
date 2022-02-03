@@ -21,6 +21,7 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
+  response: { ErrorList: any[], successful: string, message: string };
 
   //type of file
   typeOfFile: string = "F_01";
@@ -87,7 +88,11 @@ export class UploadFileComponent implements OnInit {
     this.http.request(validateReq).subscribe(event => {
       this.toastr.info("Please wait! While your file is being validated.", " Validation in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
       if (event instanceof HttpResponse) {
+       // debugger;
         console.log(event.body);
+        var response = JSON.stringify(event.body);
+        console.log(response)
+        //console.log(response.ErrorList);
         if (event.status == 200) {
           setTimeout(() => {
             this.toastr.success("Your file has been validated successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })

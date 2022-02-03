@@ -31,11 +31,12 @@ namespace SupplyWebApp.Services
         public override ImportResult Import(IFormFile file)
         {
             SalesForecast salesForecast;
-
+            
             try
             {
                 if (file != null && file.Length > 0)
                 {
+                    Console.WriteLine("inside import");
                     using (var stream = new MemoryStream())
                     {
                         file.CopyTo(stream);
@@ -57,9 +58,11 @@ namespace SupplyWebApp.Services
                         }
 
                         AdvanceToDataRow();
+                        Console.WriteLine("advance called");
 
                         while (_reader.Read())
                         {
+                            Console.WriteLine("inside while");
                             salesForecast = new SalesForecast
                             {
                                 Year = (int)_reader.GetDouble(0),
@@ -84,9 +87,11 @@ namespace SupplyWebApp.Services
                         }
 
                         int output = DataContext.SaveChanges();
+                        Console.WriteLine("uploaded------");
 
                         if (output > 0)
                         {
+                            Console.WriteLine("uploaded------");
                             _importResult.Successful = true;
                             _importResult.Message = "The Excel file has been successfully uploaded.";
                         }

@@ -30,7 +30,9 @@ import { GlobalConstants } from './common/global-constant'
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: UploadFileComponent, pathMatch: 'full' },
-      { path: 'upload/:typo', component: UploadFileComponent, pathMatch: 'full' }
+      { path: 'SalesForecast/:typo', component: UploadFileComponent, pathMatch: 'full' },
+      { path: 'CRUPricing/:typo', component: UploadFileComponent, pathMatch: 'full' },
+      { path: 'PlannedBuy/:typo', component: UploadFileComponent, pathMatch: 'full' }
 
  
       //{ path: 'crupricing', component: CRUPricingComponent }

@@ -82,6 +82,9 @@ export class UploadFileComponent implements OnInit {
       this.toastr.error('Please select a file to upload.');
       return;
     }
+    if (this.typeOfFile == 'F_02' && (this.to == null || this.from == null)) {
+      this.toastr.error('Please select FROM and TO date');
+    }
     const formData = new FormData();
 
     for (const file of files) {

@@ -2,7 +2,7 @@
   <header >
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
       <div class="container-fluid" style="padding-right: 100px;">
-        <a class="navbar-brand" style="padding-left: 0px;" [routerLink]="['/']">
+        <a class="navbar-brand" style="padding-left: 0px;" routerLink="/">
           <img src="https://cemcosteel.com/app/uploads/2019/10/logo.png" alt="CEMCO">
         </a>
         <button class="navbar-toggler"
@@ -25,9 +25,9 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <!--<a class="dropdown-item" routerLink="/salesforecast">Sales Forecast</a>-->
 
-              <a class="dropdown-item" routerLink="/salesforecast/F_01" (click)="reset()">Sales Forecast</a>
-              <a class="dropdown-item" routerLink="/cru/F_02" (click)="reset()">CRU Pricing</a>
-              <a class="dropdown-item" routerLink="/plannedbuy/F_03" (click)="reset()">Planned Buy / Transfers</a>
+              <a class="dropdown-item" routerLink="/SalesForecast/F_01" (click)="reset()">Sales Forecast</a>
+              <a class="dropdown-item" routerLink="/CRUPricing/F_02" (click)="reset()">CRU Pricing</a>
+              <a class="dropdown-item" routerLink="/PlannedBuy/F_03" (click)="reset()">Planned Buy / Transfers</a>
 
             </div>
           </div>

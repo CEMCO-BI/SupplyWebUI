@@ -21,7 +21,7 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
-  response: { ErrorList: any[], successful: string, message: string };
+  
 
   //type of file
   typeOfFile: string = "F_01";
@@ -90,8 +90,11 @@ export class UploadFileComponent implements OnInit {
       if (event instanceof HttpResponse) {
        // debugger;
         console.log(event.body);
-        var response = JSON.stringify(event.body);
-        console.log(response)
+        var response = event.body;
+        console.log(response['ErrorList']);
+        console.log(response['Successful']);
+        console.log(response['Message']);
+        
         //console.log(response.ErrorList);
         if (event.status == 200) {
           setTimeout(() => {
@@ -115,6 +118,7 @@ export class UploadFileComponent implements OnInit {
       this.toastr.info("Please wait! While your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
       if (event instanceof HttpResponse) {
         console.log(event);
+        
         if (event.status == 200) {
           setTimeout(() => {
             this.toastr.success("Your file has been uploaded successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })

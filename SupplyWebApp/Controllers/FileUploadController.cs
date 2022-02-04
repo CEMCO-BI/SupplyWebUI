@@ -25,46 +25,38 @@ namespace SupplyWebApp.Controllers
         public FileUploadController(DataContext context)
         {
             _dataContext = context;
-            _fileImporter =  new ImportService(context);
+            _fileImporter = new ImportService(context);
         }
 
         [HttpPost]
         [Route("upload")]
         public async Task<IActionResult> Upload()
         {
-            ImportResult importResult = null;
+            //ImportResult importResult = null;
+            string importResult = null;
 
             var file = Request.Form.Files[0];
             string typeOfFile = Request.Query["typeOfFile"].ToString();
 
             GlobalVars.FromDate = Request.Query["from"].ToString();
-            Console.WriteLine("----"+ GlobalVars.FromDate);
             GlobalVars.ToDate = Request.Query["to"].ToString();
-            Console.WriteLine("----" + GlobalVars.ToDate);
 
             switch (typeOfFile)
             {
+                // same import method to validate or to upload.
                 case "F_01":
-                    Console.WriteLine(typeOfFile);
+                    // this should take json data as return value.
                     importResult = _fileImporter.Import(Enums.FileNames.F_01, file);
                     break;
                 case "F_02":
-                    Console.WriteLine(typeOfFile);
-                    importResult = _fileImporter.Import(Enums.FileNames.F_02, file); 
+                    importResult = _fileImporter.Import(Enums.FileNames.F_02, file);
                     break;
                 case "F_03":
                     importResult = _fileImporter.Import(Enums.FileNames.F_03, file);
                     break;
             }
 
-            if (!importResult.Successful)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "500");
-            }
-            else
-            {
-                return Ok(importResult);
-            }
+            return Ok(importResult);
         }
     }
 }

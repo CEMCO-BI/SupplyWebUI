@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class UploadFileComponent implements OnInit {
-  response = new Response();
+  response: { ErrorList: any[], successful: string, message: string };
   sheet: [][];
   header: [][];
   data: [][];
@@ -103,7 +103,10 @@ export class UploadFileComponent implements OnInit {
       
       if (event instanceof HttpResponse) {
         console.log(event.body);
-        this.response = event.body;
+      //this.response = event.body;
+
+
+        console.log(this.response);
         this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
         
         if (event.status == 200) {

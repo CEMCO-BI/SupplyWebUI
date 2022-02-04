@@ -43,7 +43,8 @@ namespace SupplyWebApp
                     .Where(t => String.Equals(t.Namespace, "SupplyWebApp.Services", StringComparison.Ordinal))
                     .Where(t => t.IsPublic && !t.IsAbstract && !t.Name.Equals("ImportService"))
                     .ToList()
-                    .ForEach(t => t.GetMethod("RegisterImporter").Invoke(null, null));
+                    .ForEach(t => t.GetMethod("RegisterImporter").Invoke(null, null))
+                    ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

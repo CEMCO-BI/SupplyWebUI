@@ -52,7 +52,7 @@
         <label *ngIf="typeOfFile=='F_02'"  for="typeOf"><strong>CRU Pricing</strong></label>
         <label *ngIf="typeOfFile=='F_03'"  for="typeOf"><strong>Planned Buy / Transfers </strong></label>
         <div class="custom-file ">
-          <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)"
+          <input #file type="file" id="customFile" accept=".xls,.xlsx, .csv" multiple (change)="onFileChange($event, file)"
                  class="form-control-file" />
           <label class="custom-file-label" for="customFile">Choose file</label>
         </div>

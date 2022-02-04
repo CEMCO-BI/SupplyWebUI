@@ -13,6 +13,8 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Globalization;
+using CsvHelper;
 
 namespace SupplyWebApp.Services
 {
@@ -34,15 +36,19 @@ namespace SupplyWebApp.Services
             
             try
             {
+                
+                
                 if (file != null && file.Length > 0)
                 {
                     
                     using (var stream = new MemoryStream())
                     {
                         file.CopyTo(stream);
+                       
 
                         stream.Position = 0;
 
+                        
                         if (file.FileName.EndsWith(Constants.FILE_EXTENSION_XLS))
                         {
                             _reader = ExcelReaderFactory.CreateBinaryReader(stream);
@@ -50,6 +56,15 @@ namespace SupplyWebApp.Services
                         else if (file.FileName.EndsWith(Constants.FILE_EXTENSION_XLSX))
                         {
                             _reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                            Console.WriteLine(_reader+"excel reader ----------------");
+                        }
+                        else if (file.FileName.EndsWith(Constants.FILE_EXTENSION_CSV)) 
+                        {
+                            
+                            /*var csvstream = Convert.ToBase64String(stream.ToArray());*/
+                            var streamReader = new StreamReader(stream);
+                            Console.WriteLine(streamReader+"--------this is stream");
+                            _csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
                         }
                         else
                         {
@@ -57,19 +72,37 @@ namespace SupplyWebApp.Services
                             _importResult.Message = "The file format is not supported.";
                         }
 
-                        AdvanceToDataRow();
-                        
+                        AdvanceToDataRow(file);
 
-                        while (_reader.Read())
+
+
+                        while (_reader != null ? _reader.Read() : _csvReader.Read())
                         {
-                            
-                            salesForecast = new SalesForecast
+
+                            if (_reader != null)
                             {
-                                Year = (int)_reader.GetDouble(0),
-                                Month = (int)_reader.GetDouble(1),
-                                Location = _reader.GetString(2),
-                                Amount = _reader.GetDouble(3)
-                            };
+                                salesForecast = new SalesForecast
+                                {
+                                    Year = (int)_reader.GetDouble(0),
+                                    Month = (int)_reader.GetDouble(1),
+                                    Location = _reader.GetString(2),
+                                    Amount = _reader.GetDouble(3)
+                                };
+                            }
+                            else {
+                                
+
+
+                                salesForecast = new SalesForecast
+                                {
+                                    Year = Convert.ToInt32(_csvReader.GetField(0)),
+                                    Month = Convert.ToInt32(_csvReader.GetField(1)),
+                                    Location = _csvReader.GetField(2),
+                                    Amount = Convert.ToDouble(_csvReader.GetField(3))
+                                };
+                               
+
+                            }
 
                             var salesForecastFromDatabase = DataContext.SalesForecast
                                 .Where(sf => sf.Year == salesForecast.Year
@@ -87,11 +120,11 @@ namespace SupplyWebApp.Services
                         }
 
                         int output = DataContext.SaveChanges();
-                        
 
+                        Console.WriteLine("reached till 119");
                         if (output > 0)
                         {
-                            
+                            Console.WriteLine("uploaded");
                             _importResult.Successful = true;
                             _importResult.Message = "The Excel file has been successfully uploaded.";
                         }
@@ -99,13 +132,14 @@ namespace SupplyWebApp.Services
                 }
                 else
                 {
+                    Console.WriteLine("exception");
                     _importResult.Successful = false;
                     _importResult.Message = "Invalid or Empty File.";
                 }
             }
             catch (Exception ex)
             {
-                
+                Console.WriteLine("exception");
                 _importResult.Successful = false;
                 _importResult.Message = "Error occurred - " + ex.Message;
             }

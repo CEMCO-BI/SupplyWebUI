@@ -90,6 +90,7 @@ export class UploadFileComponent implements OnInit {
 
     for (const file of files) {
       formData.append(file.name, file);
+      console.log("file :" + file);
     }
 
     
@@ -128,11 +129,11 @@ export class UploadFileComponent implements OnInit {
       this.toastr.error('Cannot upload multiple files');
     }
     this.fileName = target.files[0].name;
-    let allowedExtensions = /(\.xls|\.xlsx)$/i;
+   /* let allowedExtensions = /(\.xls|\.xlsx)$/i;
     if (!allowedExtensions.exec(this.fileName)) {
       this.toastr.error('Please select an Excel File');
       file.value = '';
-    }
+    }*/
     const reader: FileReader = new FileReader();
 
     reader.onload = (e: any) => {

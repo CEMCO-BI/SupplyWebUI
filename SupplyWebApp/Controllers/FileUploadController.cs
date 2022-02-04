@@ -35,6 +35,7 @@ namespace SupplyWebApp.Controllers
             ImportResult importResult = null;
 
             var file = Request.Form.Files[0];
+            Console.WriteLine(file + "  :this is file");
             string typeOfFile = Request.Query["typeOfFile"].ToString();
 
             GlobalVars.FromDate = Request.Query["from"].ToString();
@@ -45,7 +46,7 @@ namespace SupplyWebApp.Controllers
             switch (typeOfFile)
             {
                 case "F_01":
-                    Console.WriteLine(typeOfFile);
+                    Console.WriteLine(file);
                     importResult = _fileImporter.Import(Enums.FileNames.F_01, file);
                     break;
                 case "F_02":

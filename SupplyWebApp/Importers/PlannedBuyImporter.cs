@@ -57,7 +57,7 @@ namespace SupplyWebApp.Services
                             _importResult.Message = "The file format is not supported.";
                         }
 
-                        AdvanceToDataRow();
+                        AdvanceToDataRow(file);
 
                         while (_reader.Read())
                         {

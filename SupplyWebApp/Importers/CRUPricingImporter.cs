@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using SupplyWebApp.Data;
 using SupplyWebApp.Helpers;
 using SupplyWebApp.Models;
+using SupplyWebApp.Models.TransferObjects;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,7 +32,7 @@ namespace SupplyWebApp.Services
 
         public override ImportResult Import(IFormFile file)
         {
-            CRUPricing cruPricing;
+            CRUPricingTransferObject cruPricingTransferObject;
 
             try
             {
@@ -60,8 +61,7 @@ namespace SupplyWebApp.Services
 
                         while (_reader.Read())
                         {
-                            
-                            cruPricing = new CRUPricing
+                            cruPricingTransferObject = new CRUPricingTransferObject
                             {
                                 Date = _reader.GetDateTime(0),
                                 Week1 = Convert.ToDouble(string.IsNullOrWhiteSpace(_reader.GetValue(1)?.ToString()) ? "0" : _reader.GetValue(1).ToString().Replace("-", "0")),
@@ -71,32 +71,108 @@ namespace SupplyWebApp.Services
                                 Week5 = Convert.ToDouble(string.IsNullOrWhiteSpace(_reader.GetValue(5)?.ToString()) ? "0" : _reader.GetValue(5).ToString().Replace("-", "0")),
                             };
 
-                            if (cruPricing.Date >= Convert.ToDateTime(GlobalVars.FromDate) && cruPricing.Date <= Convert.ToDateTime(GlobalVars.ToDate))
+                            if (cruPricingTransferObject.Date >= Convert.ToDateTime(GlobalVars.FromDate) && cruPricingTransferObject.Date <= Convert.ToDateTime(GlobalVars.ToDate))
                             {
-                                var cruPricingFromDatabase = DataContext.CRUPricing
-                                .Where(sf => sf.Date == cruPricing.Date).FirstOrDefault();
+                                var cruPricingsFromDatabase = DataContext.CRUPricing
+                                .Where(sf => sf.Year == cruPricingTransferObject.Date.Year && sf.Month == cruPricingTransferObject.Date.Month);
 
-                                if (cruPricingFromDatabase != null)
+                                if (cruPricingTransferObject.Week1 > 0)
                                 {
-                                    cruPricingFromDatabase.Week1 = cruPricing.Week1;
-                                    cruPricingFromDatabase.Week2 = cruPricing.Week2;
-                                    cruPricingFromDatabase.Week3 = cruPricing.Week3;
-                                    cruPricingFromDatabase.Week4 = cruPricing.Week4;
-                                    cruPricingFromDatabase.Week5 = cruPricing.Week5;
+                                    if (!cruPricingsFromDatabase.Any(x => x.Week == 1))
+                                    {
+                                        DataContext.CRUPricing.Add(new CRUPricing()
+                                        {
+                                            Amount = cruPricingTransferObject.Week1,
+                                            Month = cruPricingTransferObject.Date.Month,
+                                            Year = cruPricingTransferObject.Date.Year,
+                                            Week = 1
+                                        });
+                                    }
+                                    else
+                                    {
+                                        cruPricingsFromDatabase.FirstOrDefault(x => x.Week == 1).Amount = cruPricingTransferObject.Week1;
+                                    }
                                 }
-                                else
+
+                                if (cruPricingTransferObject.Week2 > 0)
                                 {
-                                    DataContext.CRUPricing.Add(cruPricing);
+                                    if (!cruPricingsFromDatabase.Any(x => x.Week == 2))
+                                    {
+                                        DataContext.CRUPricing.Add(new CRUPricing()
+                                        {
+                                            Amount = cruPricingTransferObject.Week2,
+                                            Month = cruPricingTransferObject.Date.Month,
+                                            Year = cruPricingTransferObject.Date.Year,
+                                            Week = 2
+                                        });
+                                    }
+                                    else
+                                    {
+                                        cruPricingsFromDatabase.FirstOrDefault(x => x.Week == 2).Amount = cruPricingTransferObject.Week2;
+                                    }
+                                }
+
+                                if (cruPricingTransferObject.Week3 > 0)
+                                {
+                                    if (!cruPricingsFromDatabase.Any(x => x.Week == 3))
+                                    {
+                                        DataContext.CRUPricing.Add(new CRUPricing()
+                                        {
+                                            Amount = cruPricingTransferObject.Week3,
+                                            Month = cruPricingTransferObject.Date.Month,
+                                            Year = cruPricingTransferObject.Date.Year,
+                                            Week = 3
+                                        });
+                                    }
+                                    else
+                                    {
+                                        cruPricingsFromDatabase.FirstOrDefault(x => x.Week == 3).Amount = cruPricingTransferObject.Week3;
+                                    }
+                                }
+
+                                if (cruPricingTransferObject.Week4 > 0)
+                                {
+                                    if (!cruPricingsFromDatabase.Any(x => x.Week == 4))
+                                    {
+                                        DataContext.CRUPricing.Add(new CRUPricing()
+                                        {
+                                            Amount = cruPricingTransferObject.Week4,
+                                            Month = cruPricingTransferObject.Date.Month,
+                                            Year = cruPricingTransferObject.Date.Year,
+                                            Week = 4
+                                        });
+                                    }
+                                    else
+                                    {
+                                        cruPricingsFromDatabase.FirstOrDefault(x => x.Week == 4).Amount = cruPricingTransferObject.Week4;
+                                    }
+                                }
+
+                                if (cruPricingTransferObject.Week5 > 0)
+                                {
+                                    if (!cruPricingsFromDatabase.Any(x => x.Week == 5))
+                                    {
+                                        DataContext.CRUPricing.Add(new CRUPricing()
+                                        {
+                                            Amount = cruPricingTransferObject.Week5,
+                                            Month = cruPricingTransferObject.Date.Month,
+                                            Year = cruPricingTransferObject.Date.Year,
+                                            Week = 5
+                                        });
+                                    }
+                                    else
+                                    {
+                                        cruPricingsFromDatabase.FirstOrDefault(x => x.Week == 5).Amount = cruPricingTransferObject.Week5;
+                                    }
                                 }
                             }
                         }
 
                         int output = DataContext.SaveChanges();
-                        
 
                         if (output > 0)
                         {
-                            
+
                             _importResult.Successful = true;
                             _importResult.Message = "The Excel file has been successfully uploaded.";
                         }

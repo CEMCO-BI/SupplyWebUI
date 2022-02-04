@@ -16,11 +16,9 @@ namespace SupplyWebApp.Models
 
         public int Id { get; set; }
 
-        public DateTime Date { get; set; }
-        public double Week1 { get; set; }
-        public double Week2 { get; set; }
-        public double Week3 { get; set; }
-        public double Week4 { get; set; }
-        public double Week5 { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int Week { get; set; }
+        public double Amount { get; set; }
     }
 }

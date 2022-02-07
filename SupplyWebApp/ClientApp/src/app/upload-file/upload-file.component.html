@@ -72,9 +72,21 @@
         <div class="table-wrap py-2" *ngIf="displayerrors" style="height:300px">
           <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel">
             <thead style="height:50px; border:2px solid black">
-              <tr style="height: 40px; border-bottom-width: 2px;" >
+              <tr style="height: 40px; border-bottom-width: 2px;">
                 <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
                   <span style="color:red"><strong>ROW</strong></span>
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  <span style="color:red"><strong>LOCATION</strong></span>
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  <span style="color:red"><strong>YEAR</strong></span>
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  <span style="color:red"><strong>MONTH</strong></span>
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  <span style="color:red"><strong>AMOUNT</strong></span>
                 </td>
                 <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
                   <span style="color:red"><strong>ERROR DESCRIPTION</strong></span>
@@ -88,8 +100,21 @@
                   {{ error.LineNumber }}
                 </td>
                 <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
-                  {{ error.ErrorValidateMessage }}
+                  {{ error.RowData.Location }}
                 </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  {{ error.RowData.Year }}
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  {{ error.RowData.Month }}
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  {{ error.RowData.Amount }}
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  {{ error.ErrorMessage }}
+                </td>
+
               </tr>
             </tbody>
 

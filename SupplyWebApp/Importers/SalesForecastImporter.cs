@@ -83,7 +83,7 @@ namespace SupplyWebApp.Services
                             {
                                 foreach (ValidationFailure failure in results.Errors)
                                 {
-                                    ValidationError v_error = new ValidationError(line, failure.ErrorMessage);
+                                    ValidationError v_error = new ValidationError(line, failure.ErrorMessage, salesForecast);
                                     _importResult.ErrorList.Add(v_error);
                                 }
                             }

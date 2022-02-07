@@ -20,16 +20,16 @@ using SupplyWebApp.Models;
         {
             RuleFor(sf => sf.Year.ToString().Length)
             .Cascade(CascadeMode.Continue)
-            .Equal(4).WithMessage("Please enter  a valid year");
+            .Equal(4).WithMessage("Please enter a valid year");
 
             RuleFor(sf => sf.Month)
             .Cascade(CascadeMode.Continue)
             .Must(BeAValidMonth)
-            .WithMessage("please enter a valid month");
+            .WithMessage("Please enter a valid month");
 
             RuleFor(sf => sf.Location)
             .Cascade(CascadeMode.Continue)
-            .Must(BeAValidLocation).WithMessage("please enter a valid location");
+            .Must(BeAValidLocation).WithMessage("Please enter a valid location");
         }
 
         public bool BeAValidMonth(int month)

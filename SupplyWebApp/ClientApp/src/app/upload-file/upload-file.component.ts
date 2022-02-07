@@ -13,7 +13,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class UploadFileComponent implements OnInit {
-  errorlist: { LineNumber: number, ErrorValidateMessage: string }[];
+  errorlist: {
+    LineNumber: number, ErrorMessage: string, RowData: { Id: number, Year: number, Month: number, Location: string, Amount: number }
+  }[];
   message: string;
   sheet: [][];
   header: [][];
@@ -78,6 +80,11 @@ export class UploadFileComponent implements OnInit {
     }
   }
 
+  errorDataOrTableData() {
+    this.displayerrors = true;
+    this.displayGrid = false;
+  }
+
  
   upload(files) {
     
@@ -108,11 +115,9 @@ export class UploadFileComponent implements OnInit {
       if (event instanceof HttpResponse) {
         var response = event.body;
         this.errorlist = response['ErrorList'];
-        this.message = response['Message'];
-        console.log(this.message);
-        console.log(this.errorlist);
-        this.errorlist != null ? this.displayerrors = true : this.displayerrors = false;
-        console.log(this.displayerrors + ':error exists');
+       // this.errorlist != null ? this.displayerrors = true : this.displayerrors = false;
+        if (this.errorlist != null) { this.errorDataOrTableData() }
+
         if (response['Successfull']) {
           setTimeout(() => {
             this.toastr.success("Your file has been uploaded successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })

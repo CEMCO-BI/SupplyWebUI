@@ -9,12 +9,15 @@ namespace SupplyWebApp.Models
     {
 
         public int LineNumber { get; set; }
-        public string ErrorValidateMessage { get; set; }
+        public string ErrorMessage { get; set; }
 
-        public ValidationError(int line, string error)
+        public object RowData { get; set; }
+
+        public ValidationError(int line, string error, object rowData)
         {
             this.LineNumber = line;
-            this.ErrorValidateMessage = error;
+            this.ErrorMessage = error;
+            this.RowData = rowData;
         }
     }
 }

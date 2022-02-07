@@ -126,7 +126,7 @@ export class UploadFileComponent implements OnInit {
         } else {
           console.log('there are errrors')
           setTimeout(() => {
-            this.toastr.error('There is some problem with the Upload, please look at the errors above.');
+            this.toastr.error("There is some problem with the Upload, please look at the errors below.","", { timeOut: 5000, progressBar: false });
           }, 2500);
         }
       }

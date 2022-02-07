@@ -13,6 +13,10 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
+using FluentValidation;
+using System.ComponentModel;
+using FluentValidation.Results;
+using Newtonsoft.Json;
 
 namespace SupplyWebApp.Services
 {
@@ -28,7 +32,7 @@ namespace SupplyWebApp.Services
             ImportService.RegisterImporter(Enums.FileNames.F_01, typeof(SalesForecastImporter));
         }
 
-        public override ImportResult Import(IFormFile file)
+        public override string Import(IFormFile file)
         {
             SalesForecast salesForecast;
             
@@ -58,7 +62,7 @@ namespace SupplyWebApp.Services
                         }
 
                         AdvanceToDataRow();
-                        
+                        var line = 1;
 
                         while (_reader.Read())
                         {
@@ -70,6 +74,19 @@ namespace SupplyWebApp.Services
                                 Location = _reader.GetString(2),
                                 Amount = _reader.GetDouble(3)
                             };
+                            //step3:pass each row for validation.
+                            // each object is passed to Validator for validation. 
+                            SalesForecastValidator sfv = new SalesForecastValidator();
+                            var results = sfv.Validate(salesForecast);
+
+                            if (results.IsValid == false)
+                            {
+                                foreach (ValidationFailure failure in results.Errors)
+                                {
+                                    ValidationError v_error = new ValidationError(line, failure.ErrorMessage, salesForecast);
+                                    _importResult.ErrorList.Add(v_error);
+                                }
+                            }
 
                             var salesForecastFromDatabase = DataContext.SalesForecast
                                 .Where(sf => sf.Year == salesForecast.Year
@@ -84,7 +101,17 @@ namespace SupplyWebApp.Services
                             {
                                 DataContext.SalesForecast.Add(salesForecast);
                             }
+                            line++;
                         }
+                        string result = JsonConvert.SerializeObject(_importResult);
+                        Console.WriteLine("------ALL ERRORS-----");
+                        Console.WriteLine(result);
+                        
+                        if (_importResult.ErrorList.Count() != 0)
+                        {
+                            return result;
+                        }
+
 
                         int output = DataContext.SaveChanges();
                         
@@ -110,7 +137,8 @@ namespace SupplyWebApp.Services
                 _importResult.Message = "Error occurred - " + ex.Message;
             }
 
-            return _importResult;
+            //return _importResult;
+            return result;
         }
     }
 }

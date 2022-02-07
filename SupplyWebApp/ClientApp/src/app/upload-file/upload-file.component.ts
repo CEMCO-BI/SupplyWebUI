@@ -13,6 +13,10 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class UploadFileComponent implements OnInit {
+  errorlist: {
+    LineNumber: number, ErrorMessage: string, RowData: { Id: number, Year: number, Month: number, Location: string, Amount: number }
+  }[];
+  message: string;
   sheet: [][];
   header: [][];
   data: [][];
@@ -22,6 +26,7 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
+  displayerrors: boolean;
 
   //type of file
   typeOfFile: string = "F_01";
@@ -65,6 +70,7 @@ export class UploadFileComponent implements OnInit {
     
     this.display = false;
     this.displayGrid = false;
+    this.displayerrors = false;
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
     this.header = [[], []];
@@ -72,6 +78,11 @@ export class UploadFileComponent implements OnInit {
     if(this.typeOfFile == 'F_02'){
       this.openDatePicker();
     }
+  }
+
+  errorDataOrTableData() {
+    this.displayerrors = true;
+    this.displayGrid = false;
   }
 
  
@@ -97,20 +108,25 @@ export class UploadFileComponent implements OnInit {
       reportProgress: true,
       params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     });
-
+    //check
+    this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
     this.http.request(uploadReq).subscribe(event => {
       
       if (event instanceof HttpResponse) {
-        this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
-        
-        if (event.status == 200) {
+        var response = event.body;
+        this.errorlist = response['ErrorList'];
+       // this.errorlist != null ? this.displayerrors = true : this.displayerrors = false;
+        if (this.errorlist != null) { this.errorDataOrTableData() }
+
+        if (response['Successfull']) {
           setTimeout(() => {
             this.toastr.success("Your file has been uploaded successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
             this.reset();
           }, 2500);
-        } else if (event.status == 500) {
+        } else {
+          console.log('there are errrors')
           setTimeout(() => {
-            this.toastr.error("Upload failed due to internal server error, please contact support.", " Uploaded failed...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+            this.toastr.error("There is some problem with the Upload, please look at the errors below.","", { timeOut: 5000, progressBar: false });
           }, 2500);
         }
       }

@@ -24,7 +24,7 @@ namespace SupplyWebApp.Services
             _fileImporters.Add(file, reportImporter);
         }
 
-        public ImportResult Import(FileNames fileName, IFormFile file)
+        public string Import(FileNames fileName, IFormFile file)
         {
             return CreateImporter(fileName).Import(file);
         }

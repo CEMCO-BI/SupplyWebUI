@@ -68,6 +68,7 @@ export class UploadFileComponent implements OnInit {
     
     this.display = false;
     this.displayGrid = false;
+    this.displayerrors = false;
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
     this.header = [[], []];
@@ -111,15 +112,16 @@ export class UploadFileComponent implements OnInit {
         console.log(this.message);
         console.log(this.errorlist);
         this.errorlist != null ? this.displayerrors = true : this.displayerrors = false;
-        console.log(this.displayerrors);
+        console.log(this.displayerrors + ':error exists');
         if (response['Successfull']) {
           setTimeout(() => {
             this.toastr.success("Your file has been uploaded successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
             this.reset();
           }, 2500);
         } else {
+          console.log('there are errrors')
           setTimeout(() => {
-            this.toastr.error("Upload failed due to internal server error, please contact support.", " Uploaded failed...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+            this.toastr.error('There is some problem with the Upload, please look at the errors above.');
           }, 2500);
         }
       }

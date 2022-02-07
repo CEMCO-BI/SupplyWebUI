@@ -62,7 +62,7 @@ namespace SupplyWebApp.Services
                         }
 
                         AdvanceToDataRow();
-                        var line = 2;
+                        var line = 1;
 
                         while (_reader.Read())
                         {

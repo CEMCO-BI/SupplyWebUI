@@ -67,60 +67,71 @@
             <input id="todate" class="form-control" [(ngModel)]="to" type="date" value=$event.target.value name="to">
           </div>
         </div>
-       
-        <div id="errors" class="row container" *ngIf="displayerrors" style="padding-top:10px">
-          <label for="errors">Errors in your file :</label>
-          <div style="width:100%">
-         
-            <div *ngFor="let error of errorlist">
-              <div style="width:30%; float:left; ">
-                <h5>{{ error.LineNumber }}</h5>  
 
-              </div>
-              <div style="width: 70%; background-color: lightgrey">
-                <h5 style="color:red">{{ error.ErrorValidateMessage }}</h5>
-              </div>
-            </div>
+        
+        <div class="table-wrap py-2" *ngIf="displayerrors" style="height:300px">
+          <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel">
+            <thead style="height:50px; border:2px solid black">
+              <tr style="height: 40px; border-bottom-width: 2px;" >
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  <span style="color:red"><strong>ROW</strong></span>
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  <span style="color:red"><strong>ERROR DESCRIPTION</strong></span>
+                </td>
+              </tr>
+            </thead>
+
+            <tbody style="height:50px; border:2px solid black">
+              <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let error of errorlist">
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  {{ error.LineNumber }}
+                </td>
+                <td style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col">
+                  {{ error.ErrorValidateMessage }}
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+          </div>
+
+          <div class="table-wrap" *ngIf="displayGrid">
+
+            <table style="border: 2px solid black; position: sticky; top: 0; width: 100%; background-color: #80bfff;" class="container-fluid" cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+
+              <thead style="height:40px; border:2px solid black">
+                <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of header">
+                  <th style=" background-color: #80bfff; text-align:center;border-bottom-width: 2px; width: 150px" scope="col" *ngFor="let title of row">
+                    {{title}}
+                  </th>
+                </tr>
+              </thead>
+
+            </table>
+            <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+
+              <thead style="height:50px; border:2px solid black">
+                <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of data">
+                  <th style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col" *ngFor="let cell of row">
+                    {{cell}}
+                  </th>
+                </tr>
+              </thead>
+
+            </table>
 
           </div>
-        </div>
 
-        <div class="table-wrap" *ngIf="displayGrid">
 
-          <table style="border: 2px solid black; position: sticky; top: 0; width: 100%; background-color: #80bfff;" class="container-fluid" cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+          <br><br>
 
-            <thead style="height:40px; border:2px solid black">
-              <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of header">
-                <th style=" background-color: #80bfff; text-align:center;border-bottom-width: 2px; width: 150px" scope="col" *ngFor="let title of row">
-                  {{title}}
-                </th>
-              </tr>
-            </thead>
-
-          </table>
-          <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
-
-            <thead style="height:50px; border:2px solid black">
-              <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of data">
-                <th style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col" *ngFor="let cell of row">
-                  {{cell}}
-                </th>
-              </tr>
-            </thead>
-
-          </table>
+          <div class="text-center">
+            <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
+            <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+          </div>
 
         </div>
-
-
-        <br><br>
-
-        <div class="text-center">
-          <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
-          <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
-        </div>
-
       </div>
-    </div>
   </form>
 </div>

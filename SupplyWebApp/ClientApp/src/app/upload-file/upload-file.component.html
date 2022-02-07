@@ -69,7 +69,8 @@
         </div>
 
         
-        <div class="table-wrap py-2" *ngIf="displayerrors" style="height:300px">
+        <div id="errordata" class="table-wrap py-2" *ngIf="displayerrors" style="height:300px">
+          <label style="color:red" for="errordata"><strong>List of all the errors in the excel file :</strong></label>
           <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel">
             <thead style="height:50px; border:2px solid black">
               <tr style="height: 40px; border-bottom-width: 2px;">
@@ -119,7 +120,7 @@
             </tbody>
 
           </table>
-          </div>
+        </div>
 
           <div class="table-wrap" *ngIf="displayGrid">
 

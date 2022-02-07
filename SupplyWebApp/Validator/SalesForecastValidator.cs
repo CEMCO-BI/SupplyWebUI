@@ -24,15 +24,15 @@ using SupplyWebApp.Models;
 
             RuleFor(sf => sf.Month)
             .Cascade(CascadeMode.Continue)
-            .Must(BeAValidMonth)
+            .Must(isAValidMonth)
             .WithMessage("Please enter a valid month");
 
             RuleFor(sf => sf.Location)
             .Cascade(CascadeMode.Continue)
-            .Must(BeAValidLocation).WithMessage("Please enter a valid location");
+            .Must(isAValidLocation).WithMessage("lease enter a valid location");
         }
 
-        public bool BeAValidMonth(int month)
+        public bool isAValidMonth(int month)
         {
             for (int i = 1; i <= 12; i++)
             {
@@ -42,7 +42,7 @@ using SupplyWebApp.Models;
             }
             return false;
         }
-        public bool BeAValidLocation(string location)
+        public bool isAValidLocation(string location)
         {
             String[] s = { "IND", "DEN", "PIT", "FTW" };
             for (int i = 0; i < s.Length; i++)

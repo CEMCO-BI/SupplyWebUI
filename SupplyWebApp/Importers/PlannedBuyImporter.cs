@@ -1,4 +1,4 @@
-﻿/*using ExcelDataReader;
+﻿using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
@@ -13,6 +13,10 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
+using FluentValidation;
+using System.ComponentModel;
+using FluentValidation.Results;
+using Newtonsoft.Json;
 
 namespace SupplyWebApp.Services
 {
@@ -28,10 +32,11 @@ namespace SupplyWebApp.Services
             ImportService.RegisterImporter(Enums.FileNames.F_03, typeof(PlannedBuyImporter));
         }
 
-        public override ImportResult Import(IFormFile file)
+        public override string Import(IFormFile file)
         {
             PlannedBuy plannedBuy;
-            
+            string result = null;
+
 
             try
             {
@@ -58,6 +63,7 @@ namespace SupplyWebApp.Services
                         }
 
                         AdvanceToDataRow();
+                        var line = 1;
 
                         while (_reader.Read())
                         {
@@ -68,6 +74,19 @@ namespace SupplyWebApp.Services
                                 Location = _reader.GetString(2),
                                 Amount = _reader.GetDouble(3)
                             };
+
+                            PlannedBuyValidator sfv = new PlannedBuyValidator();
+                            var results = sfv.Validate(plannedBuy);
+
+                            if (results.IsValid == false)
+                            {
+
+                                foreach (ValidationFailure failure in results.Errors)
+                                {
+                                    ValidationError v_error = new ValidationError(line, failure.ErrorMessage, plannedBuy);
+                                    _importResult.ErrorList.Add(v_error);
+                                }
+                            }
 
                             var plannedBuyFromDatabase = DataContext.PlannedBuy
                                 .Where(sf => sf.Year == plannedBuy.Year
@@ -82,30 +101,46 @@ namespace SupplyWebApp.Services
                             {
                                 DataContext.PlannedBuy.Add(plannedBuy);
                             }
+                            line++;
                         }
 
+                        if (_importResult.ErrorList.Any())
+                        {
+                            _importResult.Successful = false;
+                            _importResult.Message = "There are some errors in the File.";
+                            result = JsonConvert.SerializeObject(_importResult);
+                            return result;
+
+                        }
                         int output = DataContext.SaveChanges();
 
                         if (output > 0)
                         {
+
                             _importResult.Successful = true;
                             _importResult.Message = "The Excel file has been successfully uploaded.";
+                            Console.WriteLine("output :" + output);
                         }
+
+                        result = JsonConvert.SerializeObject(_importResult);
                     }
                 }
                 else
                 {
                     _importResult.Successful = false;
                     _importResult.Message = "Invalid or Empty File.";
+                    result = JsonConvert.SerializeObject(_importResult);
                 }
+                return result;
             }
             catch (Exception ex)
             {
-                 _importResult.Successful = false;
+                _importResult.Successful = false;
                 _importResult.Message = "Error occurred - " + ex.Message;
+                result = JsonConvert.SerializeObject(_importResult);
+                return result;
             }
-            return _importResult;
+            
         }
     }
 }
-*/

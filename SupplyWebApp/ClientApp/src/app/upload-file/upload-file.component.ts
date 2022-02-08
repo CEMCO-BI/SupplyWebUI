@@ -81,7 +81,7 @@ export class UploadFileComponent implements OnInit {
   }
 
   errorDataOrTableData() {
-    this.displayerrors = true;
+    this.displayerrors = false;
     this.displayGrid = false;
   }
 
@@ -128,7 +128,7 @@ export class UploadFileComponent implements OnInit {
         } else {
           console.log('there are errrors')
           setTimeout(() => {
-            this.toastr.error("There is some problem with the Upload, please look at the errors below.","", { timeOut: 5000, progressBar: false });
+            this.toastr.error("There are some errors in the excel file.","Upload Failed...", { timeOut: 5000, progressBar: false });
           }, 2500);
         }
       }

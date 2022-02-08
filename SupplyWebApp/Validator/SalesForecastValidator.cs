@@ -52,4 +52,14 @@ using SupplyWebApp.Models;
             }
             return false;
         }
+    public bool isAValidLocation(string location)
+    {
+        String[] s = { "IND", "DEN", "PIT", "FTW" };
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (location == s[i])
+                return true;
+        }
+        return false;
     }
+}

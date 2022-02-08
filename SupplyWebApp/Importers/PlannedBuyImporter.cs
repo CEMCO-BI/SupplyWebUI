@@ -36,7 +36,7 @@ namespace SupplyWebApp.Services
         {
             PlannedBuy plannedBuy;
             string result = null;
-
+            PlannedBuyValidateObj plannedBuyValidateObj;
 
             try
             {
@@ -67,63 +67,88 @@ namespace SupplyWebApp.Services
 
                         while (_reader.Read())
                         {
-                            plannedBuy = new PlannedBuy
-                            {
-                                Year = (int)_reader.GetDouble(0),
-                                Month = (int)_reader.GetDouble(1),
-                                Location = _reader.GetString(2),
-                                Amount = _reader.GetDouble(3)
-                            };
+                            object year = _reader.GetValue(0);
+                            object month = _reader.GetValue(1);
+                            object location = _reader.GetValue(2);
+                            object amount = _reader.GetValue(3);
 
-                            PlannedBuyValidator sfv = new PlannedBuyValidator();
-                            var results = sfv.Validate(plannedBuy);
+
+
+                            string year_v = year.ToString();
+                            string month_v = month.ToString();
+                            string location_v = location.ToString();
+                            string amount_v = amount.ToString();
+
+                            plannedBuyValidateObj = new PlannedBuyValidateObj(year_v, month_v, location_v, amount_v);
+
+                            PlannedBuyValidator pbv = new PlannedBuyValidator();
+                            var results = pbv.Validate(plannedBuyValidateObj);
+
 
                             if (results.IsValid == false)
                             {
 
                                 foreach (ValidationFailure failure in results.Errors)
                                 {
-                                    ValidationError v_error = new ValidationError(line, failure.ErrorMessage, plannedBuy);
+                                    ValidationError v_error = new ValidationError(line, failure.ErrorMessage, plannedBuyValidateObj);
                                     _importResult.ErrorList.Add(v_error);
                                 }
                             }
 
-                            var plannedBuyFromDatabase = DataContext.PlannedBuy
-                                .Where(sf => sf.Year == plannedBuy.Year
-                                && sf.Month == plannedBuy.Month
-                                && sf.Location.Equals(plannedBuy.Location)).FirstOrDefault();
 
-                            if (plannedBuyFromDatabase != null)
+                            if (!_importResult.ErrorList.Any())
                             {
-                                plannedBuyFromDatabase.Amount = plannedBuy.Amount;
-                            }
-                            else
-                            {
-                                DataContext.PlannedBuy.Add(plannedBuy);
+
+                                plannedBuy = new PlannedBuy
+                                {
+                                    Year = Convert.ToInt32(_reader.GetValue(0)),
+                                    Month = Convert.ToInt32(_reader.GetValue(1)),
+                                    Location = _reader.GetString(2),
+                                    Amount = Convert.ToDouble(_reader.GetValue(3)),
+                                };
+
+                                var plannedBuyFromDatabase = DataContext.PlannedBuy
+                                 .Where(sf => sf.Year == plannedBuy.Year
+                                 && sf.Month == plannedBuy.Month
+                                 && sf.Location.Equals(plannedBuy.Location)).FirstOrDefault();
+
+
+                                if (plannedBuyFromDatabase != null)
+                                {
+                                    plannedBuyFromDatabase.Amount = plannedBuy.Amount;
+                                }
+                                else
+                                {
+                                    DataContext.PlannedBuy.Add(plannedBuy);
+                                }
+                                int output = DataContext.SaveChanges();
+
+
+                                if (output > 0)
+                                {
+
+                                    _importResult.Successful = true;
+                                    _importResult.Message = "The Excel file has been successfully uploaded.";
+                                    Console.WriteLine("output :" + output);
+                                }
+
+                                result = JsonConvert.SerializeObject(_importResult);
                             }
                             line++;
                         }
-
                         if (_importResult.ErrorList.Any())
                         {
                             _importResult.Successful = false;
                             _importResult.Message = "There are some errors in the File.";
                             result = JsonConvert.SerializeObject(_importResult);
-                            return result;
+                            //return result;
 
                         }
-                        int output = DataContext.SaveChanges();
-
-                        if (output > 0)
-                        {
-
-                            _importResult.Successful = true;
-                            _importResult.Message = "The Excel file has been successfully uploaded.";
-                            Console.WriteLine("output :" + output);
-                        }
-
-                        result = JsonConvert.SerializeObject(_importResult);
                     }
+
+
+
+
                 }
                 else
                 {
@@ -131,16 +156,20 @@ namespace SupplyWebApp.Services
                     _importResult.Message = "Invalid or Empty File.";
                     result = JsonConvert.SerializeObject(_importResult);
                 }
+
                 return result;
+
             }
             catch (Exception ex)
             {
+
                 _importResult.Successful = false;
                 _importResult.Message = "Error occurred - " + ex.Message;
                 result = JsonConvert.SerializeObject(_importResult);
                 return result;
             }
-            
+
+
+
         }
-    }
-}
+    } }

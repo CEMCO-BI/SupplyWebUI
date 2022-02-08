@@ -15,39 +15,37 @@ using System.Text.RegularExpressions;
 
 
 
-public class PlannedBuyValidator : AbstractValidator<PlannedBuy>
+public class PlannedBuyValidator : AbstractValidator<PlannedBuyValidateObj>
 {
     public PlannedBuyValidator()
     {
-        RuleFor(sf => sf.Year.ToString().Length)
+        RuleFor(sf => sf.Year_v)
         .Cascade(CascadeMode.Continue)
-        .Equal(4).WithMessage("Please enter a valid Year.");
+        .Must(IsNumberOfFour)
+        .WithMessage("Please enter a valid Year.");
 
-        RuleFor(sf => sf.Month)
+        RuleFor(sf => sf.Month_v)
         .Cascade(CascadeMode.Continue)
-        .Must(isAValidMonth)
+        .Must(IsAValidMonth)
         .WithMessage("Please enter a valid Month.");
 
-        RuleFor(sf => sf.Location)
+        RuleFor(sf => sf.Location_v)
         .Cascade(CascadeMode.Continue)
-        .Must(isAValidLocation).WithMessage("Please enter a valid Location.");
+        .Must(IsAValidLocation).WithMessage("Please enter a valid Location.");
 
-        RuleFor(sf => sf.Amount.ToString())
+        RuleFor(sf => sf.Amount_v)
         .Cascade(CascadeMode.Continue)
-        .Must(isAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+        .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
     }
 
-    public bool isAValidMonth(int month)
+    public bool IsAValidMonth(string month)
     {
-        for (int i = 1; i <= 12; i++)
-        {
-            if (month == i)
-                return true;
 
-        }
-        return false;
+        var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
+        return regex.IsMatch(month);
+
     }
-    public bool isAValidLocation(string location)
+    public bool IsAValidLocation(string location)
     {
         String[] s = { "IND", "DEN", "PIT", "FTW" };
         for (int i = 0; i < s.Length; i++)
@@ -58,10 +56,17 @@ public class PlannedBuyValidator : AbstractValidator<PlannedBuy>
         return false;
     }
 
-    public bool isAValidAmount(string amount)
+    public bool IsAValidAmount(string amount)
     {
-        var regex = new Regex("[+-]?([0-9]*[.])?[0-9]+");
+        var regex = new Regex("^-?\\d*(\\.\\d+)?$");
 
         return regex.IsMatch(amount);
+    }
+
+    public bool IsNumberOfFour(string year)
+    {
+        var regex = new Regex("^[0-9]+$");
+
+        return regex.IsMatch(year) && year.Length.Equals(4);
     }
 }

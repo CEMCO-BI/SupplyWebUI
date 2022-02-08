@@ -21,31 +21,31 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
     {
         RuleFor(sf => sf.Year_v)
         .Cascade(CascadeMode.Continue)
-        .Must(isNumberOfFour)
+        .Must(IsNumberOfFour)
         .WithMessage("Please enter a valid Year.");
 
         RuleFor(sf => sf.Month_v)
         .Cascade(CascadeMode.Continue)
-        .Must(isAValidMonth)
+        .Must(IsAValidMonth)
         .WithMessage("Please enter a valid Month.");
 
         RuleFor(sf => sf.Location_v)
         .Cascade(CascadeMode.Continue)
-        .Must(isAValidLocation).WithMessage("Please enter a valid Location.");
+        .Must(IsAValidLocation).WithMessage("Please enter a valid Location.");
 
         RuleFor(sf => sf.Amount_v)
         .Cascade(CascadeMode.Continue)
-        .Must(isAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+        .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
     }
 
-    public bool isAValidMonth(string month)
+    public bool IsAValidMonth(string month)
     {
         
          var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
          return regex.IsMatch(month);
 
     }
-    public bool isAValidLocation(string location)
+    public bool IsAValidLocation(string location)
     {
         String[] s = { "IND", "DEN", "PIT", "FTW" };
         for (int i = 0; i < s.Length; i++)
@@ -56,14 +56,14 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
         return false;
     }
 
-    public bool isAValidAmount(string amount)
+    public bool IsAValidAmount(string amount)
     {
         var regex = new Regex("^-?\\d*(\\.\\d+)?$");
 
         return regex.IsMatch(amount);
     }
 
-    public bool isNumberOfFour(string year)
+    public bool IsNumberOfFour(string year)
     {
        var regex = new Regex("^[0-9]+$");
 

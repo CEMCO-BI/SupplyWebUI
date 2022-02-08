@@ -15,37 +15,35 @@ using System.Text.RegularExpressions;
 
 
 
-public class SalesForecastValidator : AbstractValidator<SalesForecast>
+public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj>
 {
     public SalesForecastValidator()
     {
-        RuleFor(sf => sf.Year.ToString().Length)
+        RuleFor(sf => sf.Year_v)
         .Cascade(CascadeMode.Continue)
-        .Equal(4).WithMessage("Please enter a valid Year.");
+        .Must(isNumberOfFour)
+        .WithMessage("Please enter a valid Year.");
 
-        RuleFor(sf => sf.Month)
+        RuleFor(sf => sf.Month_v)
         .Cascade(CascadeMode.Continue)
         .Must(isAValidMonth)
         .WithMessage("Please enter a valid Month.");
 
-        RuleFor(sf => sf.Location)
+        RuleFor(sf => sf.Location_v)
         .Cascade(CascadeMode.Continue)
         .Must(isAValidLocation).WithMessage("Please enter a valid Location.");
 
-        RuleFor(sf => sf.Amount.ToString())
+        RuleFor(sf => sf.Amount_v)
         .Cascade(CascadeMode.Continue)
         .Must(isAValidAmount).WithMessage("Please enter a numeric value for Amount.");
     }
 
-    public bool isAValidMonth(int month)
+    public bool isAValidMonth(string month)
     {
-        for (int i = 1; i <= 12; i++)
-        {
-            if (month == i)
-                return true;
+        
+         var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
+         return regex.IsMatch(month);
 
-        }
-        return false;
     }
     public bool isAValidLocation(string location)
     {
@@ -60,8 +58,15 @@ public class SalesForecastValidator : AbstractValidator<SalesForecast>
 
     public bool isAValidAmount(string amount)
     {
-        var regex = new Regex("[+-]?([0-9]*[.])?[0-9]+");
+        var regex = new Regex("^-?\\d*(\\.\\d+)?$");
 
         return regex.IsMatch(amount);
+    }
+
+    public bool isNumberOfFour(string year)
+    {
+       var regex = new Regex("^[0-9]+$");
+
+        return regex.IsMatch(year) && year.Length.Equals(4);
     }
 }

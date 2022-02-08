@@ -11,6 +11,9 @@ namespace SupplyWebApp.Models
 
     public class SalesForecast
     {
+
+
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
@@ -19,5 +22,6 @@ namespace SupplyWebApp.Models
         public int Month { get; set; }
         public string Location { get; set; }
         public double Amount { get; set; }
+
     }
 }

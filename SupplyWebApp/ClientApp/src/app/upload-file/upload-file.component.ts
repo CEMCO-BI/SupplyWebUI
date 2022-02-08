@@ -26,7 +26,7 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
-  displayerrors: boolean;
+  displayerrors: boolean = false;
 
   //type of file
   typeOfFile: string = "F_01";
@@ -81,8 +81,11 @@ export class UploadFileComponent implements OnInit {
   }
 
   errorDataOrTableData() {
-    this.displayerrors = true;
-    this.displayGrid = false;
+    if (this.errorlist.length) {
+      this.displayerrors = true;
+      this.displayGrid = false;
+
+    } 
   }
 
  
@@ -117,18 +120,18 @@ export class UploadFileComponent implements OnInit {
         console.log(event.body);
         console.log(response['Successful'])
         this.errorlist = response['ErrorList'];
-       // this.errorlist != null ? this.displayerrors = true : this.displayerrors = false;
-        if (this.errorlist != []) { this.errorDataOrTableData() }
+        this.errorDataOrTableData() 
+       
 
         if (response['Successful']) {
           setTimeout(() => {
-            this.toastr.success("Your file has been uploaded successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
+            this.toastr.success("Your file has been uploaded successfully.", " Upload Successful...", { positionClass: 'toast-bottom-center', timeOut: 3000, progressBar: false })
             this.reset();
           }, 2500);
         } else {
           console.log('there are errrors')
           setTimeout(() => {
-            this.toastr.error("There is some problem with the Upload, please look at the errors below.","", { timeOut: 5000, progressBar: false });
+            this.toastr.error("There are some errors in the excel file.","Upload Failed...", { timeOut: 5000, progressBar: false });
           }, 2500);
         }
       }

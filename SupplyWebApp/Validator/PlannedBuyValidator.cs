@@ -15,9 +15,9 @@ using System.Text.RegularExpressions;
 
 
 
-public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj>
+public class PlannedBuyValidator : AbstractValidator<PlannedBuyValidateObj>
 {
-    public SalesForecastValidator()
+    public PlannedBuyValidator()
     {
         RuleFor(sf => sf.Year_v)
         .Cascade(CascadeMode.Continue)
@@ -40,9 +40,9 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
 
     public bool IsAValidMonth(string month)
     {
-        
-         var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
-         return regex.IsMatch(month);
+
+        var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
+        return regex.IsMatch(month);
 
     }
     public bool IsAValidLocation(string location)
@@ -65,7 +65,7 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
 
     public bool IsNumberOfFour(string year)
     {
-       var regex = new Regex("^[0-9]+$");
+        var regex = new Regex("^[0-9]+$");
 
         return regex.IsMatch(year) && year.Length.Equals(4);
     }

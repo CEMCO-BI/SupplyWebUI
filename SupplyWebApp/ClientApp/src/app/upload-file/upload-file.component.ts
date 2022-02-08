@@ -114,11 +114,13 @@ export class UploadFileComponent implements OnInit {
       
       if (event instanceof HttpResponse) {
         var response = event.body;
+        console.log(event.body);
+        console.log(response['Successful'])
         this.errorlist = response['ErrorList'];
        // this.errorlist != null ? this.displayerrors = true : this.displayerrors = false;
-        if (this.errorlist != null) { this.errorDataOrTableData() }
+        if (this.errorlist != []) { this.errorDataOrTableData() }
 
-        if (response['Successfull']) {
+        if (response['Successful']) {
           setTimeout(() => {
             this.toastr.success("Your file has been uploaded successfully.", " Upload Successfull...", { positionClass: 'toast-bottom-center', timeOut: 1000, progressBar: false })
             this.reset();

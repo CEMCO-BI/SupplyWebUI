@@ -35,7 +35,9 @@ namespace SupplyWebApp.Services
         public override string Import(IFormFile file)
         {
             SalesForecast salesForecast;
-            
+            string result = null;
+
+
             try
             {
                 if (file != null && file.Length > 0)
@@ -81,6 +83,7 @@ namespace SupplyWebApp.Services
 
                             if (results.IsValid == false)
                             {
+                                
                                 foreach (ValidationFailure failure in results.Errors)
                                 {
                                     ValidationError v_error = new ValidationError(line, failure.ErrorMessage, salesForecast);
@@ -103,16 +106,16 @@ namespace SupplyWebApp.Services
                             }
                             line++;
                         }
-                        string result = JsonConvert.SerializeObject(_importResult);
-                        Console.WriteLine("------ALL ERRORS-----");
-                        Console.WriteLine(result);
                         
-                        if (_importResult.ErrorList.Count() != 0)
-                        {
+                       
+
+                        if ( _importResult.ErrorList.Any() ) { 
+                            _importResult.Successful = false;
+                            _importResult.Message = "There are some errors in the File.";
+                            result = JsonConvert.SerializeObject(_importResult);
                             return result;
+
                         }
-
-
                         int output = DataContext.SaveChanges();
                         
 
@@ -121,24 +124,32 @@ namespace SupplyWebApp.Services
                             
                             _importResult.Successful = true;
                             _importResult.Message = "The Excel file has been successfully uploaded.";
+                            Console.WriteLine("output :"+ output);
                         }
+
+                        result = JsonConvert.SerializeObject(_importResult);
                     }
                 }
                 else
                 {
                     _importResult.Successful = false;
                     _importResult.Message = "Invalid or Empty File.";
+                    result = JsonConvert.SerializeObject(_importResult);
                 }
+                
+                return result;
             }
             catch (Exception ex)
             {
                 
                 _importResult.Successful = false;
                 _importResult.Message = "Error occurred - " + ex.Message;
+                result = JsonConvert.SerializeObject(_importResult);
+                return result;
             }
 
-            //return _importResult;
-            return result;
+            
+            
         }
     }
 }

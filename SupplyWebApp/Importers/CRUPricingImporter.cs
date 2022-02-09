@@ -1,11 +1,10 @@
-﻿/*using ExcelDataReader;
+﻿using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using SupplyWebApp.Data;
 using SupplyWebApp.Helpers;
 using SupplyWebApp.Models;
-using SupplyWebApp.Models.TransferObjects;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,6 +13,11 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
+using FluentValidation;
+using System.ComponentModel;
+using FluentValidation.Results;
+using Newtonsoft.Json;
+using SupplyWebApp.Models.TransferObjects;
 
 namespace SupplyWebApp.Services
 {
@@ -30,7 +34,7 @@ namespace SupplyWebApp.Services
             ImportService.RegisterImporter(Enums.FileNames.F_02, typeof(CRUPricingImporter));
         }
 
-        public override ImportResult Import(IFormFile file)
+        public override string Import(IFormFile file)
         {
             CRUPricingTransferObject cruPricingTransferObject;
 
@@ -183,14 +187,14 @@ namespace SupplyWebApp.Services
                     _importResult.Successful = false;
                     _importResult.Message = "Invalid or Empty File.";
                 }
+                result = JsonConvert.SerializeObject(_importResult);
             }
             catch (Exception ex)
             {
                 _importResult.Successful = false;
                 _importResult.Message = "Error occurred - " + ex.Message;
             }
-            return _importResult;
+            return result;
         }
     }
 }
-*/

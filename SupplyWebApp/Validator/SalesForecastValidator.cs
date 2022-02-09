@@ -21,7 +21,7 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
     {
         RuleFor(sf => sf.Year_v)
         .Cascade(CascadeMode.Continue)
-        .Must(IsNumberOfFour)
+        .Must(IsValidYear)
         .WithMessage("Please enter a valid Year.");
 
         RuleFor(sf => sf.Month_v)
@@ -42,7 +42,7 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
     {
         
          var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
-         return regex.IsMatch(month);
+         return  month == "" ||  regex.IsMatch(month);
 
     }
     public bool IsAValidLocation(string location)
@@ -63,7 +63,7 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
         return regex.IsMatch(amount);
     }
 
-    public bool IsNumberOfFour(string year)
+    public bool IsValidYear(string year)
     {
        var regex = new Regex("^[0-9]+$");
 

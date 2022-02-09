@@ -111,10 +111,10 @@ namespace SupplyWebApp.Services
 
                                 salesForecast = new SalesForecast
                                 {
-                                    Year = Convert.ToInt32(_reader.GetValue(0)),
-                                    Month = Convert.ToInt32(_reader.GetValue(1)),
-                                    Location = _reader.GetString(2),
-                                    Amount = Convert.ToDouble(_reader.GetValue(3)),
+                                    Year = Convert.ToInt32(_reader?.GetValue(0)),
+                                    Month = Convert.ToInt32(_reader?.GetValue(1)),
+                                    Location = _reader?.GetString(2),
+                                    Amount = Convert.ToDouble(_reader?.GetValue(3)),
                                 };
 
                                 var salesForecastFromDatabase = DataContext.SalesForecast

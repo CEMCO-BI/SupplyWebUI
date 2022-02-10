@@ -40,33 +40,53 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
 
     public bool IsAValidMonth(string month)
     {
-        
-         var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
-         return  month == "" ||  regex.IsMatch(month);
+        try {
+            var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
+            return month == "" || regex.IsMatch(month);
+        } catch (Exception ex) {
+            return false;
+                }
 
     }
     public bool IsAValidLocation(string location)
     {
-        String[] s = { "IND", "DEN", "PIT", "FTW" };
-        for (int i = 0; i < s.Length; i++)
-        {
-            if (location == s[i])
-                return true;
+        try {
+            String[] s = { "IND", "DEN", "PIT", "FTW" };
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (location == s[i] || location == "")
+                    return true;
+            }
+            return false;
         }
-        return false;
+        catch (Exception ex) {
+            return false;
+        }
+        
     }
 
     public bool IsAValidAmount(string amount)
     {
-        var regex = new Regex("^-?\\d*(\\.\\d+)?$");
+        try {
+            var regex = new Regex("^-?\\d*(\\.\\d+)?$");
+            return regex.IsMatch(amount) || amount == "";
+        }
+        catch (Exception ex) {
 
-        return regex.IsMatch(amount);
+            return false;
+        }
+
     }
 
     public bool IsValidYear(string year)
     {
-       var regex = new Regex("^[0-9]+$");
+        try {
+            var regex = new Regex("^[0-9]+$");
+            return regex.IsMatch(year) && year.Length.Equals(4) || year == "";
 
-        return regex.IsMatch(year) && year.Length.Equals(4);
+        }
+        catch (Exception ex) {
+            return false;
+        }
     }
 }

@@ -71,16 +71,11 @@ namespace SupplyWebApp.Services
                         {
 
 
-
-                            object year = _reader.GetValue(0);
-                            object month = _reader.GetValue(1);
-                            object location = _reader.GetValue(2);
-                            object amount = _reader.GetValue(3);
-                            
-                            
-                            
-                            
-                            
+                            object year, month, location, amount;
+                            if (_reader.GetValue(0) == null) { year = ""; } else year = _reader.GetValue(0);
+                            if (_reader.GetValue(1) == null) { month = ""; } else month = _reader.GetValue(1);
+                            if (_reader.GetValue(2) == null) { location = ""; } else location = _reader.GetValue(2);
+                            if (_reader.GetValue(3) == null) { amount = ""; } else amount = _reader.GetValue(3);                                                                               
                             
                             //----------------------------------------------------
                             string year_v = year.ToString();

@@ -78,9 +78,13 @@ using System.Text.RegularExpressions;
 
     public bool IsAValidAmount(string amount)
     {
-        var regex = new Regex("^-?\\d*(\\.\\d+)?$");
-
-        return regex.IsMatch(amount);
+        try {
+            var regex = new Regex("^-?\\d*(\\.\\d+)?$");
+            return regex.IsMatch(amount);
+        }
+        catch (Exception ex) {
+            return false;
+        }
     }
 }
 

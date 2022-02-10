@@ -112,7 +112,7 @@ export class UploadFileComponent implements OnInit {
       params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     });
     //check
-    this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-bottom-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
+    this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-top-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
     this.http.request(uploadReq).subscribe(event => {
       
       if (event instanceof HttpResponse) {
@@ -125,7 +125,7 @@ export class UploadFileComponent implements OnInit {
 
         if (response['Successful']) {
           setTimeout(() => {
-            this.toastr.success("Your file has been uploaded successfully.", " Upload Successful...", { positionClass: 'toast-bottom-center', timeOut: 3000, progressBar: false })
+            this.toastr.success("Your file has been uploaded successfully.", " Upload Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
             this.reset();
           }, 2500);
         } else {

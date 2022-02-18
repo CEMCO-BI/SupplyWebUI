@@ -188,7 +188,7 @@ export class UploadFileComponent implements OnInit {
     let isValidFile: boolean
     let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount'], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount']];
 
-    if (this.typeOfFile == GlobalConstants.F_01 && this.fileName.indexOf(GlobalConstants.SalesForecast) > 0) {
+    if (this.typeOfFile == GlobalConstants.F_01) {
       for (var i = 0; i < 3; i++) {
         if (this.header[0][i] == fileColumnHeader[0][i])
           isValidFile = true;
@@ -196,7 +196,7 @@ export class UploadFileComponent implements OnInit {
           isValidFile = false
       }
     }
-    else if (this.typeOfFile == GlobalConstants.F_02 && this.fileName.indexOf(GlobalConstants.CRUPricing) > 0) {
+    else if (this.typeOfFile == GlobalConstants.F_02) {
       for (var i = 0; i < 5; i++) {
         if (this.header[0][i] == fileColumnHeader[1][i])
           isValidFile = true;
@@ -204,7 +204,7 @@ export class UploadFileComponent implements OnInit {
           isValidFile = false
       }
     }
-    else if (this.typeOfFile == GlobalConstants.F_03 && this.fileName.indexOf(GlobalConstants.PlannedBuy) > 0) {
+    else if (this.typeOfFile == GlobalConstants.F_03) {
       for (var i = 0; i < 3; i++) {
         if (this.header[0][i] == fileColumnHeader[2][i])
           isValidFile = true;

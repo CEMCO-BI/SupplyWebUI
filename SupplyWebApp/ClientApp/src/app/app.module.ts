@@ -43,7 +43,8 @@ import { GlobalConstants } from './common/global-constant'
       timeOut: 2000,
       progressBar: true,
       preventDuplicates: true,
-      positionClass: 'toast-top-center'
+      positionClass: 'toast-top-center',
+      maxOpened: 1
     })
   ],
   providers: [UploadService],

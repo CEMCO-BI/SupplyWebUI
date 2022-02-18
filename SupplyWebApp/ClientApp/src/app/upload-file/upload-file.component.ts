@@ -99,6 +99,7 @@ export class UploadFileComponent implements OnInit {
       this.toastr.error('Please select FROM and TO date');
       document.getElementById("fromdate").focus();
       document.getElementById("todate").focus();
+      return;
     }
     const formData = new FormData();
 
@@ -112,7 +113,7 @@ export class UploadFileComponent implements OnInit {
       params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     });
     //check
-    
+    this.toastr.clear();
     this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-top-center', progressBar: true, progressAnimation: 'increasing' });
     this.http.request(uploadReq).subscribe(event => {
       

@@ -2,7 +2,7 @@ import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpHeaders, Http
 import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
-import { ToastrService } from 'ngx-toastr';
+import { Toast, ToastrService } from 'ngx-toastr';
 import { GlobalConstants } from '../common/global-constant';
 import { ActivatedRoute } from '@angular/router';
 
@@ -112,7 +112,8 @@ export class UploadFileComponent implements OnInit {
       params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     });
     //check
-    this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-top-center', progressBar: true, timeOut: 2000, progressAnimation: 'increasing' });
+    
+    this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-top-center', progressBar: true, progressAnimation: 'increasing' });
     this.http.request(uploadReq).subscribe(event => {
       
       if (event instanceof HttpResponse) {
@@ -124,15 +125,17 @@ export class UploadFileComponent implements OnInit {
        
 
         if (response['Successful']) {
-          setTimeout(() => {
+         
+            this.toastr.clear();
             this.toastr.success("Your file has been uploaded successfully.", " Upload Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-            this.reset();
-          }, 2500);
+          this.reset();
+          
+          
         } else {
           console.log('there are errrors')
-          setTimeout(() => {
+          this.toastr.clear();
             this.toastr.error("There are some errors in the excel file.","Upload Failed...", { timeOut: 5000, progressBar: false });
-          }, 2500);
+         
         }
       }
     });

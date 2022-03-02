@@ -71,6 +71,7 @@ namespace SupplyWebApp.Services
                             object month = _reader.GetValue(1);
                             object location = _reader.GetValue(2);
                             object amount = _reader.GetValue(3);
+                            object cwt = _reader.GetValue(4);
 
 
 
@@ -78,8 +79,14 @@ namespace SupplyWebApp.Services
                             string month_v = month.ToString();
                             string location_v = location.ToString();
                             string amount_v = amount.ToString();
+                            string cwt_v = cwt.ToString();
+                            Console.WriteLine("cwt value  :" + cwt_v);
+                            Console.WriteLine("-------------------------");
+                            Console.WriteLine("-------------------------");
+                            Console.WriteLine("-------------------------");
+                            Console.WriteLine("-------------------------");
 
-                            plannedBuyValidateObj = new PlannedBuyValidateObj(year_v, month_v, location_v, amount_v);
+                            plannedBuyValidateObj = new PlannedBuyValidateObj(year_v, month_v, location_v, amount_v,cwt_v);
 
                             PlannedBuyValidator pbv = new PlannedBuyValidator();
                             var results = pbv.Validate(plannedBuyValidateObj);
@@ -105,6 +112,7 @@ namespace SupplyWebApp.Services
                                     Month = Convert.ToInt32(_reader.GetValue(1)),
                                     Location = _reader.GetString(2),
                                     Amount = Convert.ToDouble(_reader.GetValue(3)),
+                                    Cwt = Convert.ToDouble(_reader.GetValue(4))
                                 };
 
                                 var plannedBuyFromDatabase = DataContext.PlannedBuy
@@ -116,6 +124,7 @@ namespace SupplyWebApp.Services
                                 if (plannedBuyFromDatabase != null)
                                 {
                                     plannedBuyFromDatabase.Amount = plannedBuy.Amount;
+                                    plannedBuyFromDatabase.Cwt = plannedBuy.Cwt;
                                 }
                                 else
                                 {
@@ -133,6 +142,7 @@ namespace SupplyWebApp.Services
                                 }
 
                                 result = JsonConvert.SerializeObject(_importResult);
+                                Console.WriteLine("result   :" + result);
                             }
                             line++;
                         }

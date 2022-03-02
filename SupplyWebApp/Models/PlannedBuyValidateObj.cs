@@ -19,13 +19,15 @@ namespace SupplyWebApp.Models
         public string Month_v { get; set; }
         public string Location_v { get; set; }
         public string Amount_v { get; set; }
+        public string Cwt_v { get; set; }
 
-        public PlannedBuyValidateObj(string v1, string v2, string v3, string v4)
+        public PlannedBuyValidateObj(string v1, string v2, string v3, string v4, string v5)
         {
             this.Year_v = v1;
             this.Month_v = v2;
             this.Location_v = v3;
             this.Amount_v = v4;
+            this.Cwt_v = v5;
         }
     }
 }

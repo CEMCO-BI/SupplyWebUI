@@ -113,8 +113,8 @@ export class UploadFileComponent implements OnInit {
       params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     });
     //check
-    this.toastr.clear();
-    this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-top-center', progressBar: true, progressAnimation: 'increasing' });
+    
+    this.toastr.info("Please wait while your file is being uploaded.", " Upload in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
     this.http.request(uploadReq).subscribe(event => {
       
       if (event instanceof HttpResponse) {
@@ -190,7 +190,7 @@ export class UploadFileComponent implements OnInit {
 
   checkFileValidation(): boolean {
     let isValidFile: boolean
-    let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount'], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount']];
+    let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount'], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount','CWT']];
 
     if (this.typeOfFile == GlobalConstants.F_01) {
       for (var i = 0; i < 3; i++) {
@@ -209,7 +209,7 @@ export class UploadFileComponent implements OnInit {
       }
     }
     else if (this.typeOfFile == GlobalConstants.F_03) {
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 5; i++) {
         if (this.header[0][i] == fileColumnHeader[2][i])
           isValidFile = true;
         else

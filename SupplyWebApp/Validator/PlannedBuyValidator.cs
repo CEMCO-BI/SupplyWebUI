@@ -36,6 +36,11 @@ public class PlannedBuyValidator : AbstractValidator<PlannedBuyValidateObj>
         RuleFor(sf => sf.Amount_v)
         .Cascade(CascadeMode.Continue)
         .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+
+        //the validation for cwt and amount is same so amount_validation code is reused.
+        RuleFor(sf => sf.Cwt_v)
+        .Cascade(CascadeMode.Continue)
+        .Must(IsAValidAmount).WithMessage("Please enter a numeric value for CWT.");
     }
 
     public bool IsAValidMonth(string month)

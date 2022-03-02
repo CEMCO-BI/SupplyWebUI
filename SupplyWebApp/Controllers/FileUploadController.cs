@@ -38,6 +38,7 @@ namespace SupplyWebApp.Controllers
             var file = Request.Form.Files[0];
             string typeOfFile = Request.Query["typeOfFile"].ToString();
 
+
             GlobalVars.FromDate = Request.Query["from"].ToString();
             GlobalVars.ToDate = Request.Query["to"].ToString();
 

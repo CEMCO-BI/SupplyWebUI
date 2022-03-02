@@ -19,5 +19,6 @@ namespace SupplyWebApp.Models
         public int Month { get; set; }
         public string Location { get; set; }
         public double Amount { get; set; }
+        public double Cwt { get; set; }
     }
 }

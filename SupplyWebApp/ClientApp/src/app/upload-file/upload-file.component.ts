@@ -194,7 +194,7 @@ export class UploadFileComponent implements OnInit {
     let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount',''], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount','CWT']];
 
     if (this.typeOfFile == GlobalConstants.F_01) {
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < 4; i++) {
         if (this.header[0][i] == fileColumnHeader[0][i])
           isValidFile = true;
         else

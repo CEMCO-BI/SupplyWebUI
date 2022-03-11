@@ -101,13 +101,13 @@ export class UploadFileComponent implements OnInit {
       document.getElementById("todate").focus();
       return;
     }
+    //converted dates into number to compare which is greater.
     if (this.typeOfFile == 'F_02') {
       var from = new Date(this.from)
       var start = from.getFullYear();
       var to = new Date(this.to)
       var end = to.getFullYear();
       if (start>end) {
-      
         this.toastr.error('Start Date cannot be greater than end Date');
         document.getElementById("fromdate").focus();
         document.getElementById("todate").focus();
@@ -119,12 +119,7 @@ export class UploadFileComponent implements OnInit {
     for (const file of files) {
       formData.append(file.name, file);
     }
-
-    var from = new Date(this.from)
-    var start = from.getFullYear();
-    
-    
-    
+    // passing the params to server
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
       reportProgress: true,
       params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to',this.to)
@@ -136,21 +131,15 @@ export class UploadFileComponent implements OnInit {
       
       if (event instanceof HttpResponse) {
         var response = event.body;
-        console.log(event.body);
-        console.log(response['Successful'])
         this.errorlist = response['ErrorList'];
-        this.errorDataOrTableData() 
+        this.errorDataOrTableData()   // called to remove the table grid and put the error grid
        
 
         if (response['Successful']) {
-         
-            this.toastr.clear();
-            this.toastr.success("Your file has been uploaded successfully.", " Upload Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+          this.toastr.clear(); //to clear the old toaster of file upload in progress
+          this.toastr.success("Your file has been uploaded successfully.", " Upload Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
           this.reset();
-          
-          
-        } else {
-          console.log('there are errrors')
+        } else { //if there are errors in the file         
           this.toastr.clear();
             this.toastr.error("There are some errors in the excel file.","Upload Failed...", { timeOut: 5000, progressBar: false });
          
@@ -170,7 +159,7 @@ export class UploadFileComponent implements OnInit {
       this.toastr.error('Cannot upload multiple files');
     }
     this.fileName = target.files[0].name;
-    let allowedExtensions = /(\.xls|\.xlsx)$/i;
+    let allowedExtensions = /(\.xls|\.xlsx)$/i;  // to allow only excel files
     if (!allowedExtensions.exec(this.fileName)) {
       this.toastr.error('Please select an Excel File');
       file.value = '';
@@ -190,10 +179,10 @@ export class UploadFileComponent implements OnInit {
 
       this.sheet = (XLSX.utils.sheet_to_json(ws, { header: 1, raw: false }));
       var headerEnd = this.typeOfFile == GlobalConstants.F_02 ? 8 : 1
-
+      // seperating the header and the actual data
       this.data = this.sheet.slice(headerEnd);
       this.header = this.sheet.slice(0, headerEnd);
-
+      
       isValidFile = this.checkFileValidation();
       if (!isValidFile) {
         this.toastr.error('Columns do not match. Please select appropriate file for File Type');
@@ -210,7 +199,7 @@ export class UploadFileComponent implements OnInit {
     //the '' column is to differentiate the salesforecast and the plannedbuy
     let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount',''], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount','CWT']];
 
-    if (this.typeOfFile == GlobalConstants.F_01) {
+    if (this.typeOfFile == GlobalConstants.F_01) { // no role of the 5th column in salesforecast.
       for (var i = 0; i < 4; i++) {
         if (this.header[0][i] == fileColumnHeader[0][i])
           isValidFile = true;

@@ -33,8 +33,8 @@ export class UploadFileComponent implements OnInit {
   typo: string = "F_01";
   display: boolean = false;
   displayGrid: boolean = false;
-  to: null;
-  from: null;
+  to: string = null;
+  from: string = null;
   
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute) {
@@ -101,16 +101,33 @@ export class UploadFileComponent implements OnInit {
       document.getElementById("todate").focus();
       return;
     }
+    if (this.typeOfFile == 'F_02') {
+      var from = new Date(this.from)
+      var start = from.getFullYear();
+      var to = new Date(this.to)
+      var end = to.getFullYear();
+      if (start>end) {
+      
+        this.toastr.error('Start Date cannot be greater than end Date');
+        document.getElementById("fromdate").focus();
+        document.getElementById("todate").focus();
+        return;
+      }
+    }
     const formData = new FormData();
 
     for (const file of files) {
       formData.append(file.name, file);
     }
 
+    var from = new Date(this.from)
+    var start = from.getFullYear();
+    
+    
     
     const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
       reportProgress: true,
-      params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
+      params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to',this.to)
     });
     //check
     

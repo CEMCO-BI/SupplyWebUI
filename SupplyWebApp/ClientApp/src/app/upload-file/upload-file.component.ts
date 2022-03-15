@@ -90,11 +90,13 @@ export class UploadFileComponent implements OnInit {
 
  
   upload(files) {
-    
+
+    //check if the file is selected or not.
     if (files.length === 0) {
       this.toastr.error('Please select a file to upload.');
       return;
     }
+    //check if the file type is CRU, then it must have a datepicker.
     if (this.typeOfFile == 'F_02' && (this.to == null || this.from == null)) {
       this.toastr.error('Please select FROM and TO date');
       document.getElementById("fromdate").focus();
@@ -107,6 +109,7 @@ export class UploadFileComponent implements OnInit {
       var start = from.getFullYear();
       var to = new Date(this.to)
       var end = to.getFullYear();
+      console.log(start);
       if (start>end) {
         this.toastr.error('Start Date cannot be greater than end Date');
         document.getElementById("fromdate").focus();
@@ -152,12 +155,15 @@ export class UploadFileComponent implements OnInit {
 
   onFileChange(evt: any, file) {
 
+    //this.reset();
     this.displayGrid = true;
+    this.displayerrors = false;
     const target: DataTransfer = <DataTransfer>(evt.target);
 
-    if (target.files.length !== 1) {
+    if (target.files.length > 1) {
       this.toastr.error('Cannot upload multiple files');
     }
+    console.log(target.files.length);
     this.fileName = target.files[0].name;
     let allowedExtensions = /(\.xls|\.xlsx)$/i;  // to allow only excel files
     if (!allowedExtensions.exec(this.fileName)) {

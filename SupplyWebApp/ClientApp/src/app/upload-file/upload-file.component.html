@@ -60,11 +60,11 @@
         <div style="padding-left:18px; padding-top:5px; padding-bottom:7px" class="pt-2 row" id="datepicker-parent" *ngIf="display">
           <h6 class="from">Update date from :</h6>
           <div id="datepicker-child1" style="float: left; width: 15%;">
-            <input id="fromdate" class="form-control" [(ngModel)]="from" type="date" value=$event.target.value name="from">
+            <input id="fromdate"  max="9999-12-31" [(ngModel)]="from" type="date" value=$event.target.value name="from">
           </div>
           <h6 class="to">To :</h6>
           <div id="datepicker-child2" style="float: left; width: 15%;">
-            <input id="todate" class="form-control" [(ngModel)]="to" type="date" value=$event.target.value name="to">
+            <input id="todate"  max="9999-12-31" [(ngModel)]="to" type="date" value=$event.target.value name="to">
           </div>
         </div>
 

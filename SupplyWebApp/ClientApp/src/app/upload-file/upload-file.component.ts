@@ -25,7 +25,7 @@ export class UploadFileComponent implements OnInit {
   fileName: string;
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
-  InputVar: ElementRef;
+  InputVar: ElementRef;     
   displayerrors: boolean = false;
 
   //type of file
@@ -82,6 +82,7 @@ export class UploadFileComponent implements OnInit {
 
   errorDataOrTableData() {
     if (this.errorlist.length) {
+      this.InputVar.nativeElement.value = "";
       this.displayerrors = true;
       this.displayGrid = false;
 
@@ -154,17 +155,18 @@ export class UploadFileComponent implements OnInit {
   }
 
   onFileChange(evt: any, file) {
-
-    //this.reset();
+    console.log('onFileChange selected')
     this.displayGrid = true;
     this.displayerrors = false;
     const target: DataTransfer = <DataTransfer>(evt.target);
-
+    if (target.files.length == 0) {
+      this.displayGrid = false;
+    }
     if (target.files.length > 1) {
       this.toastr.error('Cannot upload multiple files');
     }
-    console.log(target.files.length);
-    this.fileName = target.files[0].name;
+    
+    this.fileName = target.files[0].name != null ? target.files[0].name : "";
     let allowedExtensions = /(\.xls|\.xlsx)$/i;  // to allow only excel files
     if (!allowedExtensions.exec(this.fileName)) {
       this.toastr.error('Please select an Excel File');

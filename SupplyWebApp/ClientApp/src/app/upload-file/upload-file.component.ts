@@ -154,16 +154,15 @@ export class UploadFileComponent implements OnInit {
   }
 
   onFileChange(evt: any, file) {
-
-    //this.reset();
     this.displayGrid = true;
     this.displayerrors = false;
     const target: DataTransfer = <DataTransfer>(evt.target);
-
+    if (target.files.length == 0) {
+      this.displayGrid = false;
+    }
     if (target.files.length > 1) {
       this.toastr.error('Cannot upload multiple files');
     }
-    console.log(target.files.length);
     this.fileName = target.files[0].name;
     let allowedExtensions = /(\.xls|\.xlsx)$/i;  // to allow only excel files
     if (!allowedExtensions.exec(this.fileName)) {

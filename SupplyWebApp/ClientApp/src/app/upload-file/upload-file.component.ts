@@ -165,7 +165,8 @@ export class UploadFileComponent implements OnInit {
     if (target.files.length > 1) {
       this.toastr.error('Cannot upload multiple files');
     }
-    this.fileName = target.files[0].name;
+    
+    this.fileName = target.files[0].name != null ? target.files[0].name : "";
     let allowedExtensions = /(\.xls|\.xlsx)$/i;  // to allow only excel files
     if (!allowedExtensions.exec(this.fileName)) {
       this.toastr.error('Please select an Excel File');

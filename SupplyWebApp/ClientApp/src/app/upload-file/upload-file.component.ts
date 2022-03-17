@@ -25,7 +25,7 @@ export class UploadFileComponent implements OnInit {
   fileName: string;
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
-  InputVar: ElementRef;
+  InputVar: ElementRef;     
   displayerrors: boolean = false;
 
   //type of file
@@ -82,6 +82,7 @@ export class UploadFileComponent implements OnInit {
 
   errorDataOrTableData() {
     if (this.errorlist.length) {
+      this.InputVar.nativeElement.value = "";
       this.displayerrors = true;
       this.displayGrid = false;
 
@@ -154,6 +155,7 @@ export class UploadFileComponent implements OnInit {
   }
 
   onFileChange(evt: any, file) {
+    console.log('onFileChange selected')
     this.displayGrid = true;
     this.displayerrors = false;
     const target: DataTransfer = <DataTransfer>(evt.target);

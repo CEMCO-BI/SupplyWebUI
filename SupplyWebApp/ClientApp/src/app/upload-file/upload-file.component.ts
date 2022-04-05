@@ -32,6 +32,7 @@ export class UploadFileComponent implements OnInit {
   typeOfFile: string = "F_01";
   typo: string = "F_01";
   display: boolean = false;
+  displayBrowseFile: boolean = true;
   displayGrid: boolean = false;
   to: string = null;
   from: string = null;
@@ -44,12 +45,19 @@ export class UploadFileComponent implements OnInit {
   ngOnInit(): void {
     
 
-    if (this.route.snapshot.params.typo == 'F_02' || this.route.snapshot.params.typo == 'F_03' || this.route.snapshot.params.typo == 'F_01') {
+    if (this.route.snapshot.params.typo == 'F_02' || this.route.snapshot.params.typo == 'F_03' || this.route.snapshot.params.typo == 'F_01' || this.route.snapshot.params.typo == 'F_04') {
       this.typeOfFile = this.route.snapshot.params.typo;
       
     }
     if (this.typeOfFile == 'F_02') {
       this.display = true;
+    }
+
+    if (this.typeOfFile == GlobalConstants.F_04) {
+      this.displayBrowseFile = false;
+    }
+    else {
+      this.displayBrowseFile = true;
     }
     
   };

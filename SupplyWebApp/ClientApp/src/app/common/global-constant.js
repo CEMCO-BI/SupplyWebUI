@@ -8,10 +8,12 @@ var GlobalConstants = /** @class */ (function () {
     GlobalConstants.F_01 = "F_01";
     GlobalConstants.F_02 = "F_02";
     GlobalConstants.F_03 = "F_03";
+    GlobalConstants.F_04 = "F_04";
     //File Name
     GlobalConstants.SalesForecast = "Sales Forecast";
     GlobalConstants.CRUPricing = "CRU Pricing";
     GlobalConstants.PlannedBuy = "Planned Buy";
+    GlobalConstants.MarginTables = "Margin Tables";
     return GlobalConstants;
 }());
 exports.GlobalConstants = GlobalConstants;

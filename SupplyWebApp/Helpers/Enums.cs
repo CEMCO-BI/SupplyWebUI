@@ -14,7 +14,9 @@ namespace SupplyWebApp.Helpers
             // CRU
             F_02,
             // Planned Buy
-            F_03
+            F_03,
+            //Margin Tables
+            F_04
         }
     }
 }

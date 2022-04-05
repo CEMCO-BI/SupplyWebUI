@@ -28,6 +28,7 @@
               <a class="dropdown-item" routerLink="/SalesForecast/F_01" (click)="reset()">Sales Forecast</a>
               <a class="dropdown-item" routerLink="/CRUPricing/F_02" (click)="reset()">CRU Pricing</a>
               <a class="dropdown-item" routerLink="/PlannedBuy/F_03" (click)="reset()">Planned Buy / Transfers</a>
+              <a class="dropdown-item" routerLink="/MarginTables/F_04" (click)="reset()">Margin Tables</a>
 
             </div>
           </div>
@@ -51,7 +52,8 @@
         <label *ngIf="typeOfFile=='F_01'" for="typeOf"><strong>Sales Forecast</strong></label>
         <label *ngIf="typeOfFile=='F_02'" for="typeOf"><strong>CRU Pricing</strong></label>
         <label *ngIf="typeOfFile=='F_03'" for="typeOf"><strong>Planned Buy / Transfers </strong></label>
-        <div class="custom-file ">
+        <label *ngIf="typeOfFile=='F_04'" for="typeOf"><strong>Margin Tables</strong></label>
+        <div class="custom-file " *ngIf="displayBrowseFile">
           <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)"
                  class="form-control-file" />
           <label class="custom-file-label" for="customFile">Choose file</label>

@@ -31,8 +31,9 @@ export class UploadFileComponent implements OnInit {
   //type of file
   typeOfFile: string = "F_01";
   typo: string = "F_01";
-  display: boolean = false;
+  displayDatePicker: boolean = false;
   displayBrowseFile: boolean = true;
+  displayMarginTables: boolean = false;
   displayGrid: boolean = false;
   to: string = null;
   from: string = null;
@@ -50,21 +51,23 @@ export class UploadFileComponent implements OnInit {
       
     }
     if (this.typeOfFile == 'F_02') {
-      this.display = true;
+      this.displayDatePicker = true;
     }
 
     if (this.typeOfFile == GlobalConstants.F_04) {
       this.displayBrowseFile = false;
+      this.displayMarginTables = true;
     }
     else {
       this.displayBrowseFile = true;
+      this.displayMarginTables = false;
     }
     
   };
 
   openDatePicker() {
-    //this.display = true;
-    this.display = true;
+    //this.displayDatePicker = true;
+    this.displayDatePicker = true;
     this.InputVar.nativeElement.value = "";
     this.data = [[], []];
     this.header = [[], []];
@@ -76,7 +79,7 @@ export class UploadFileComponent implements OnInit {
     document.getElementById("btnUpload").blur();
     document.getElementById("btnReset").blur();
     
-    this.display = false;
+    this.displayDatePicker = false;
     this.displayGrid = false;
     this.displayerrors = false;
     this.InputVar.nativeElement.value = "";

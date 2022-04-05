@@ -59,7 +59,64 @@
           <label class="custom-file-label" for="customFile">Choose file</label>
         </div>
 
-        <div style="padding-left:18px; padding-top:5px; padding-bottom:7px" class="pt-2 row" id="datepicker-parent" *ngIf="display">
+        <div *ngIf="displayMarginTables">
+          <table border="0">
+              <tr>
+                <td>
+                  <table border="1" cellpadding="10px" cellspacing="10px">
+                    <tr>
+                      <td>PO Location</td>
+                      <td>PO Warehouse</td>
+                      <td>PO Carrier</td>
+                      <td>Vendor</td>
+                      <td>"Added Freight"/CWT</td>
+                      <td>$/TruckLoad</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table border="1" cellpadding="10px" cellspacing="10px">
+                    <tr>
+                      <td>PO Location</td>
+                      <td>PO Warehouse</td>
+                      <td>PO Carrier</td>
+                      <td>Vendor</td>
+                      <td>"Added Freight"/CWT</td>
+                      <td>$/TruckLoad</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table border="1" cellpadding="10px" cellspacing="10px">
+                    <tr>
+                      <td>PO Location</td>
+                      <td>PO Warehouse</td>
+                      <td>PO Carrier</td>
+                      <td>Vendor</td>
+                      <td>"Added Freight"/CWT</td>
+                      <td>$/TruckLoad</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table border="1" cellpadding="10px" cellspacing="10px">
+                    <tr>
+                      <td>PO Location</td>
+                      <td>PO Warehouse</td>
+                      <td>PO Carrier</td>
+                      <td>Vendor</td>
+                      <td>"Added Freight"/CWT</td>
+                      <td>$/TruckLoad</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+          </table>
+        </div>
+
+        <div style="padding-left:18px; padding-top:5px; padding-bottom:7px" class="pt-2 row" id="datepicker-parent" *ngIf="displayDatePicker">
           <h6 class="from">Update date from :</h6>
           <div id="datepicker-child1" style="float: left; width: 15%;">
             <input id="fromdate"  max="9999-12-31" [(ngModel)]="from" type="date" value=$event.target.value name="from">

@@ -1,4 +1,4 @@
-<div style="background-color: #99c2ff ">
+<!--<div style="background-color: #99c2ff ">
   <header >
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
       <div class="container-fluid" style="padding-right: 100px;">
@@ -22,21 +22,21 @@
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Supply
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
               <!--<a class="dropdown-item" routerLink="/salesforecast">Sales Forecast</a>-->
 
-              <a class="dropdown-item" routerLink="/SalesForecast/F_01" (click)="reset()">Sales Forecast</a>
+              <!--<a class="dropdown-item" routerLink="/SalesForecast/F_01" (click)="reset()">Sales Forecast</a>
               <a class="dropdown-item" routerLink="/CRUPricing/F_02" (click)="reset()">CRU Pricing</a>
               <a class="dropdown-item" routerLink="/PlannedBuy/F_03" (click)="reset()">Planned Buy / Transfers</a>
               <a class="dropdown-item" routerLink="/MarginTables/F_04" (click)="reset()">Margin Tables</a>
 
             </div>
-          </div>
+          </div>-->
           <!--<button type="submit" class="parcel-btn weight-option" value="25" (click)="onItemSelector()">
             <button type="submit" class="parcel-btn weight-option" value="50" (click)="onItemSelector()">
               <button type="submit" class="parcel-btn weight-option" value="250" (click)="onItemSelector()">-->
 
-        </div>
+        <!--</div>
       </div>
     </nav>
   </header>
@@ -63,16 +63,7 @@
           <table border="0">
               <tr>
                 <td>
-                  <table border="1" cellpadding="10px">
-                    <tr>
-                      <td>PO Location</td>
-                      <td>PO Warehouse</td>
-                      <td>PO Carrier</td>
-                      <td>Vendor</td>
-                      <td>"Added Freight"/CWT</td>
-                      <td>$/TruckLoad</td>
-                    </tr>
-                  </table>
+                  
                 </td>
                 <td>
                   <table border="1" cellpadding="10px">
@@ -195,4 +186,12 @@
         </div>
       </div>
   </form>
+</div>-->
+<div>
+  <ag-grid-angular #AddedFreight
+                   style="width: 500px; height: 500px"
+                   class="ag-theme-balham"
+                   [columnDefs]="AddedFreightcolumnDefs"
+                   [rowData]="AddedFreightrowData">
+  </ag-grid-angular>
 </div>

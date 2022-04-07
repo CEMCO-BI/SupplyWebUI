@@ -37,6 +37,36 @@ export class UploadFileComponent implements OnInit {
   displayGrid: boolean = false;
   to: string = null;
   from: string = null;
+
+  AddedFreightcolumnDefs = [
+    { field: "POLocation", headerName: "PO Location" },
+    { field: "POWarehouse", headerName: "PO Warehouse" },
+    { field: "POCarrier", headerName: "PO Carrier" },
+    { field: "Vendor", headerName: "Vendor" },
+    { field: "AddedFreightperCWT", headerName: "\"Added Freight/CWT\"" },
+    { field: "TruckLoad", headerName: "$/Truckload" }
+  ];
+
+  AddedFreightrowData = [
+    { POLocation: 'IND', POWarehouse: 'IND', POCarrier: 'Will Call', Vendor: 'CSI', AddedFreightperCWT: '0.87', TruckLoad:'240.00'},
+    { POLocation: 'PIT', POWarehouse: 'PIT', POCarrier: 'Will Call', Vendor: 'UPI', AddedFreightperCWT: '9.76', TruckLoad:'120.34'},
+    { POLocation: 'FTW', POWarehouse: 'FTW', POCarrier: 'Will Call', Vendor: 'All', AddedFreightperCWT: '0.34', TruckLoad:'450.98'},
+  ];
+
+  //columnDefs = [{
+  //  headerName: 'Software',
+  //  field: 'name'
+  //}, {
+  //  headerName: 'Use',
+  //  field: 'usage'
+  //}];
+  //rowData = [{
+  //  name: 'Disk Drill',
+  //  usage: 'Files recovery'
+  //}, {
+  //  name: 'VScode',
+  //  usage: 'IDE developed by Microsoft'
+  //}];
   
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute) {

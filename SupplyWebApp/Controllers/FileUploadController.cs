@@ -59,5 +59,22 @@ namespace SupplyWebApp.Controllers
 
             return Ok(importResult);
         }
+
+        [HttpGet]
+        [Route("/GetAddedFreightsDetails")]
+        public IQueryable<AddedFreight> GetAddedFreightsDetails()
+        {
+            try
+            {
+
+                IQueryable<AddedFreight> addedFreightsFromdb = _dataContext.AddedFreight.AsQueryable();
+                return addedFreightsFromdb;
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
 }

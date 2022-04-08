@@ -5,6 +5,8 @@ import * as XLSX from 'xlsx';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { GlobalConstants } from '../common/global-constant';
 import { ActivatedRoute } from '@angular/router';
+import { AddedFreight } from '../model/AddedFreight';
+import { UploadService } from '../service/upload.service';
 
 @Component({
   selector: 'app-upload-file',
@@ -37,25 +39,31 @@ export class UploadFileComponent implements OnInit {
   displayGrid: boolean = false;
   to: string = null;
   from: string = null;
+  addedFreightrowData: any;
+  isFailedMessage: boolean = false;
+  public globalResponse: any;
 
   AddedFreightcolumnDefs = [
-    { field: "POLocation", headerName: "PO Location", width:"100" },
-    { field: "POWarehouse", headerName: "PO Warehouse", width: "100" },
-    { field: "POCarrier", headerName: "PO Carrier", width: "100"  },
-    { field: "Vendor", headerName: "Vendor", width: "100" },
-    { field: "AddedFreightperCWT", headerName: "\"Added Freight/CWT\"", width: "100" },
-    { field: "TruckLoad", headerName: "$/Truckload", width: "100" }
+    { field: "pO_LocationId", headerName: "PO Location", width:"100" },
+    { field: "pO_WarehouseId", headerName: "PO Warehouse", width: "100" },
+    { field: "pO_CarrierId", headerName: "PO Carrier", width: "100"  },
+    { field: "vendorId", headerName: "Vendor", width: "100" },
+    { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "100" },
+    { field: "truckLoad", headerName: "$/Truckload", width: "100" }
   ];
 
-  AddedFreightrowData = [
-    { POLocation: 'IND', POWarehouse: 'IND', POCarrier: 'Will Call', Vendor: 'CSI', AddedFreightperCWT: '0.87', TruckLoad:'2100.00'},
-    { POLocation: 'PIT', POWarehouse: 'PIT', POCarrier: 'Will Call', Vendor: 'UPI', AddedFreightperCWT: '9.76', TruckLoad:'120.34'},
-    { POLocation: 'FTW', POWarehouse: 'FTW', POCarrier: 'Will Call', Vendor: 'All', AddedFreightperCWT: '0.34', TruckLoad:'450.98'},
-  ];
-
-
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
+    this.getAddedFreightDetails();
+  }
+
+  getAddedFreightDetails() {
+    return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
+      data => {
+        this.addedFreightrowData = data;
+
+      }
+    )
   }
 
   ngOnInit(): void {

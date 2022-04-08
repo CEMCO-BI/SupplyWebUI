@@ -55,7 +55,96 @@
           <label class="custom-file-label" for="customFile">Choose file</label>
         </div>
 
-        <div *ngIf="displayMarginTables">
+        <div  *ngIf="displayMarginTables">
+          <table>
+            <tr>
+              <td>
+                <span><strong>Added Freight</strong></span>
+                <br><br>
+                <div class="row">
+                  <div class="col-md-8"></div>
+                  <div class="col-md-8">
+                    <button class="btn btn-sm btn-success button" (click)="Add()">Add</button>
+
+                    <button class="btn btn-sm btn-primary" (click)="editUser()">Edit</button>
+
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser()">Delete</button>
+                  </div>
+                </div>
+                <ag-grid-angular #AddedFreight
+                                 style="width: 635px; height: 300px"
+                                 class="ag-theme-balham"
+                                 [columnDefs]="AddedFreightcolumnDefs"
+                                 [rowData]="addedFreightrowData">
+                </ag-grid-angular>
+              </td>
+              <td>
+                <span><strong>Transfer Freight</strong></span>
+                <br><br>
+                <div class="row">
+                  <div class="col-md-8"></div>
+                  <div class="col-md-8">
+                    <button class="btn btn-sm btn-success button" (click)="Add()">Add</button>
+
+                    <button class="btn btn-sm btn-primary" (click)="editUser()">Edit</button>
+
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser()">Delete</button>
+                  </div>
+                </div>
+                <ag-grid-angular #TransferFreight
+                                 style="width: 515px; height: 300px"
+                                 class="ag-theme-balham"
+                                 [columnDefs]="TransferFreightcolumnDefs"
+                                 [rowData]="transferFreightrowData">
+                </ag-grid-angular>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span><strong>Class Code Management</strong></span>
+                <br><br>
+                <div class="row">
+                  <div class="col-md-8"></div>
+                  <div class="col-md-8">
+                    <button class="btn btn-sm btn-success button" (click)="Add()">Add</button>
+
+                    <button class="btn btn-sm btn-primary" (click)="editUser()">Edit</button>
+
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser()">Delete</button>
+                  </div>
+                </div>
+                <ag-grid-angular #ClassCodeManagement
+                                 style="width: 635px; height: 300px"
+                                 class="ag-theme-balham"
+                                 [columnDefs]="ClassCodeManagementcolumnDefs"
+                                 [rowData]="classCodeManagementrowData">
+                </ag-grid-angular>
+              </td>
+              <td>
+                <span><strong>Display Months</strong></span>
+                <br><br>
+                <div class="row">
+                  <div class="col-md-8"></div>
+                  <div class="col-md-8">
+                    <button class="btn btn-sm btn-success button" (click)="Add()">Add</button>
+
+                    <button class="btn btn-sm btn-primary" (click)="editUser()">Edit</button>
+
+                    <button class="btn btn-sm btn-danger" (click)="deleteUser()">Delete</button>
+                  </div>
+                </div>
+                <ag-grid-angular #DisplayMonths
+                                 style="width: 515; height: 300px"
+                                 class="ag-theme-balham"
+                                 [columnDefs]="DisplayMonthscolumnDefs"
+                                 [rowData]="displayMonthsrowData">
+                </ag-grid-angular>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!--<div *ngIf="displayMarginTables">
           <ag-grid-angular #AddedFreight
                            style="width: 600px; height: 300px"
                            class="ag-theme-balham"
@@ -63,19 +152,27 @@
                            [rowData]="addedFreightrowData">
           </ag-grid-angular>
         </div>
+        <div *ngIf="displayMarginTables">
+          <ag-grid-angular #Transfer
+                           style="width: 600px; height: 300px"
+                           class="ag-theme-balham"
+                           [columnDefs]="TransferFreightcolumnDefs"
+                           [rowData]="transferFreightrowData">
+          </ag-grid-angular>
+        </div>-->
 
         <div style="padding-left:18px; padding-top:5px; padding-bottom:7px" class="pt-2 row" id="datepicker-parent" *ngIf="displayDatePicker">
           <h6 class="from">Update date from :</h6>
           <div id="datepicker-child1" style="float: left; width: 15%;">
-            <input id="fromdate"  max="9999-12-31" [(ngModel)]="from" type="date" value=$event.target.value name="from">
+            <input id="fromdate" max="9999-12-31" [(ngModel)]="from" type="date" value=$event.target.value name="from">
           </div>
           <h6 class="to">To :</h6>
           <div id="datepicker-child2" style="float: left; width: 15%;">
-            <input id="todate"  max="9999-12-31" [(ngModel)]="to" type="date" value=$event.target.value name="to">
+            <input id="todate" max="9999-12-31" [(ngModel)]="to" type="date" value=$event.target.value name="to">
           </div>
         </div>
 
-        
+
         <div id="errordata" class="table-wrap py-2" *ngIf="displayerrors" style="height:300px">
           <label style="color:red" for="errordata"><strong>List of all the errors in the excel file :</strong></label>
           <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel">
@@ -105,42 +202,42 @@
           </table>
         </div>
 
-          <div class="table-wrap" *ngIf="displayGrid">
+        <div class="table-wrap" *ngIf="displayGrid">
 
-            <table style="border: 2px solid black; position: sticky; top: 0; width: 100%; background-color: #80bfff;" class="container-fluid" cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+          <table style="border: 2px solid black; position: sticky; top: 0; width: 100%; background-color: #80bfff;" class="container-fluid" cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
 
-              <thead style="height:40px; border:2px solid black">
-                <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of header">
-                  <th style=" background-color: #80bfff; text-align:center;border-bottom-width: 2px; width: 150px" scope="col" *ngFor="let title of row">
-                    {{title}}
-                  </th>
-                </tr>
-              </thead>
+            <thead style="height:40px; border:2px solid black">
+              <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of header">
+                <th style=" background-color: #80bfff; text-align:center;border-bottom-width: 2px; width: 150px" scope="col" *ngFor="let title of row">
+                  {{title}}
+                </th>
+              </tr>
+            </thead>
 
-            </table>
-            <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
+          </table>
+          <table style="border: 2px solid black; width: 100%;  " cellspacing=0 cellpadding=0 border="1" aria-labelledby="tableLabel" *ngIf="data">
 
-              <thead style="height:50px; border:2px solid black">
-                <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of data">
-                  <th style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col" *ngFor="let cell of row">
-                    {{cell}}
-                  </th>
-                </tr>
-              </thead>
+            <thead style="height:50px; border:2px solid black">
+              <tr style="height: 40px; border-bottom-width: 2px;" *ngFor="let row of data">
+                <th style="background-color: #cce6ff; text-align: center; border-bottom-width: 2px; width: 150px " scope="col" *ngFor="let cell of row">
+                  {{cell}}
+                </th>
+              </tr>
+            </thead>
 
-            </table>
-
-          </div>
-
-
-          <br><br>
-
-          <div class="text-center">
-            <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
-            <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
-          </div>
+          </table>
 
         </div>
+
+
+        <br><br>
+
+        <div class="text-center">
+          <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
+          <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
+        </div>
+
+      </div>
       </div>
   </form>
 </div>

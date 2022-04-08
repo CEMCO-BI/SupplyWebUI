@@ -39,31 +39,80 @@ export class UploadFileComponent implements OnInit {
   displayGrid: boolean = false;
   to: string = null;
   from: string = null;
+
+  //Margin Tables constants
   addedFreightrowData: any;
-  isFailedMessage: boolean = false;
-  public globalResponse: any;
+  transferFreightrowData: any;
+  classCodeManagementrowData: any;
+  displayMonthsrowData: any;
 
   AddedFreightcolumnDefs = [
-    { field: "pO_LocationId", headerName: "PO Location", width:"100" },
-    { field: "pO_WarehouseId", headerName: "PO Warehouse", width: "100" },
-    { field: "pO_CarrierId", headerName: "PO Carrier", width: "100"  },
-    { field: "vendorId", headerName: "Vendor", width: "100" },
-    { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "100" },
-    { field: "truckLoad", headerName: "$/Truckload", width: "100" }
+    {
+      field: "pO_LocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+    },
+    {
+      field: "pO_WarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true//TODO: values from Warehouse.Abb
+    },
+    {
+      field: "pO_CarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['Will Call', 'Delivery'] }
+    },
+    {
+      field: "vendorId", headerName: "Vendor", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true //TODO:type ahead search + 'CheckName’ values in the Vendor db table.
+    },
+    { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "150", editable: true, required: true },
+    { field: "truckLoad", headerName: "$/Truckload", width: "100", editable: true, required: true  }
+  ];
+
+  TransferFreightcolumnDefs = [
+    {
+      field: "transfer_from_Id", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+    },
+    {
+      field: "transfer_to_Id", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+    },
+    { field: "product_Code", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
+    { field: "transfer_Cost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true  }
+  ];
+
+  ClassCodeManagementcolumnDefs = [
+    { field: "class_CodeID", headerName: "Class Code", width: "160", editable: true, required: true },//TODO: ‘Code’ column from the ‘ClassCode’ table
+    { field: "product_codeId", headerName: "Product Code", width: "140", editable: true, required: true },//TODO: PartNo column from the Part table.
+    {
+      field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+    },
+    {
+      field: "active", headerName: "Active", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['True', 'False'] }, required: true
+    }
+  ];
+
+  DisplayMonthscolumnDefs = [
+    { field: "month", headerName: "Month", width: "150", editable: true, cellEditor: 'agSelectCellEditor',
+    cellEditorParams: { values: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] }, required: true },
+    {
+      field: "year", headerName: "Year", width: "150", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: {
+        values: ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030',
+          '2031', '2032', '2033', '2034', '2035', '2036', '2037', '2038', '2039', '2040',
+          '2041', '2042', '2043', '2044', '2045', '2046', '2047', '2048', '2049', '2050'
+        ]
+      }, required: true
+    },
+    {
+      field: "active", headerName: "Active", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: ['True', 'False'] }, required: true }
   ];
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
-    this.getAddedFreightDetails();
-  }
-
-  getAddedFreightDetails() {
-    return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
-      data => {
-        this.addedFreightrowData = data;
-
-      }
-    )
+    
   }
 
   ngOnInit(): void {
@@ -80,6 +129,12 @@ export class UploadFileComponent implements OnInit {
     if (this.typeOfFile == GlobalConstants.F_04) {
       this.displayBrowseFile = false;
       this.displayMarginTables = true;
+
+      //Get Data from db
+      this.getAddedFreightDetails();
+      this.getTransferFreightDetails();
+      this.getClassCodeManagementDetails();
+      this.getDisplayMonthsDetails();
     }
     else {
       this.displayBrowseFile = true;
@@ -87,6 +142,42 @@ export class UploadFileComponent implements OnInit {
     }
     
   };
+
+  getAddedFreightDetails() {
+    return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
+      data => {
+        this.addedFreightrowData = data;
+
+      }
+    )
+  }
+
+  getTransferFreightDetails() {
+    return this.http.get('https://localhost:44341/GetTransferFreightsDetails').subscribe(
+      data => {
+        this.transferFreightrowData = data;
+
+      }
+    )
+  }
+
+  getClassCodeManagementDetails() {
+    return this.http.get('https://localhost:44341/GetClassCodeManagementDetails').subscribe(
+      data => {
+        this.classCodeManagementrowData = data;
+
+      }
+    )
+  }
+
+  getDisplayMonthsDetails() {
+    return this.http.get('https://localhost:44341/GetDisplayMonthsDetails').subscribe(
+      data => {
+        this.displayMonthsrowData = data;
+
+      }
+    )
+  }
 
   openDatePicker() {
     //this.displayDatePicker = true;

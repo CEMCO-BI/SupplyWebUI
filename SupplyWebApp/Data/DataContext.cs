@@ -17,6 +17,9 @@ namespace SupplyWebApp.Data
         public DbSet<PlannedBuy> PlannedBuy { get; set; }
         public DbSet<CRUPricing> CRUPricing { get; set; }
         public DbSet<AddedFreight> AddedFreight { get; set; }
+        public DbSet<TransferFreight> TransferFreight { get; set; }
+        public DbSet<ClassCodeManagement> ClassCodeManagement { get; set; }
+        public DbSet<DisplayMonths> DisplayMonths { get; set; }
 
     }
 }

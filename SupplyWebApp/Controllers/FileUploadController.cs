@@ -76,5 +76,54 @@ namespace SupplyWebApp.Controllers
                 throw;
             }
         }
+
+        [HttpGet]
+        [Route("/GetTransferFreightsDetails")]
+        public IQueryable<TransferFreight> GetTransferFreightsDetails()
+        {
+            try
+            {
+
+                IQueryable<TransferFreight> transferFreightsFromdb = _dataContext.TransferFreight.AsQueryable();
+                return transferFreightsFromdb;
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetClassCodeManagementDetails")]
+        public IQueryable<ClassCodeManagement> GetClassCodeManagementDetails()
+        {
+            try
+            {
+
+                IQueryable<ClassCodeManagement> classCodeManagementFromdb = _dataContext.ClassCodeManagement.AsQueryable();
+                return classCodeManagementFromdb;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetDisplayMonthsDetails")]
+        public IQueryable<DisplayMonths> GetDisplayMonthsDetails()
+        {
+            try
+            {
+
+                IQueryable<DisplayMonths> displayMonthsFromdb = _dataContext.DisplayMonths.AsQueryable();
+                return displayMonthsFromdb;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
 }

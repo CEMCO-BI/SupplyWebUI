@@ -1,8 +1,8 @@
 export class AddedFreight {
-  pO_LocationId: number;
-  pO_WarehouseId: number;
-  pO_CarrierId: number;
-  vendorId: number;
-  cwt: number;
-  truckLoad: number;
+  pO_LocationId: string;
+  pO_WarehouseId: string;
+  pO_CarrierId: string;
+  vendorId: string;
+  cwt: string;
+  truckLoad: string;
 }

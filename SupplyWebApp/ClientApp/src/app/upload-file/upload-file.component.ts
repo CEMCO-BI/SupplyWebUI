@@ -7,6 +7,9 @@ import { GlobalConstants } from '../common/global-constant';
 import { ActivatedRoute } from '@angular/router';
 import { AddedFreight } from '../model/AddedFreight';
 import { UploadService } from '../service/upload.service';
+import { AgGridAngular } from 'ag-grid-angular';
+import { GridOptions } from 'ag-grid-community';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-upload-file',
@@ -27,7 +30,7 @@ export class UploadFileComponent implements OnInit {
   fileName: string;
   @ViewChild('labelImport', { static: true })
   @ViewChild('file', { static: false })
-  InputVar: ElementRef;     
+  InputVar: ElementRef;
   displayerrors: boolean = false;
 
   //type of file
@@ -45,6 +48,12 @@ export class UploadFileComponent implements OnInit {
   transferFreightrowData: any;
   classCodeManagementrowData: any;
   displayMonthsrowData: any;
+  @ViewChild('addedFreightGrid', { static: false }) addedFreightGrid: AgGridAngular;
+  @ViewChild('transferFreightGrid', { static: false }) transferFreightGrid: AgGridAngular;
+  @ViewChild('classCodeManagementGrid', { static: false }) classCodeManagementGrid: AgGridAngular;
+  @ViewChild('displayMonthsGrid', { static: false }) displayMonthsGrid: AgGridAngular;
+  private gridApi;
+  private gridColumnApi;
 
   AddedFreightcolumnDefs = [
     {
@@ -143,6 +152,7 @@ export class UploadFileComponent implements OnInit {
     
   };
 
+  //Added Freight
   getAddedFreightDetails() {
     return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
       data => {
@@ -152,6 +162,46 @@ export class UploadFileComponent implements OnInit {
     )
   }
 
+  AddAddedFreightRecord() {
+    this.addedFreightGrid.api.updateRowData({
+      add: [{ pO_LocationId: '', pO_WarehouseId: '', pO_CarrierId: '', vendorId: '', cwt: '', truckLoad:''}]
+    });
+  }
+
+  DeleteAddedFreightRecord() {
+    var selectedData = this.addedFreightGrid.api.getSelectedRows();
+    this.addedFreightGrid.api.updateRowData({ remove: selectedData });
+  }
+
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+  }
+
+  onCellValueChanged(event) {
+    event.data.modified = true;
+  }
+
+  SaveAddedFreightRecord() {
+    const allRowData = [];
+    this.gridApi.forEachNode(node => allRowData.push(node.data));
+
+    //use below if we want to save only modified rows
+    //const modifiedRows = allRowData.filter(row => row['modified']);
+
+    console.log(allRowData);
+    // add API call to save modified rows
+    //const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
+    //  reportProgress: true,
+    //  params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
+    //});
+    this.http.post<any>('https://localhost:44341/PostAddedFreightsDetails', { addedFreight: allRowData });
+
+  }
+
+  
+
+  //Transfer Freight
   getTransferFreightDetails() {
     return this.http.get('https://localhost:44341/GetTransferFreightsDetails').subscribe(
       data => {
@@ -161,6 +211,19 @@ export class UploadFileComponent implements OnInit {
     )
   }
 
+  AddTransferFreightRecord() {
+    this.transferFreightGrid.api.updateRowData({
+      add: [{ transfer_from_Id: '', transfer_to_Id: '', product_Code: '', transfer_Cost: '' }]
+    });
+  }
+
+  DeleteTransferFreightRecord() {
+    var selectedData = this.transferFreightGrid.api.getSelectedRows();
+    this.transferFreightGrid.api.updateRowData({ remove: selectedData });
+  }
+
+
+  //Class Code Management
   getClassCodeManagementDetails() {
     return this.http.get('https://localhost:44341/GetClassCodeManagementDetails').subscribe(
       data => {
@@ -170,6 +233,19 @@ export class UploadFileComponent implements OnInit {
     )
   }
 
+  AddClassCodeMgtRecord() {
+    this.classCodeManagementGrid.api.updateRowData({
+      add: [{ class_CodeID: '', product_codeId: '', locationId: '', active: '' }]
+    });
+  }
+
+  DeleteClassCodeMgtRecord() {
+    var selectedData = this.classCodeManagementGrid.api.getSelectedRows();
+    this.classCodeManagementGrid.api.updateRowData({ remove: selectedData });
+  }
+
+
+  //Display Months
   getDisplayMonthsDetails() {
     return this.http.get('https://localhost:44341/GetDisplayMonthsDetails').subscribe(
       data => {
@@ -177,6 +253,17 @@ export class UploadFileComponent implements OnInit {
 
       }
     )
+  }
+
+  AddDisplayMonthsRecord() {
+    this.displayMonthsGrid.api.updateRowData({
+      add: [{ month: '', year: '', active: ''}]
+    });
+  }
+
+  DeleteDisplayMonthsRecord() {
+    var selectedData = this.displayMonthsGrid.api.getSelectedRows();
+    this.displayMonthsGrid.api.updateRowData({ remove: selectedData });
   }
 
   openDatePicker() {

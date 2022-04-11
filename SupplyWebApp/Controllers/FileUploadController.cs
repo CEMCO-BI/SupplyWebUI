@@ -125,5 +125,33 @@ namespace SupplyWebApp.Controllers
                 throw;
             }
         }
+
+        [HttpPost]
+        [Route("/PostAddedFreightsDetails")]
+        public async Task<AddedFreight> PostAddedFreightsDetails(AddedFreight addedFreight)
+        {
+            string message = "";
+            if (addedFreight != null)
+            {
+                try
+                {
+                    _dataContext.AddedFreight.Add(addedFreight);
+                    int result = await _dataContext.SaveChangesAsync();
+                    if (result > 0)
+                    {
+                        message = "Added Freight records has been successfully added";
+                    }
+                    else
+                    {
+                        message = "Added Freight records insertion failed";
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            //return Ok(message);
+        }
     }
 }

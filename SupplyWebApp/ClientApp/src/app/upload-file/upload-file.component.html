@@ -64,18 +64,22 @@
                 <div class="row">
                   <div class="col-md-8"></div>
                   <div class="col-md-8">
-                    <button class="btn btn-sm btn-success button" (click)="Add()">Add</button>
+                    <button class="btn btn-sm btn-success button" (click)="AddAddedFreightRecord()">Add</button>
 
-                    <button class="btn btn-sm btn-primary" (click)="editUser()">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="DeleteAddedFreightRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-danger" (click)="deleteUser()">Delete</button>
+                    <button class="btn btn-sm btn-primary" (click)="SaveAddedFreightRecord()">Save</button>
+
                   </div>
                 </div>
-                <ag-grid-angular #AddedFreight
+                <ag-grid-angular #addedFreightGrid
                                  style="width: 635px; height: 300px"
                                  class="ag-theme-balham"
                                  [columnDefs]="AddedFreightcolumnDefs"
-                                 [rowData]="addedFreightrowData">
+                                 [rowData]="addedFreightrowData"
+                                 rowSelection="multiple"
+                                 (gridReady)="onGridReady($event)"
+                                 (cellValueChanged)="onCellValueChanged($event)">
                 </ag-grid-angular>
               </td>
               <td>
@@ -84,18 +88,19 @@
                 <div class="row">
                   <div class="col-md-8"></div>
                   <div class="col-md-8">
-                    <button class="btn btn-sm btn-success button" (click)="Add()">Add</button>
+                    <button class="btn btn-sm btn-success button" (click)="AddTransferFreightRecord()">Add</button>
 
-                    <button class="btn btn-sm btn-primary" (click)="editUser()">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="DeleteTransferFreightRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-danger" (click)="deleteUser()">Delete</button>
+                    <button class="btn btn-sm btn-primary" (click)="SaveTransferFreightRecord()">Save</button>
                   </div>
                 </div>
-                <ag-grid-angular #TransferFreight
+                <ag-grid-angular #transferFreightGrid
                                  style="width: 515px; height: 300px"
                                  class="ag-theme-balham"
                                  [columnDefs]="TransferFreightcolumnDefs"
-                                 [rowData]="transferFreightrowData">
+                                 [rowData]="transferFreightrowData"
+                                 rowSelection="multiple">
                 </ag-grid-angular>
               </td>
             </tr>
@@ -106,18 +111,19 @@
                 <div class="row">
                   <div class="col-md-8"></div>
                   <div class="col-md-8">
-                    <button class="btn btn-sm btn-success button" (click)="Add()">Add</button>
+                    <button class="btn btn-sm btn-success button" (click)="AddClassCodeMgtRecord()">Add</button>
 
-                    <button class="btn btn-sm btn-primary" (click)="editUser()">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="DeleteClassCodeMgtRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-danger" (click)="deleteUser()">Delete</button>
+                    <button class="btn btn-sm btn-primary" (click)="SaveClassCodeMgtRecord()">Save</button>
                   </div>
                 </div>
-                <ag-grid-angular #ClassCodeManagement
+                <ag-grid-angular #classCodeManagementGrid
                                  style="width: 635px; height: 300px"
                                  class="ag-theme-balham"
                                  [columnDefs]="ClassCodeManagementcolumnDefs"
-                                 [rowData]="classCodeManagementrowData">
+                                 [rowData]="classCodeManagementrowData"
+                                 rowSelection="multiple">
                 </ag-grid-angular>
               </td>
               <td>
@@ -126,40 +132,24 @@
                 <div class="row">
                   <div class="col-md-8"></div>
                   <div class="col-md-8">
-                    <button class="btn btn-sm btn-success button" (click)="Add()">Add</button>
+                    <button class="btn btn-sm btn-success button" (click)="AddDisplayMonthsRecord()">Add</button>
 
-                    <button class="btn btn-sm btn-primary" (click)="editUser()">Edit</button>
+                    <button class="btn btn-sm btn-danger" (click)="DeleteDisplayMonthsRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-danger" (click)="deleteUser()">Delete</button>
+                    <button class="btn btn-sm btn-primary" (click)="SaveDisplayMonthsRecord()">Save</button>
                   </div>
                 </div>
-                <ag-grid-angular #DisplayMonths
+                <ag-grid-angular #displayMonthsGrid
                                  style="width: 515; height: 300px"
                                  class="ag-theme-balham"
                                  [columnDefs]="DisplayMonthscolumnDefs"
-                                 [rowData]="displayMonthsrowData">
+                                 [rowData]="displayMonthsrowData"
+                                 rowSelection="multiple">
                 </ag-grid-angular>
               </td>
             </tr>
           </table>
         </div>
-
-        <!--<div *ngIf="displayMarginTables">
-          <ag-grid-angular #AddedFreight
-                           style="width: 600px; height: 300px"
-                           class="ag-theme-balham"
-                           [columnDefs]="AddedFreightcolumnDefs"
-                           [rowData]="addedFreightrowData">
-          </ag-grid-angular>
-        </div>
-        <div *ngIf="displayMarginTables">
-          <ag-grid-angular #Transfer
-                           style="width: 600px; height: 300px"
-                           class="ag-theme-balham"
-                           [columnDefs]="TransferFreightcolumnDefs"
-                           [rowData]="transferFreightrowData">
-          </ag-grid-angular>
-        </div>-->
 
         <div style="padding-left:18px; padding-top:5px; padding-bottom:7px" class="pt-2 row" id="datepicker-parent" *ngIf="displayDatePicker">
           <h6 class="from">Update date from :</h6>

@@ -13,10 +13,10 @@ namespace SupplyWebApp.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        public int PO_LocationId { get; set; }
-        public int PO_WarehouseId { get; set; }
-        public int PO_CarrierId { get; set; }
-        public int VendorId { get; set; }
+        public int? POLocationId { get; set; }
+        public int? POWarehouseId { get; set; }
+        public int? POCarrierId { get; set; }
+        public int? VendorId { get; set; }
         public string CWT { get; set; }
         public string TruckLoad { get; set; }
 

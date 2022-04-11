@@ -128,7 +128,7 @@ namespace SupplyWebApp.Controllers
 
         [HttpPost]
         [Route("/PostAddedFreightsDetails")]
-        public async Task<AddedFreight> PostAddedFreightsDetails(AddedFreight addedFreight)
+        public async Task<IActionResult> PostAddedFreightsDetails(AddedFreight addedFreight)
         {
             string message = "";
             if (addedFreight != null)
@@ -151,7 +151,8 @@ namespace SupplyWebApp.Controllers
                     throw;
                 }
             }
-            //return Ok(message);
+            return Ok(message);
         }
+
     }
 }

@@ -13,8 +13,8 @@ namespace SupplyWebApp.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        public int Class_CodeID { get; set; }
-        public int Product_codeId { get; set; }
+        public int ClassCodeID { get; set; }
+        public int ProductcodeId { get; set; }
         public int LocationId { get; set; }
         public int Active { get; set; }
     }

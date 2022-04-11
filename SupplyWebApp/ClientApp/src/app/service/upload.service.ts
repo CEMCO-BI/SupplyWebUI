@@ -25,17 +25,12 @@ export class UploadService {
     return this.http.post(this.url + '/Upload', formData, httpOptions)
   }
 
-  //GetAddedFreightsDetails()
-  //{
-  //  return this.http.get(this.apiUrl + '/GetAddedFreightsDetails')
-  //    .pipe(
-  //      map(res => res),
-  //      catchError(this.errorHandler)
-  //  );
-  //}
+  PostAddedFreightsDetails(addedFreight) {
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Accept', 'application/json');
 
-  //errorHandler(error: Response) {
-  //  console.log(error);
-  //  return throwError(error);
-  //}
+    const httpOptions = { headers: headers };
+    return this.http.post('https://localhost:44341/MarginTables/F_04/PostAddedFreightsDetails', addedFreight, httpOptions);
+  }
 }

@@ -57,15 +57,15 @@ export class UploadFileComponent implements OnInit {
 
   AddedFreightcolumnDefs = [
     {
-      field: "pO_LocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
     },
     {
-      field: "pO_WarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true//TODO: values from Warehouse.Abb
     },
     {
-      field: "pO_CarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "poCarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['Will Call', 'Delivery'] }
     },
     {
@@ -78,20 +78,20 @@ export class UploadFileComponent implements OnInit {
 
   TransferFreightcolumnDefs = [
     {
-      field: "transfer_from_Id", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "transferfromId", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
     },
     {
-      field: "transfer_to_Id", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "transfertoId", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
     },
-    { field: "product_Code", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
-    { field: "transfer_Cost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true  }
+    { field: "productCode", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
+    { field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true  }
   ];
 
   ClassCodeManagementcolumnDefs = [
-    { field: "class_CodeID", headerName: "Class Code", width: "160", editable: true, required: true },//TODO: ‘Code’ column from the ‘ClassCode’ table
-    { field: "product_codeId", headerName: "Product Code", width: "140", editable: true, required: true },//TODO: PartNo column from the Part table.
+    { field: "classCodeID", headerName: "Class Code", width: "160", editable: true, required: true },//TODO: ‘Code’ column from the ‘ClassCode’ table
+    { field: "productcodeId", headerName: "Product Code", width: "140", editable: true, required: true },//TODO: PartNo column from the Part table.
     {
       field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
@@ -195,7 +195,11 @@ export class UploadFileComponent implements OnInit {
     //  reportProgress: true,
     //  params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
     //});
-    this.http.post<any>('https://localhost:44341/PostAddedFreightsDetails', { addedFreight: allRowData });
+    this.uploadService.PostAddedFreightsDetails(allRowData).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
 
   }
 

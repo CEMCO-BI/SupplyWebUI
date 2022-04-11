@@ -13,9 +13,9 @@ namespace SupplyWebApp.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        public int Transfer_from_Id { get; set; }
-        public int Transfer_to_Id { get; set; }
-        public string? Product_Code { get; set; }
-        public string Transfer_Cost { get; set; }
+        public int TransferfromId { get; set; }
+        public int TransfertoId { get; set; }
+        public string? ProductCode { get; set; }
+        public string TransferCost { get; set; }
     }
 }

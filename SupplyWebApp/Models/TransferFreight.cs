@@ -13,8 +13,8 @@ namespace SupplyWebApp.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        public int TransferfromId { get; set; }
-        public int TransfertoId { get; set; }
+        public int TransferFromId { get; set; }
+        public int TransferToId { get; set; }
         public string? ProductCode { get; set; }
         public string TransferCost { get; set; }
     }

@@ -52,8 +52,14 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('transferFreightGrid', { static: false }) transferFreightGrid: AgGridAngular;
   @ViewChild('classCodeManagementGrid', { static: false }) classCodeManagementGrid: AgGridAngular;
   @ViewChild('displayMonthsGrid', { static: false }) displayMonthsGrid: AgGridAngular;
-  private gridApi;
-  private gridColumnApi;
+  private addedFreightgridApi;
+  private addedFreightgridColumnApi;
+  private transferFreightgridApi;
+  private transferFreightgridColumnApi;
+  private classCodeManagementgridApi;
+  private classCodeManagementColumnApi;
+  private displayMonthsgridApi;
+  private displayMonthsColumnApi;
 
   AddedFreightcolumnDefs = [
     {
@@ -78,11 +84,11 @@ export class UploadFileComponent implements OnInit {
 
   TransferFreightcolumnDefs = [
     {
-      field: "transferfromId", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "transferFromId", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
     },
     {
-      field: "transfertoId", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "transferToId", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
     },
     { field: "productCode", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
@@ -91,7 +97,7 @@ export class UploadFileComponent implements OnInit {
 
   ClassCodeManagementcolumnDefs = [
     { field: "classCodeID", headerName: "Class Code", width: "160", editable: true, required: true },//TODO: ‘Code’ column from the ‘ClassCode’ table
-    { field: "productcodeId", headerName: "Product Code", width: "140", editable: true, required: true },//TODO: PartNo column from the Part table.
+    { field: "productCodeId", headerName: "Product Code", width: "140", editable: true, required: true },//TODO: PartNo column from the Part table.
     {
       field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
@@ -116,7 +122,8 @@ export class UploadFileComponent implements OnInit {
     },
     {
       field: "active", headerName: "Active", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['True', 'False'] }, required: true }
+      cellEditorParams: { values: ['True', 'False'] }, required: true
+    }
   ];
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
@@ -157,7 +164,7 @@ export class UploadFileComponent implements OnInit {
     return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
       data => {
         this.addedFreightrowData = data;
-
+        console.log(data);
       }
     )
   }
@@ -174,35 +181,36 @@ export class UploadFileComponent implements OnInit {
     this.addedFreightGrid.api.updateRowData({ remove: selectedData });
   }
 
-  onGridReady(params) {
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+  onAddedFreightGridReady(params) {
+    this.addedFreightgridApi = params.api;
+    this.addedFreightgridColumnApi = params.columnApi;
   }
 
-  onCellValueChanged(event) {
+  onAddedFreightCellValueChanged(event) {
     event.data.modified = true;
   }
 
   SaveAddedFreightRecord() {
-    //const allRowData = [];
-    let input= [{ pO_LocationId: 'IND', pO_WarehouseId: 'IND', pO_CarrierId: 'IND', vendorId: 'CSI', cwt: '$0.98', truckLoad: '$245.00' }]
-    //this.gridApi.forEachNode(node => allRowData.push(node.data));
+    const allRowData = [];
+    this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
 
-    //use below if we want to save only modified rows
-    //const modifiedRows = allRowData.filter(row => row['modified']);
+    const modifiedRows = allRowData.filter(row => row['modified']);
 
-  
-    //this.uploadService.PostAddedFreightsDetails(input).subscribe(
-    //  data => {
-    //    console.log(data);
-    //  }
-    //);
-    let url = 'https://localhost:44341/PostAddedFreightsDetails'
-    this.http.post(url, { poLocationId: 'IND', poWarehouseId: 'IND', poCarrierId: 'IND', vendorId: 'CSI', cwt: '$0.98', truckLoad: '$245.00' }
-    ).toPromise().then((data: any) => {
-      console.log(data)
-    })
+    const formData = new FormData();
 
+    formData.append('poLocationId',modifiedRows[0].poLocationId);
+    formData.append('poWarehouseId', modifiedRows[0].poWarehouseId);
+    formData.append('poCarrierId', modifiedRows[0].poCarrierId);
+    formData.append('vendorId', modifiedRows[0].vendorId);
+    formData.append('cwt', modifiedRows[0].cwt);
+    formData.append('truckLoad', modifiedRows[0].truckLoad);
+
+    // passing the params to server
+    const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostAddedFreightsDetails', formData);
+
+    this.http.request(uploadReq).subscribe(data => {
+      console.log(data);
+    });
   }
 
   
@@ -229,6 +237,34 @@ export class UploadFileComponent implements OnInit {
     this.transferFreightGrid.api.updateRowData({ remove: selectedData });
   }
 
+  onTransferFreightGridReady(params) {
+    this.transferFreightgridApi = params.api;
+    this.transferFreightgridColumnApi = params.columnApi;
+  }
+
+  onTransferFreightCellValueChanged(event) {
+    event.data.modified = true;
+  }
+
+  SaveTransferFreightRecord() {
+    const allRowData = [];
+    this.transferFreightgridApi.forEachNode(node => allRowData.push(node.data));
+    const modifiedRows = allRowData.filter(row => row['modified']);
+    const formData = new FormData();
+
+    formData.append('transferFromId', modifiedRows[0].transferFromId);
+    formData.append('transferToId', modifiedRows[0].transferToId);
+    formData.append('productCode', modifiedRows[0].productCode);
+    formData.append('transferCost', modifiedRows[0].transferCost);
+
+    // passing the params to server
+    const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostTransferFreightsDetails', formData);
+
+    this.http.request(uploadReq).subscribe(data => {
+      console.log(data);
+    });
+  }
+
 
   //Class Code Management
   getClassCodeManagementDetails() {
@@ -252,6 +288,35 @@ export class UploadFileComponent implements OnInit {
     this.classCodeManagementGrid.api.updateRowData({ remove: selectedData });
   }
 
+  onClassCodeMgtGridReady(params) {
+    this.classCodeManagementgridApi = params.api;
+    this.classCodeManagementColumnApi = params.columnApi;
+  }
+
+  onClassCodeMgtCellValueChanged(event) {
+    event.data.modified = true;
+  }
+
+  SaveClassCodeMgtRecord() {
+    const allRowData = [];
+    this.classCodeManagementgridApi.forEachNode(node => allRowData.push(node.data));
+
+    const modifiedRows = allRowData.filter(row => row['modified']);
+
+    const formData = new FormData();
+
+    formData.append('classCodeID', modifiedRows[0].classCodeID);
+    formData.append('productCodeId', modifiedRows[0].productCodeId);
+    formData.append('locationId', modifiedRows[0].locationId);
+    formData.append('active', modifiedRows[0].active);
+
+    // passing the params to server
+    const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostClassCodesDetails', formData);
+
+    this.http.request(uploadReq).subscribe(data => {
+      console.log(data);
+    });
+  }
 
   //Display Months
   getDisplayMonthsDetails() {
@@ -273,6 +338,35 @@ export class UploadFileComponent implements OnInit {
   DeleteDisplayMonthsRecord() {
     var selectedData = this.displayMonthsGrid.api.getSelectedRows();
     this.displayMonthsGrid.api.updateRowData({ remove: selectedData });
+  }
+
+  onDisplayMonthsGridReady(params) {
+    this.displayMonthsgridApi = params.api;
+    this.displayMonthsColumnApi = params.columnApi;
+  }
+
+  onDisplayMonthCellValueChanged(event) {
+    event.data.modified = true;
+  }
+
+  SaveDisplayMonthsRecord() {
+    const allRowData = [];
+    this.displayMonthsgridApi.forEachNode(node => allRowData.push(node.data));
+
+    const modifiedRows = allRowData.filter(row => row['modified']);
+
+    const formData = new FormData();
+
+    formData.append('month', modifiedRows[0].month);
+    formData.append('year', modifiedRows[0].year);
+    formData.append('active', modifiedRows[0].active);
+
+    // passing the params to server
+    const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostDisplayMonthsDetails', formData);
+
+    this.http.request(uploadReq).subscribe(data => {
+      console.log(data);
+    });
   }
 
   openDatePicker() {

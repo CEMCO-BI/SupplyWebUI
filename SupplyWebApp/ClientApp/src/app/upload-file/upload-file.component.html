@@ -78,8 +78,8 @@
                                  [columnDefs]="AddedFreightcolumnDefs"
                                  [rowData]="addedFreightrowData"
                                  rowSelection="multiple"
-                                 (gridReady)="onGridReady($event)"
-                                 (cellValueChanged)="onCellValueChanged($event)">
+                                 (gridReady)="onAddedFreightGridReady($event)"
+                                 (cellValueChanged)="onAddedFreightCellValueChanged($event)">
                 </ag-grid-angular>
               </td>
               <td>
@@ -100,7 +100,9 @@
                                  class="ag-theme-balham"
                                  [columnDefs]="TransferFreightcolumnDefs"
                                  [rowData]="transferFreightrowData"
-                                 rowSelection="multiple">
+                                 rowSelection="multiple"
+                                 (gridReady)="onTransferFreightGridReady($event)"
+                                 (cellValueChanged)="onTransferFreightCellValueChanged($event)">
                 </ag-grid-angular>
               </td>
             </tr>
@@ -123,7 +125,9 @@
                                  class="ag-theme-balham"
                                  [columnDefs]="ClassCodeManagementcolumnDefs"
                                  [rowData]="classCodeManagementrowData"
-                                 rowSelection="multiple">
+                                 rowSelection="multiple"
+                                 (gridReady)="onClassCodeMgtGridReady($event)"
+                                 (cellValueChanged)="onClassCodeMgtCellValueChanged($event)">
                 </ag-grid-angular>
               </td>
               <td>
@@ -144,7 +148,9 @@
                                  class="ag-theme-balham"
                                  [columnDefs]="DisplayMonthscolumnDefs"
                                  [rowData]="displayMonthsrowData"
-                                 rowSelection="multiple">
+                                 rowSelection="multiple"
+                                 (gridReady)="onDisplayMonthsGridReady($event)"
+                                 (cellValueChanged)="onDisplayMonthCellValueChanged($event)">
                 </ag-grid-angular>
               </td>
             </tr>
@@ -222,7 +228,7 @@
 
         <br><br>
 
-        <div class="text-center">
+        <div class="text-center" *ngIf="displayGrid">
           <input id="btnUpload" type="submit" class="btn btn-outline-primary mr-1" value="Upload" />
           <input id="btnReset" type="reset" class="btn btn-outline-secondary mr-1" value="Cancel" (click)="reset()" />
         </div>

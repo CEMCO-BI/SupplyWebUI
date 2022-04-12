@@ -1,6 +1,6 @@
 export class ClassCodeManagement {
-  class_CodeID: string
-  product_codeId: string
+  classCodeID: string
+  productCodeId: string
   locationId: string
   active: string
 }

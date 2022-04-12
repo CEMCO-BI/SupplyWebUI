@@ -128,29 +128,30 @@ namespace SupplyWebApp.Controllers
 
         [HttpPost]
         [Route("/PostAddedFreightsDetails")]
-        public async Task<IActionResult> PostAddedFreightsDetails(AddedFreight addedFreight)
+        public async Task<IActionResult> PostAddedFreightsDetails()
         {
             string message = "";
-            if (addedFreight != null)
-            {
-                try
-                {
-                    _dataContext.AddedFreight.Add(addedFreight);
-                    int result = await _dataContext.SaveChangesAsync();
-                    if (result > 0)
-                    {
-                        message = "Added Freight records has been successfully added";
-                    }
-                    else
-                    {
-                        message = "Added Freight records insertion failed";
-                    }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
+            var file = Request;
+            //if (addedFreight != null)
+            //{
+            //    try
+            //    {
+            //        _dataContext.AddedFreight.Add(addedFreight);
+            //        int result = await _dataContext.SaveChangesAsync();
+            //        if (result > 0)
+            //        {
+            //            message = "Added Freight records has been successfully added";
+            //        }
+            //        else
+            //        {
+            //            message = "Added Freight records insertion failed";
+            //        }
+            //    }
+            //    catch (Exception)
+            //    {
+            //        throw;
+            //    }
+            //}
             return Ok(message);
         }
 

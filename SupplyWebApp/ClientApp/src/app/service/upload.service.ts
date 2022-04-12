@@ -31,6 +31,6 @@ export class UploadService {
     headers.append('Accept', 'application/json');
 
     const httpOptions = { headers: headers };
-    return this.http.post('https://localhost:44341/MarginTables/F_04/PostAddedFreightsDetails', addedFreight, httpOptions);
+    return this.http.post('https://localhost:44341/PostAddedFreightsDetails', addedFreight, httpOptions);
   }
 }

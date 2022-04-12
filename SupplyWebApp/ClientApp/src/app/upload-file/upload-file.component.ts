@@ -183,23 +183,24 @@ export class UploadFileComponent implements OnInit {
   }
 
   SaveAddedFreightRecord() {
-    const allRowData = [];
-    this.gridApi.forEachNode(node => allRowData.push(node.data));
+    //const allRowData = [];
+    let input= [{ pO_LocationId: 'IND', pO_WarehouseId: 'IND', pO_CarrierId: 'IND', vendorId: 'CSI', cwt: '$0.98', truckLoad: '$245.00' }]
+    //this.gridApi.forEachNode(node => allRowData.push(node.data));
 
     //use below if we want to save only modified rows
     //const modifiedRows = allRowData.filter(row => row['modified']);
 
-    console.log(allRowData);
-    // add API call to save modified rows
-    //const uploadReq = new HttpRequest('POST', this.baseUrl + 'FileUpload/upload', formData, {
-    //  reportProgress: true,
-    //  params: new HttpParams().set('typeOfFile', this.typeOfFile).set('from', this.from).set('to', this.to)
-    //});
-    this.uploadService.PostAddedFreightsDetails(allRowData).subscribe(
-      data => {
-        console.log(data);
-      }
-    );
+  
+    //this.uploadService.PostAddedFreightsDetails(input).subscribe(
+    //  data => {
+    //    console.log(data);
+    //  }
+    //);
+    let url = 'https://localhost:44341/PostAddedFreightsDetails'
+    this.http.post(url, { poLocationId: 'IND', poWarehouseId: 'IND', poCarrierId: 'IND', vendorId: 'CSI', cwt: '$0.98', truckLoad: '$245.00' }
+    ).toPromise().then((data: any) => {
+      console.log(data)
+    })
 
   }
 
@@ -307,6 +308,10 @@ export class UploadFileComponent implements OnInit {
 
  
   upload(files) {
+
+    if (this.typeOfFile == 'F_04') {
+      return;
+    }
 
     //check if the file is selected or not.
     if (files.length === 0) {

@@ -164,7 +164,8 @@ export class UploadFileComponent implements OnInit {
 
   AddAddedFreightRecord() {
     this.addedFreightGrid.api.updateRowData({
-      add: [{ pO_LocationId: '', pO_WarehouseId: '', pO_CarrierId: '', vendorId: '', cwt: '', truckLoad:''}]
+      add: [{ pO_LocationId: '', pO_WarehouseId: '', pO_CarrierId: '', vendorId: '', cwt: '', truckLoad: '' }],
+      addIndex: 0
     });
   }
 
@@ -218,7 +219,8 @@ export class UploadFileComponent implements OnInit {
 
   AddTransferFreightRecord() {
     this.transferFreightGrid.api.updateRowData({
-      add: [{ transfer_from_Id: '', transfer_to_Id: '', product_Code: '', transfer_Cost: '' }]
+      add: [{ transfer_from_Id: '', transfer_to_Id: '', product_Code: '', transfer_Cost: '' }],
+      addIndex: 0
     });
   }
 
@@ -240,7 +242,8 @@ export class UploadFileComponent implements OnInit {
 
   AddClassCodeMgtRecord() {
     this.classCodeManagementGrid.api.updateRowData({
-      add: [{ class_CodeID: '', product_codeId: '', locationId: '', active: '' }]
+      add: [{ class_CodeID: '', product_codeId: '', locationId: '', active: '' }],
+      addIndex: 0
     });
   }
 
@@ -262,7 +265,8 @@ export class UploadFileComponent implements OnInit {
 
   AddDisplayMonthsRecord() {
     this.displayMonthsGrid.api.updateRowData({
-      add: [{ month: '', year: '', active: ''}]
+      add: [{ month: '', year: '', active: '' }],
+      addIndex: 0
     });
   }
 

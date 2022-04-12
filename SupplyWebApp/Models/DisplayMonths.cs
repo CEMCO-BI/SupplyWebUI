@@ -13,7 +13,7 @@ namespace SupplyWebApp.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        public int Month { get; set; }
+        public string Month { get; set; }
         public int Year { get; set; }
         public int Active { get; set; }
     }

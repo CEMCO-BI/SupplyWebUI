@@ -11,8 +11,9 @@ namespace SupplyWebApp.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
+            //this.ChangeTracker.LazyLoadingEnabled = false;
         }
-
+        public DbSet<Location> Location { get; set; }
         public DbSet<SalesForecast> SalesForecast { get; set; }
         public DbSet<PlannedBuy> PlannedBuy { get; set; }
         public DbSet<CRUPricing> CRUPricing { get; set; }
@@ -21,5 +22,19 @@ namespace SupplyWebApp.Data
         public DbSet<ClassCodeManagement> ClassCodeManagement { get; set; }
         public DbSet<DisplayMonths> DisplayMonths { get; set; }
 
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<AddedFreight>()
+        //        .HasNoKey()
+        //        .ToView("AddedFreight");
+        //}
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<AddedFreight>()
+        //        .HasOne(p => p.Location)
+        //        .WithMany(b => b.AddedFreight);
+        //}
     }
 }

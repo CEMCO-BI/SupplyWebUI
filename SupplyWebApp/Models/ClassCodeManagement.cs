@@ -10,6 +10,8 @@ namespace SupplyWebApp.Models
     [Table("ClassCodeManagement", Schema = "Upload")]
     public class ClassCodeManagement
     {
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
         public int ClassCodeID { get; set; }

@@ -181,10 +181,10 @@ export class UploadFileComponent implements OnInit {
     });
   }
 
-  DeleteAddedFreightRecord() {
-    var selectedData = this.addedFreightGrid.api.getSelectedRows();
-    this.addedFreightGrid.api.updateRowData({ remove: selectedData });
-  }
+  //DeleteAddedFreightRecord() {
+  //  var selectedData = this.addedFreightGrid.api.getSelectedRows();
+  //  this.addedFreightGrid.api.updateRowData({ remove: selectedData });
+  //}
 
   onAddedFreightGridReady(params) {
     this.addedFreightgridApi = params.api;
@@ -220,7 +220,6 @@ export class UploadFileComponent implements OnInit {
 
   EditAddedFreightRecord() {
     debugger;
-    const d = this.addedFreightgridApi.getEditingCells();
     if (this.addedFreightgridApi.getSelectedRows().length == 0) {
       this.toastr.error("error", "Please select Record for update");
       return;
@@ -241,9 +240,23 @@ export class UploadFileComponent implements OnInit {
     this.http.request(req).subscribe(data => {
       console.log(data);
     });
-
   }
 
+  DeleteAddedFreightRecord() {
+    debugger;
+    var selectedRow = this.addedFreightgridApi.getSelectedRows();
+    if (selectedRow.length == 0) {
+      this.toastr.error("error", "Please select a Record for deletion");
+      return;
+    }
+    console.log('id'+ selectedRow[0].id);
+    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteAddedFreightRecord?id=' + selectedRow[0].id);
+    var selectedData = this.addedFreightGrid.api.getSelectedRows();
+    this.addedFreightGrid.api.updateRowData({ remove: selectedData });
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+  }
   
 
   //Transfer Freight
@@ -264,8 +277,20 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteTransferFreightRecord() {
+    debugger;
+    var selectedRow = this.transferFreightgridApi.getSelectedRows();
+    if (selectedRow.length == 0) {
+      this.toastr.error("error", "Please select a Record for deletion");
+      return;
+    }
+    console.log('id' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteTransferFreightRecord?id=' + selectedRow[0].id);
     var selectedData = this.transferFreightGrid.api.getSelectedRows();
     this.transferFreightGrid.api.updateRowData({ remove: selectedData });
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+
   }
 
   onTransferFreightGridReady(params) {
@@ -295,12 +320,10 @@ export class UploadFileComponent implements OnInit {
       console.log(data);
 
     });
-
   }
 
   EditTransferFreightRecord() {
     debugger;
-    const d = this.transferFreightgridApi.getEditingCells();
     if (this.transferFreightgridApi.getSelectedRows().length == 0) {
       this.toastr.error("error", "Please select Record for update");
       return;
@@ -319,7 +342,6 @@ export class UploadFileComponent implements OnInit {
     this.http.request(req).subscribe(data => {
       console.log(data);
     });
-
   }
 
 
@@ -341,8 +363,20 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteClassCodeMgtRecord() {
+    debugger;
+    var selectedRow = this.classCodeManagementgridApi.getSelectedRows();
+    if (selectedRow.length == 0) {
+      this.toastr.error("error", "Please select a Record for deletion");
+      return;
+    }
+    console.log('id' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteClassCodesRecord?id=' + selectedRow[0].id);
     var selectedData = this.classCodeManagementGrid.api.getSelectedRows();
     this.classCodeManagementGrid.api.updateRowData({ remove: selectedData });
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+
   }
 
   onClassCodeMgtGridReady(params) {
@@ -377,7 +411,6 @@ export class UploadFileComponent implements OnInit {
 
   EditClassCodeMgtRecord() {
     debugger;
-    const d = this.classCodeManagementgridApi.getEditingCells();
     if (this.classCodeManagementgridApi.getSelectedRows().length == 0) {
       this.toastr.error("error", "Please select Record for update");
       return;
@@ -396,7 +429,6 @@ export class UploadFileComponent implements OnInit {
     this.http.request(req).subscribe(data => {
       console.log(data);
     });
-
   }
 
  
@@ -419,8 +451,19 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteDisplayMonthsRecord() {
+    debugger;
+    var selectedRow = this.displayMonthsgridApi.getSelectedRows();
+    if (selectedRow.length == 0) {
+      this.toastr.error("error", "Please select a Record for deletion");
+      return;
+    }
+    console.log('id' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteDisplayMonthsRecord?id=' + selectedRow[0].id);
     var selectedData = this.displayMonthsGrid.api.getSelectedRows();
     this.displayMonthsGrid.api.updateRowData({ remove: selectedData });
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
   }
 
   onDisplayMonthsGridReady(params) {
@@ -454,7 +497,6 @@ export class UploadFileComponent implements OnInit {
 
   EditDisplayMonthsRecord() {
     debugger;
-    const d = this.displayMonthsgridApi.getEditingCells();
     if (this.displayMonthsgridApi.getSelectedRows().length == 0) {
       this.toastr.error("error", "Please select Display Month Record for update");
       return;
@@ -468,11 +510,11 @@ export class UploadFileComponent implements OnInit {
     formData.append('active', row[0].active);
 
     const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateDisplayMonthsDetails', formData);
-
+    var selectedData = this.displayMonthsGrid.api.getSelectedRows();
+    this.displayMonthsGrid.api.updateRowData({ update: selectedData });
     this.http.request(req).subscribe(data => {
       console.log(data);
     });
-
   }
 
   openDatePicker() {

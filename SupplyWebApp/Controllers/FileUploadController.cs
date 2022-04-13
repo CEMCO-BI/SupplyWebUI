@@ -429,5 +429,112 @@ namespace SupplyWebApp.Controllers
             return Ok(message);
         }
 
+        [HttpDelete]
+        [Route("/DeleteAddedFreightRecord")]
+        public async Task<IActionResult> DeleteAddedFreightRecord(int id)
+        {
+            string message = "";
+            try
+            {
+                AddedFreight addedFreight = _dataContext.AddedFreight.Find(id);
+                _dataContext.AddedFreight.Remove(addedFreight);
+                int result = await _dataContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    message = "Added Freight Record has been sucessfully deleted";
+                }
+                else
+                {
+                    message = "failed";
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            
+            return Ok(message);
+        }
+
+        [HttpDelete]
+        [Route("/DeleteTransferFreightRecord")]
+        public async Task<IActionResult> DeleteTransferFreightRecord(int id)
+        {
+            string message = "";
+            try
+            {
+                TransferFreight transferFreight = _dataContext.TransferFreight.Find(id);
+                _dataContext.TransferFreight.Remove(transferFreight);
+                int result = await _dataContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    message = "Transfer Freight Record has been sucessfully deleted";
+                }
+                else
+                {
+                    message = "failed";
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+            return Ok(message);
+        }
+
+        [HttpDelete]
+        [Route("/DeleteClassCodesRecord")]
+        public async Task<IActionResult> DeleteClassCodesRecord(int id)
+        {
+            string message = "";
+            try
+            {
+                ClassCodeManagement classCode = _dataContext.ClassCodeManagement.Find(id);
+                _dataContext.ClassCodeManagement.Remove(classCode);
+                int result = await _dataContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    message = "Added Freight Record has been sucessfully deleted";
+                }
+                else
+                {
+                    message = "failed";
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+            return Ok(message);
+        }
+
+        [HttpDelete]
+        [Route("/DeleteDisplayMonthsRecord")]
+        public async Task<IActionResult> DeleteDisplayMonthsRecord(int id)
+        {
+            string message = "";
+            try
+            {
+                DisplayMonths displayMonths = _dataContext.DisplayMonths.Find(id);
+                _dataContext.DisplayMonths.Remove(displayMonths);
+                int result = await _dataContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    message = "Added Freight Record has been sucessfully deleted";
+                }
+                else
+                {
+                    message = "failed";
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+            return Ok(message);
+        }
     }
 }

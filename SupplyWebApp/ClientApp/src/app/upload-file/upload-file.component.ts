@@ -218,6 +218,32 @@ export class UploadFileComponent implements OnInit {
     });
   }
 
+  EditAddedFreightRecord() {
+    debugger;
+    const d = this.addedFreightgridApi.getEditingCells();
+    if (this.addedFreightgridApi.getSelectedRows().length == 0) {
+      this.toastr.error("error", "Please select Record for update");
+      return;
+    }
+    var row = this.addedFreightgridApi.getSelectedRows();
+    console.log(row);
+    const formData = new FormData();
+    formData.append('id', row[0].id);
+    formData.append('poLocationId', row[0].poLocationId);
+    formData.append('poWarehouseId', row[0].poWarehouseId);
+    formData.append('poCarrierId', row[0].poCarrierId);
+    formData.append('vendorId', row[0].vendorId);
+    formData.append('cwt', row[0].cwt);
+    formData.append('truckLoad', row[0].truckLoad);
+
+    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateAddedFreightDetails', formData);
+
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+
+  }
+
   
 
   //Transfer Freight
@@ -268,6 +294,30 @@ export class UploadFileComponent implements OnInit {
     this.http.request(uploadReq).subscribe(data => {
       console.log(data);
 
+    });
+
+  }
+
+  EditTransferFreightRecord() {
+    debugger;
+    const d = this.transferFreightgridApi.getEditingCells();
+    if (this.transferFreightgridApi.getSelectedRows().length == 0) {
+      this.toastr.error("error", "Please select Record for update");
+      return;
+    }
+    var row = this.transferFreightgridApi.getSelectedRows();
+    console.log(row);
+    const formData = new FormData();
+    formData.append('id', row[0].id);
+    formData.append('transferFromId', row[0].transferFromId);
+    formData.append('transferToId', row[0].transferToId);
+    formData.append('productCode', row[0].productCode);
+    formData.append('transferCost', row[0].transferCost);
+
+    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateTransferFreightDetails', formData);
+
+    this.http.request(req).subscribe(data => {
+      console.log(data);
     });
 
   }
@@ -323,6 +373,30 @@ export class UploadFileComponent implements OnInit {
     this.http.request(uploadReq).subscribe(data => {
       console.log(data);
     });
+  }
+
+  EditClassCodeMgtRecord() {
+    debugger;
+    const d = this.classCodeManagementgridApi.getEditingCells();
+    if (this.classCodeManagementgridApi.getSelectedRows().length == 0) {
+      this.toastr.error("error", "Please select Record for update");
+      return;
+    }
+    var row = this.classCodeManagementgridApi.getSelectedRows();
+    console.log(row);
+    const formData = new FormData();
+    formData.append('id', row[0].id);
+    formData.append('classCodeID', row[0].classCodeID);
+    formData.append('productCodeId', row[0].productCodeId);
+    formData.append('locationId', row[0].locationId);
+    formData.append('active', row[0].active);
+
+    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateClassCodeDetails', formData);
+
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+
   }
 
  
@@ -386,10 +460,19 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     var row = this.displayMonthsgridApi.getSelectedRows();
-    //this.uploadService.updateUser(row[0]).subscribe(data => {
-    //  this.toastr.success("success", data);
-    //  this.ngOnInit();
-    //});
+    console.log(row);
+    const formData = new FormData();
+    formData.append('id', row[0].id);
+    formData.append('month', row[0].month);
+    formData.append('year', row[0].year);
+    formData.append('active', row[0].active);
+
+    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateDisplayMonthsDetails', formData);
+
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+
   }
 
   openDatePicker() {

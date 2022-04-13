@@ -272,5 +272,162 @@ namespace SupplyWebApp.Controllers
             return Ok(message);
         }
 
+        [HttpPut]
+        [Route("/UpdateAddedFreightDetails")]
+        public async Task<IActionResult> UpdateAddedFreightDetails()
+        {
+            string message = "";
+            var addedFreightFromReq = Request.Form.ToList();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                AddedFreight addedFreight = new AddedFreight();
+                addedFreight = _dataContext.AddedFreight.Find(Convert.ToInt32(addedFreightFromReq[0].Value));
+                if (addedFreight != null)
+                {
+                    addedFreight.POLocationId = Convert.ToInt32(addedFreightFromReq[1].Value);
+                    addedFreight.POWarehouseId = Convert.ToInt32(addedFreightFromReq[2].Value);
+                    addedFreight.POCarrierId = Convert.ToInt32(addedFreightFromReq[3].Value);
+                    addedFreight.VendorId = Convert.ToInt32(addedFreightFromReq[4].Value);
+                    addedFreight.CWT = addedFreightFromReq[5].Value;
+                    addedFreight.TruckLoad = addedFreightFromReq[6].Value;
+                }
+                _dataContext.AddedFreight.Update(addedFreight);
+                int result = await _dataContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    message = "Added Freight Record has been sussfully updated";
+                }
+                else
+                {
+                    message = "Added Freight Record updation Failed";
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return Ok(message);
+        }
+
+        [HttpPut]
+        [Route("/UpdateTransferFreightDetails")]
+        public async Task<IActionResult> UpdateTransferFreightDetails()
+        {
+            string message = "";
+            var transferFreightFromReq = Request.Form.ToList();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                TransferFreight transferFreight = new TransferFreight();
+                transferFreight = _dataContext.TransferFreight.Find(Convert.ToInt32(transferFreightFromReq[0].Value));
+                if (transferFreight != null)
+                {
+                    transferFreight.TransferFromId = Convert.ToInt32(transferFreightFromReq[1].Value);
+                    transferFreight.TransferToId = Convert.ToInt32(transferFreightFromReq[2].Value);
+                    transferFreight.ProductCode = transferFreightFromReq[3].Value;
+                    transferFreight.TransferCost = Convert.ToDouble(transferFreightFromReq[4].Value);
+                }
+                _dataContext.TransferFreight.Update(transferFreight);
+                int result = await _dataContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    message = "Transfer Freight Record has been sussfully updated";
+                }
+                else
+                {
+                    message = "Transfer Freight Record updation Failed";
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return Ok(message);
+        }
+
+        [HttpPut]
+        [Route("/UpdateClassCodeDetails")]
+        public async Task<IActionResult> UpdateClassCodeDetails()
+        {
+            string message = "";
+            var classCodesFromReq = Request.Form.ToList();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                ClassCodeManagement classCodes = new ClassCodeManagement();
+                classCodes = _dataContext.ClassCodeManagement.Find(Convert.ToInt32(classCodesFromReq[0].Value));
+                if (classCodes != null)
+                {
+                    classCodes.ClassCodeID = Convert.ToInt32(classCodesFromReq[1].Value);
+                    classCodes.ProductCodeId = Convert.ToInt32(classCodesFromReq[2].Value);
+                    classCodes.LocationId = Convert.ToInt32(classCodesFromReq[3].Value);
+                    classCodes.Active = Convert.ToInt32(classCodesFromReq[4].Value);
+                }
+                _dataContext.ClassCodeManagement.Update(classCodes);
+                int result = await _dataContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    message = "ClassCodeManagement Record has been sussfully updated";
+                }
+                else
+                {
+                    message = "ClassCodeManagement Record updation Failed";
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return Ok(message);
+        }
+
+        [HttpPut]
+        [Route("/UpdateDisplayMonthsDetails")]
+        public async Task<IActionResult> UpdateDisplayMonthsDetails()
+        {
+            string message = "";
+            var displayMonthsFromReq = Request.Form.ToList();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                DisplayMonths dm = new DisplayMonths();
+                dm = _dataContext.DisplayMonths.Find(Convert.ToInt32(displayMonthsFromReq[0].Value));
+                if (dm != null)
+                {
+                    dm.Month = Convert.ToInt32(displayMonthsFromReq[1].Value);
+                    dm.Year = Convert.ToInt32(displayMonthsFromReq[2].Value);
+                    dm.Active = Convert.ToInt32(displayMonthsFromReq[3].Value);
+                }
+                _dataContext.DisplayMonths.Update(dm);
+                int result = await _dataContext.SaveChangesAsync();
+                if (result > 0)
+                {
+                    message = "Display Months Record has been sussfully updated";
+                }
+                else
+                {
+                    message = "Display Months Record updation Failed";
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            return Ok(message);
+        }
+
     }
 }

@@ -14,9 +14,20 @@ namespace SupplyWebApp.Models
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
+
+        [ForeignKey("ClassCode")]
         public int ClassCodeID { get; set; }
+        public ClassCode ClassCode { get; set; }
+
+        [ForeignKey("Part")]
+
         public int ProductCodeId { get; set; }
+        public Part Part { get; set; }
+
+        [ForeignKey("Location")]
         public int LocationId { get; set; }
+        public Location Location { get; set; }
+
         public int Active { get; set; }
     }
 }

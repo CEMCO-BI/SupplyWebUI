@@ -14,6 +14,10 @@ namespace SupplyWebApp.Data
             //this.ChangeTracker.LazyLoadingEnabled = false;
         }
         public DbSet<Location> Location { get; set; }
+        public DbSet<Warehouse> Warehouse { get; set; }
+        public DbSet<Vendor> Vendor { get; set; }
+        public DbSet<Carrier> Carrier { get; set; }
+        public DbSet<Part> Part { get; set; }
         public DbSet<SalesForecast> SalesForecast { get; set; }
         public DbSet<PlannedBuy> PlannedBuy { get; set; }
         public DbSet<CRUPricing> CRUPricing { get; set; }

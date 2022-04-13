@@ -67,7 +67,10 @@ namespace SupplyWebApp.Controllers
         {
             try
             {
-                var addedFreightData = _dataContext.AddedFreight.Include(x=>x.Location).AsQueryable();
+                var addedFreightData = _dataContext.AddedFreight.Include(x=>x.Location)
+                                        .Include(c=> c.Carrier)
+                                        .Include(w => w.Warehouse)
+                                        .Include(v => v.Vendor).AsQueryable();
                 IQueryable<AddedFreight> addedFreightsFromdb = addedFreightData;
                 return addedFreightsFromdb;
 
@@ -84,8 +87,11 @@ namespace SupplyWebApp.Controllers
         {
             try
             {
+                var transferFreightsData = _dataContext.TransferFreight
+                                            .Include(x => x.LocationFrom)
+                                            .Include(x => x.LocationTo).AsQueryable();
 
-                IQueryable<TransferFreight> transferFreightsFromdb = _dataContext.TransferFreight.AsQueryable();
+                IQueryable<TransferFreight> transferFreightsFromdb = transferFreightsData;
                 return transferFreightsFromdb;
 
             }
@@ -101,8 +107,12 @@ namespace SupplyWebApp.Controllers
         {
             try
             {
-
-                IQueryable<ClassCodeManagement> classCodeManagementFromdb = _dataContext.ClassCodeManagement.AsQueryable();
+                var classCodeManagementData = _dataContext.ClassCodeManagement
+                                           .Include(x => x.Location)
+                                           .Include(x => x.ClassCode)
+                                           .Include(x => x.Part)
+                                           .AsQueryable();
+                IQueryable<ClassCodeManagement> classCodeManagementFromdb = classCodeManagementData;
                 return classCodeManagementFromdb;
             }
             catch (Exception e)

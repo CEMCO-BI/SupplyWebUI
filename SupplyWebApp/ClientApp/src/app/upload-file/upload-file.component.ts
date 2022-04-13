@@ -64,24 +64,43 @@ export class UploadFileComponent implements OnInit {
   AddedFreightcolumnDefs = [
     {
       /*field: "poLocationId",*/ headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }
+    //  {
+    //  valuesKeys: { valueKey: 'id', contentKey: 'location' },
+    //    values: [{ id: 1, name: 'IND' }, { id: 2, name: 'PIT' }]
+    //}
+
+      , required: true
       ,valueGetter: params => {
         //console.log(params.data.location.locationCode);
         return params.data.location.locationCode;
       }
+      //,valueSetter: params => {
+      //  params.data.poLocationId = params.newValue.id;
+      //  return true;
+      //}
 
     },
     {
-      field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
+      /*field: "poWarehouseId",*/ headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true//TODO: values from Warehouse.Abb
+      , valueGetter: params => {
+        return params.data.warehouse == null ? "" :params.data.warehouse.abbr;
+      }
     },
     {
-      field: "poCarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+      /*field: "poCarrierId",*/ headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['Will Call', 'Delivery'] }
+      , valueGetter: params => {
+        return params.data.carrier == null ? "" :params.data.carrier.description;
+      }
     },
     {
       field: "vendorId", headerName: "Vendor", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true //TODO:type ahead search + 'CheckName’ values in the Vendor db table.
+      , valueGetter: params => {
+        return params.data.vendor == null ? "" : params.data.vendor.checkName;
+      }
     },
     { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "150", editable: true, required: true },
     { field: "truckLoad", headerName: "$/Truckload", width: "100", editable: true, required: true  }
@@ -89,23 +108,44 @@ export class UploadFileComponent implements OnInit {
 
   TransferFreightcolumnDefs = [
     {
-      field: "transferFromId", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+     /* field: "transferFromId",*/ headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+      , valueGetter: params => {
+        //console.log(params.data.location.locationCode);
+        return params.data.locationFrom.locationCode;
+      }
     },
     {
-      field: "transferToId", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      /*field: "transferToId",*/ headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+      , valueGetter: params => {
+        //console.log(params.data.location.locationCode);
+        return params.data.locationTo.locationCode;
+      }
     },
     { field: "productCode", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
     { field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true  }
   ];
 
   ClassCodeManagementcolumnDefs = [
-    { field: "classCodeID", headerName: "Class Code", width: "160", editable: true, required: true },//TODO: ‘Code’ column from the ‘ClassCode’ table
-    { field: "productCodeId", headerName: "Product Code", width: "140", editable: true, required: true },//TODO: PartNo column from the Part table.
     {
-      field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+     /* field: "classCodeID",*/ headerName: "Class Code", width: "160", editable: true, required: true
+      , valueGetter: params => {
+        return params.data.classCode.code;
+      }
+    },//TODO: ‘Code’ column from the ‘ClassCode’ table
+    {
+      /*field: "productCodeId",*/ headerName: "Product Code", width: "140", editable: true, required: true
+      , valueGetter: params => {
+        return params.data.part.partNo;
+      }
+    },//TODO: PartNo column from the Part table.
+    {
+      /*field: "locationId", */headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+      , valueGetter: params => {
+        return params.data.location.locationCode;
+      }
     },
     {
       field: "active", headerName: "Active", width: "140", editable: true, cellEditor: 'agSelectCellEditor',

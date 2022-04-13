@@ -19,9 +19,22 @@ namespace SupplyWebApp.Models
         [ForeignKey("Location")]
         public int POLocationId { get; set; }
         public Location Location { get; set; }
+
+        [ForeignKey("Warehouse")]
         public int? POWarehouseId { get; set; }
+        public Warehouse Warehouse { get; set; }
+
+
+
+        [ForeignKey("Carrier")]
         public int? POCarrierId { get; set; }
+        public Carrier Carrier { get; set; }
+        
+        [ForeignKey("Vendor")]
         public int? VendorId { get; set; }
+        public Vendor Vendor { get; set; }
+
+
         public string CWT { get; set; }
         public string TruckLoad { get; set; }
 

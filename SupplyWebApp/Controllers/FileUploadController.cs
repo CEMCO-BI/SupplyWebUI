@@ -248,7 +248,7 @@ namespace SupplyWebApp.Controllers
                 try
                 {
                     DisplayMonths displayMonths = new DisplayMonths();
-                    displayMonths.Month = displayMonthsfromRequest[0].Value;
+                    displayMonths.Month = Convert.ToInt32(displayMonthsfromRequest[0].Value);
                     displayMonths.Year = Convert.ToInt32(displayMonthsfromRequest[1].Value);
                     displayMonths.Active = Convert.ToInt32(displayMonthsfromRequest[2].Value);
                     _dataContext.DisplayMonths.Add(displayMonths);

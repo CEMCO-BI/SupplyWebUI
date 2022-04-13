@@ -63,8 +63,13 @@ export class UploadFileComponent implements OnInit {
 
   AddedFreightcolumnDefs = [
     {
-      field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+      /*field: "poLocationId",*/ headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+      ,valueGetter: params => {
+        //console.log(params.data.location.locationCode);
+        return params.data.location.locationCode;
+      }
+
     },
     {
       field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',

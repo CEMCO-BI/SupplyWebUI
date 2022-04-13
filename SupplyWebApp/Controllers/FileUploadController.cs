@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using SupplyWebApp.Helpers;
 using SupplyWebApp.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace SupplyWebApp.Controllers
 {
@@ -66,8 +67,8 @@ namespace SupplyWebApp.Controllers
         {
             try
             {
-
-                IQueryable<AddedFreight> addedFreightsFromdb = _dataContext.AddedFreight.AsQueryable();
+                var addedFreightData = _dataContext.AddedFreight.Include(x=>x.Location).AsQueryable();
+                IQueryable<AddedFreight> addedFreightsFromdb = addedFreightData;
                 return addedFreightsFromdb;
 
             }

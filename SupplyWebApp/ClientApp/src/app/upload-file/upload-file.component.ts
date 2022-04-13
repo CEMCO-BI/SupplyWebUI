@@ -154,10 +154,10 @@ export class UploadFileComponent implements OnInit {
   ];
 
   DisplayMonthscolumnDefs = [
-    { field: "month", headerName: "Month", width: "150", editable: true, cellEditor: 'agSelectCellEditor',
+    { field: "month", headerName: "Month", width: "150", editable: true,
     cellEditorParams: { values: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] }, required: true },
     {
-      field: "year", headerName: "Year", width: "150", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "year", headerName: "Year", width: "150", editable: true,
       cellEditorParams: {
         values: ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030',
           '2031', '2032', '2033', '2034', '2035', '2036', '2037', '2038', '2039', '2040',
@@ -166,7 +166,7 @@ export class UploadFileComponent implements OnInit {
       }, required: true
     },
     {
-      field: "active", headerName: "Active", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "active", headerName: "Active", width: "120", editable: true,
       cellEditorParams: { values: ['True', 'False'] }, required: true
     }
   ];
@@ -221,10 +221,10 @@ export class UploadFileComponent implements OnInit {
     });
   }
 
-  DeleteAddedFreightRecord() {
-    var selectedData = this.addedFreightGrid.api.getSelectedRows();
-    this.addedFreightGrid.api.updateRowData({ remove: selectedData });
-  }
+  //DeleteAddedFreightRecord() {
+  //  var selectedData = this.addedFreightGrid.api.getSelectedRows();
+  //  this.addedFreightGrid.api.updateRowData({ remove: selectedData });
+  //}
 
   onAddedFreightGridReady(params) {
     this.addedFreightgridApi = params.api;
@@ -258,6 +258,45 @@ export class UploadFileComponent implements OnInit {
     });
   }
 
+  EditAddedFreightRecord() {
+    debugger;
+    if (this.addedFreightgridApi.getSelectedRows().length == 0) {
+      this.toastr.error("error", "Please select Record for update");
+      return;
+    }
+    var row = this.addedFreightgridApi.getSelectedRows();
+    console.log(row);
+    const formData = new FormData();
+    formData.append('id', row[0].id);
+    formData.append('poLocationId', row[0].poLocationId);
+    formData.append('poWarehouseId', row[0].poWarehouseId);
+    formData.append('poCarrierId', row[0].poCarrierId);
+    formData.append('vendorId', row[0].vendorId);
+    formData.append('cwt', row[0].cwt);
+    formData.append('truckLoad', row[0].truckLoad);
+
+    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateAddedFreightDetails', formData);
+
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+  }
+
+  DeleteAddedFreightRecord() {
+    debugger;
+    var selectedRow = this.addedFreightgridApi.getSelectedRows();
+    if (selectedRow.length == 0) {
+      this.toastr.error("error", "Please select a Record for deletion");
+      return;
+    }
+    console.log('id'+ selectedRow[0].id);
+    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteAddedFreightRecord?id=' + selectedRow[0].id);
+    var selectedData = this.addedFreightGrid.api.getSelectedRows();
+    this.addedFreightGrid.api.updateRowData({ remove: selectedData });
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+  }
   
 
   //Transfer Freight
@@ -278,8 +317,20 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteTransferFreightRecord() {
+    debugger;
+    var selectedRow = this.transferFreightgridApi.getSelectedRows();
+    if (selectedRow.length == 0) {
+      this.toastr.error("error", "Please select a Record for deletion");
+      return;
+    }
+    console.log('id' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteTransferFreightRecord?id=' + selectedRow[0].id);
     var selectedData = this.transferFreightGrid.api.getSelectedRows();
     this.transferFreightGrid.api.updateRowData({ remove: selectedData });
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+
   }
 
   onTransferFreightGridReady(params) {
@@ -307,6 +358,29 @@ export class UploadFileComponent implements OnInit {
 
     this.http.request(uploadReq).subscribe(data => {
       console.log(data);
+
+    });
+  }
+
+  EditTransferFreightRecord() {
+    debugger;
+    if (this.transferFreightgridApi.getSelectedRows().length == 0) {
+      this.toastr.error("error", "Please select Record for update");
+      return;
+    }
+    var row = this.transferFreightgridApi.getSelectedRows();
+    console.log(row);
+    const formData = new FormData();
+    formData.append('id', row[0].id);
+    formData.append('transferFromId', row[0].transferFromId);
+    formData.append('transferToId', row[0].transferToId);
+    formData.append('productCode', row[0].productCode);
+    formData.append('transferCost', row[0].transferCost);
+
+    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateTransferFreightDetails', formData);
+
+    this.http.request(req).subscribe(data => {
+      console.log(data);
     });
   }
 
@@ -329,8 +403,20 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteClassCodeMgtRecord() {
+    debugger;
+    var selectedRow = this.classCodeManagementgridApi.getSelectedRows();
+    if (selectedRow.length == 0) {
+      this.toastr.error("error", "Please select a Record for deletion");
+      return;
+    }
+    console.log('id' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteClassCodesRecord?id=' + selectedRow[0].id);
     var selectedData = this.classCodeManagementGrid.api.getSelectedRows();
     this.classCodeManagementGrid.api.updateRowData({ remove: selectedData });
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+
   }
 
   onClassCodeMgtGridReady(params) {
@@ -363,6 +449,30 @@ export class UploadFileComponent implements OnInit {
     });
   }
 
+  EditClassCodeMgtRecord() {
+    debugger;
+    if (this.classCodeManagementgridApi.getSelectedRows().length == 0) {
+      this.toastr.error("error", "Please select Record for update");
+      return;
+    }
+    var row = this.classCodeManagementgridApi.getSelectedRows();
+    console.log(row);
+    const formData = new FormData();
+    formData.append('id', row[0].id);
+    formData.append('classCodeID', row[0].classCodeID);
+    formData.append('productCodeId', row[0].productCodeId);
+    formData.append('locationId', row[0].locationId);
+    formData.append('active', row[0].active);
+
+    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateClassCodeDetails', formData);
+
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
+  }
+
+ 
+
   //Display Months
   getDisplayMonthsDetails() {
     return this.http.get('https://localhost:44341/GetDisplayMonthsDetails').subscribe(
@@ -381,8 +491,19 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteDisplayMonthsRecord() {
+    debugger;
+    var selectedRow = this.displayMonthsgridApi.getSelectedRows();
+    if (selectedRow.length == 0) {
+      this.toastr.error("error", "Please select a Record for deletion");
+      return;
+    }
+    console.log('id' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteDisplayMonthsRecord?id=' + selectedRow[0].id);
     var selectedData = this.displayMonthsGrid.api.getSelectedRows();
     this.displayMonthsGrid.api.updateRowData({ remove: selectedData });
+    this.http.request(req).subscribe(data => {
+      console.log(data);
+    });
   }
 
   onDisplayMonthsGridReady(params) {
@@ -410,6 +531,28 @@ export class UploadFileComponent implements OnInit {
     const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostDisplayMonthsDetails', formData);
 
     this.http.request(uploadReq).subscribe(data => {
+      console.log(data);
+    });
+  }
+
+  EditDisplayMonthsRecord() {
+    debugger;
+    if (this.displayMonthsgridApi.getSelectedRows().length == 0) {
+      this.toastr.error("error", "Please select Display Month Record for update");
+      return;
+    }
+    var row = this.displayMonthsgridApi.getSelectedRows();
+    console.log(row);
+    const formData = new FormData();
+    formData.append('id', row[0].id);
+    formData.append('month', row[0].month);
+    formData.append('year', row[0].year);
+    formData.append('active', row[0].active);
+
+    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateDisplayMonthsDetails', formData);
+    var selectedData = this.displayMonthsGrid.api.getSelectedRows();
+    this.displayMonthsGrid.api.updateRowData({ update: selectedData });
+    this.http.request(req).subscribe(data => {
       console.log(data);
     });
   }

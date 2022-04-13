@@ -10,8 +10,11 @@ namespace SupplyWebApp.Models
     [Table("AddedFreight", Schema = "Upload")]
     public class AddedFreight
     {
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [ForeignKey("Location")]
         public int POLocationId { get; set; }

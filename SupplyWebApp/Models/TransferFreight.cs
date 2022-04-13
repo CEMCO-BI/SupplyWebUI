@@ -10,12 +10,13 @@ namespace SupplyWebApp.Models
     [Table("TransferFreight", Schema = "Upload")]
     public class TransferFreight
     {
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
+        public int Id { get; set; }
         public int TransferFromId { get; set; }
         public int TransferToId { get; set; }
         public string? ProductCode { get; set; }
-        public string TransferCost { get; set; }
+        public double TransferCost { get; set; }
     }
 }

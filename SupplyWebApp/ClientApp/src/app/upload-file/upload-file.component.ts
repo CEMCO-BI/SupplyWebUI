@@ -109,10 +109,10 @@ export class UploadFileComponent implements OnInit {
   ];
 
   DisplayMonthscolumnDefs = [
-    { field: "month", headerName: "Month", width: "150", editable: true, cellEditor: 'agSelectCellEditor',
+    { field: "month", headerName: "Month", width: "150", editable: true,
     cellEditorParams: { values: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] }, required: true },
     {
-      field: "year", headerName: "Year", width: "150", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "year", headerName: "Year", width: "150", editable: true,
       cellEditorParams: {
         values: ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030',
           '2031', '2032', '2033', '2034', '2035', '2036', '2037', '2038', '2039', '2040',
@@ -121,7 +121,7 @@ export class UploadFileComponent implements OnInit {
       }, required: true
     },
     {
-      field: "active", headerName: "Active", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      field: "active", headerName: "Active", width: "120", editable: true,
       cellEditorParams: { values: ['True', 'False'] }, required: true
     }
   ];
@@ -262,7 +262,9 @@ export class UploadFileComponent implements OnInit {
 
     this.http.request(uploadReq).subscribe(data => {
       console.log(data);
+
     });
+
   }
 
 
@@ -318,6 +320,8 @@ export class UploadFileComponent implements OnInit {
     });
   }
 
+ 
+
   //Display Months
   getDisplayMonthsDetails() {
     return this.http.get('https://localhost:44341/GetDisplayMonthsDetails').subscribe(
@@ -367,6 +371,20 @@ export class UploadFileComponent implements OnInit {
     this.http.request(uploadReq).subscribe(data => {
       console.log(data);
     });
+  }
+
+  EditDisplayMonthsRecord() {
+    debugger;
+    const d = this.displayMonthsgridApi.getEditingCells();
+    if (this.displayMonthsgridApi.getSelectedRows().length == 0) {
+      this.toastr.error("error", "Please select Display Month Record for update");
+      return;
+    }
+    var row = this.displayMonthsgridApi.getSelectedRows();
+    //this.uploadService.updateUser(row[0]).subscribe(data => {
+    //  this.toastr.success("success", data);
+    //  this.ngOnInit();
+    //});
   }
 
   openDatePicker() {

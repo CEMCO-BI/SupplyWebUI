@@ -117,8 +117,9 @@ namespace SupplyWebApp.Controllers
             try
             {
 
-                IQueryable<DisplayMonths> displayMonthsFromdb = _dataContext.DisplayMonths.AsQueryable();
-                return displayMonthsFromdb;
+                //IQueryable<DisplayMonths> displayMonthsFromdb = _dataContext.DisplayMonths.AsQueryable();
+                var res = _dataContext.DisplayMonths;
+                return res;
             }
             catch (Exception e)
             {

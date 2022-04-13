@@ -11,10 +11,9 @@ namespace SupplyWebApp.Models
     public class AddedFreight
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
-        public int? POLocationId { get; set; }
-        public int? POWarehouseId { get; set; }
+        public int Id { get; set; }
+        public int POLocationId { get; set; }
+        public int POWarehouseId { get; set; }
         public int? POCarrierId { get; set; }
         public int? VendorId { get; set; }
         public string CWT { get; set; }

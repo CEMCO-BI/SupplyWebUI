@@ -117,9 +117,8 @@ namespace SupplyWebApp.Controllers
             try
             {
 
-                //IQueryable<DisplayMonths> displayMonthsFromdb = _dataContext.DisplayMonths.AsQueryable();
-                var res = _dataContext.DisplayMonths;
-                return res;
+                IQueryable<DisplayMonths> displayMonthsFromdb = _dataContext.DisplayMonths.AsQueryable();
+                return displayMonthsFromdb;
             }
             catch (Exception e)
             {
@@ -180,7 +179,7 @@ namespace SupplyWebApp.Controllers
                     transferFreight.TransferFromId = Convert.ToInt32(transferFreightfromRequest[0].Value);
                     transferFreight.TransferToId = Convert.ToInt32(transferFreightfromRequest[1].Value);
                     transferFreight.ProductCode = transferFreightfromRequest[2].Value;
-                    transferFreight.TransferCost = transferFreightfromRequest[3].Value;
+                    transferFreight.TransferCost = Convert.ToDouble(transferFreightfromRequest[3].Value);
                     _dataContext.TransferFreight.Add(transferFreight);
                     int result = await _dataContext.SaveChangesAsync();
                     if (result > 0)

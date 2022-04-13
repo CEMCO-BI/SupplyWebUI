@@ -11,8 +11,7 @@ namespace SupplyWebApp.Models
     public class DisplayMonths
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
+        public int Id { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
         public int Active { get; set; }

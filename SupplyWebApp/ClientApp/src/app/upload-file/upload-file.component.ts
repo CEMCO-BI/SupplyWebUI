@@ -48,6 +48,11 @@ export class UploadFileComponent implements OnInit {
   transferFreightrowData: any;
   classCodeManagementrowData: any;
   displayMonthsrowData: any;
+  AddedFreightcolumnDefs: any;
+  TransferFreightcolumnDefs: any;
+  DisplayMonthscolumnDefs: any;
+  ClassCodeManagementcolumnDefs: any;
+
   @ViewChild('addedFreightGrid', { static: false }) addedFreightGrid: AgGridAngular;
   @ViewChild('transferFreightGrid', { static: false }) transferFreightGrid: AgGridAngular;
   @ViewChild('classCodeManagementGrid', { static: false }) classCodeManagementGrid: AgGridAngular;
@@ -60,116 +65,6 @@ export class UploadFileComponent implements OnInit {
   private classCodeManagementColumnApi;
   private displayMonthsgridApi;
   private displayMonthsColumnApi;
-
-  AddedFreightcolumnDefs = [
-    {
-      /*field: "poLocationId",*/ headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }
-    //  {
-    //  valuesKeys: { valueKey: 'id', contentKey: 'location' },
-    //    values: [{ id: 1, name: 'IND' }, { id: 2, name: 'PIT' }]
-    //}
-
-      , required: true
-      ,valueGetter: params => {
-        //console.log(params.data.location.locationCode);
-        return params.data.location.locationCode;
-      }
-      //,valueSetter: params => {
-      //  params.data.poLocationId = params.newValue.id;
-      //  return true;
-      //}
-
-    },
-    {
-      /*field: "poWarehouseId",*/ headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true//TODO: values from Warehouse.Abb
-      , valueGetter: params => {
-        return params.data.warehouse == null ? "" :params.data.warehouse.abbr;
-      }
-    },
-    {
-      /*field: "poCarrierId",*/ headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['Will Call', 'Delivery'] }
-      , valueGetter: params => {
-        return params.data.carrier == null ? "" :params.data.carrier.description;
-      }
-    },
-    {
-      field: "vendorId", headerName: "Vendor", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true //TODO:type ahead search + 'CheckName’ values in the Vendor db table.
-      , valueGetter: params => {
-        return params.data.vendor == null ? "" : params.data.vendor.checkName;
-      }
-    },
-    { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "150", editable: true, required: true },
-    { field: "truckLoad", headerName: "$/Truckload", width: "100", editable: true, required: true  }
-  ];
-
-  TransferFreightcolumnDefs = [
-    {
-     /* field: "transferFromId",*/ headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
-      , valueGetter: params => {
-        //console.log(params.data.location.locationCode);
-        return params.data.locationFrom.locationCode;
-      }
-    },
-    {
-      /*field: "transferToId",*/ headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
-      , valueGetter: params => {
-        //console.log(params.data.location.locationCode);
-        return params.data.locationTo.locationCode;
-      }
-    },
-    { field: "productCode", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
-    { field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true  }
-  ];
-
-  ClassCodeManagementcolumnDefs = [
-    {
-     /* field: "classCodeID",*/ headerName: "Class Code", width: "160", editable: true, required: true
-      , valueGetter: params => {
-        return params.data.classCode.code;
-      }
-    },//TODO: ‘Code’ column from the ‘ClassCode’ table
-    {
-      /*field: "productCodeId",*/ headerName: "Product Code", width: "140", editable: true, required: true
-      , valueGetter: params => {
-        return params.data.part.partNo;
-      }
-    },//TODO: PartNo column from the Part table.
-    {
-      /*field: "locationId", */headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
-      , valueGetter: params => {
-        return params.data.location.locationCode;
-      }
-    },
-    {
-      field: "active", headerName: "Active", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: ['True', 'False'] }, required: true
-    }
-  ];
-
-  DisplayMonthscolumnDefs = [
-    { field: "month", headerName: "Month", width: "150", editable: true,
-    cellEditorParams: { values: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] }, required: true },
-    {
-      field: "year", headerName: "Year", width: "150", editable: true,
-      cellEditorParams: {
-        values: ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030',
-          '2031', '2032', '2033', '2034', '2035', '2036', '2037', '2038', '2039', '2040',
-          '2041', '2042', '2043', '2044', '2045', '2046', '2047', '2048', '2049', '2050'
-        ]
-      }, required: true
-    },
-    {
-      field: "active", headerName: "Active", width: "120", editable: true,
-      cellEditorParams: { values: ['True', 'False'] }, required: true
-    }
-  ];
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
@@ -191,6 +86,13 @@ export class UploadFileComponent implements OnInit {
       this.displayBrowseFile = false;
       this.displayMarginTables = true;
 
+      //this.getLocations();
+      //Creating column defs
+      this.createAddedFreightColumnDefs();
+      this.createTransferFreightcolumnDefs();
+      this.createClassCodeManagementcolumnDefs();
+      this.createDisplayMonthscolumnDefs();
+
       //Get Data from db
       this.getAddedFreightDetails();
       this.getTransferFreightDetails();
@@ -205,6 +107,79 @@ export class UploadFileComponent implements OnInit {
   };
 
   //Added Freight
+  createAddedFreightColumnDefs() {
+    this.AddedFreightcolumnDefs = [
+      {
+        field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+        //cellEditorParams:
+        //  { values: ['IND', 'PIT', 'DEN', 'FTW'] }
+        cellEditorParams:  {
+          valuesKeys: { valueKey: 'locationId', contentKey: 'locationCode' },
+          values: [{ locationId: 1, locationCode: 'IND' }, { locationId: 2, locationCode: 'PIT' }]
+        }
+
+        , required: true
+        , valueGetter: params => {
+          //console.log(params.data.location.locationCode);
+          return params.data.location.locationCode;
+        }
+        //,valueSetter: params => {
+        //  params.data.poLocationId = params.newValue;
+        //  console.log(params.data.poLocationId);
+        //  return params.data.poLocationId;
+        //}
+
+      },
+      {
+        field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true//TODO: values from Warehouse.Abb
+        , valueGetter: params => {
+          return params.data.warehouse == null ? "" : params.data.warehouse.abbr;
+        }
+        , valueSetter: params => {
+          params.data.poWarehouseId = params.newValue;
+          console.log(params.data.poWarehouseId);
+          return params.data.poWarehouseId;
+        }
+      },
+      {
+        field: "poCarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: { values: ['Will Call', 'Delivery'] }
+        , valueGetter: params => {
+          return params.data.carrier == null ? "" : params.data.carrier.description;
+        }
+        , valueSetter: params => {
+          params.data.poCarrierId = params.newValue;
+          console.log(params.data.poCarrierId);
+          return params.data.poCarrierId;
+        }
+      },
+      {
+        field: "vendorId", headerName: "Vendor", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true //TODO:type ahead search + 'CheckName’ values in the Vendor db table.
+        , valueGetter: params => {
+          return params.data.vendor == null ? "" : params.data.vendor.checkName;
+        }
+        , valueSetter: params => {
+          params.data.vendorId = params.newValue;
+          console.log(params.data.vendorId);
+          return params.data.vendorId;
+        }
+      },
+      { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "150", editable: true, required: true },
+      { field: "truckLoad", headerName: "$/Truckload", width: "100", editable: true, required: true }
+    ];
+  }
+
+  getLocations() {
+    return this.http.get('https://localhost:44341/GetLocations').subscribe(
+      data => {
+        
+        console.log(data);
+      }
+    )
+  }
+
   getAddedFreightDetails() {
     return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
       data => {
@@ -216,7 +191,7 @@ export class UploadFileComponent implements OnInit {
 
   AddAddedFreightRecord() {
     this.addedFreightGrid.api.updateRowData({
-      add: [{ pO_LocationId: '', pO_WarehouseId: '', pO_CarrierId: '', vendorId: '', cwt: '', truckLoad: '' }],
+      add: [{ poLocationId: '', poWarehouseId: '', poCarrierId: '', vendorId: '', cwt: '', truckLoad: '' }],
       addIndex: 0
     });
   }
@@ -300,6 +275,39 @@ export class UploadFileComponent implements OnInit {
   
 
   //Transfer Freight
+  createTransferFreightcolumnDefs() {
+    this.TransferFreightcolumnDefs = [
+      {
+        field: "transferFromId", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+        , valueGetter: params => {
+          //console.log(params.data.location.locationCode);
+          return params.data.locationFrom.locationCode;
+        }
+        , valueSetter: params => {
+          params.data.transferFromId = params.newValue;
+          console.log(params.data.transferFromId);
+          return params.data.transferFromId;
+        }
+      },
+      {
+        field: "transferToId", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+        , valueGetter: params => {
+          //console.log(params.data.location.locationCode);
+          return params.data.locationTo.locationCode;
+        }
+        , valueSetter: params => {
+          params.data.transferToId = params.newValue;
+          console.log(params.data.transferToId);
+          return params.data.transferToId;
+        }
+      },
+      { field: "productCode", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
+      { field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true }
+    ];
+
+  }
   getTransferFreightDetails() {
     return this.http.get('https://localhost:44341/GetTransferFreightsDetails').subscribe(
       data => {
@@ -386,6 +394,49 @@ export class UploadFileComponent implements OnInit {
 
 
   //Class Code Management
+  createClassCodeManagementcolumnDefs() {
+    this.ClassCodeManagementcolumnDefs = [
+      {
+        field: "classCodeID", headerName: "Class Code", width: "160", editable: true, required: true
+        , valueGetter: params => {
+          return params.data.classCode.code;
+        }
+        , valueSetter: params => {
+          params.data.classCodeID = params.newValue;
+          console.log(params.data.classCodeID);
+          return params.data.classCodeID;
+        }
+      },//TODO: ‘Code’ column from the ‘ClassCode’ table
+      {
+        field: "productCodeId", headerName: "Product Code", width: "140", editable: true, required: true
+        , valueGetter: params => {
+          return params.data.part.partNo;
+        }
+        , valueSetter: params => {
+          params.data.productCodeId = params.newValue;
+          console.log(params.data.productCodeId);
+          return params.data.productCodeId;
+        }
+      },//TODO: PartNo column from the Part table.
+      {
+        field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
+        , valueGetter: params => {
+          return params.data.location.locationCode;
+        }
+        , valueSetter: params => {
+          params.data.locationId = params.newValue;
+          console.log(params.data.locationId);
+          return params.data.locationId;
+        }
+      },
+      {
+        field: "active", headerName: "Active", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: { values: ['True', 'False'] }, required: true
+      }
+    ];
+  }
+
   getClassCodeManagementDetails() {
     return this.http.get('https://localhost:44341/GetClassCodeManagementDetails').subscribe(
       data => {
@@ -474,6 +525,28 @@ export class UploadFileComponent implements OnInit {
  
 
   //Display Months
+  createDisplayMonthscolumnDefs() {
+    this.DisplayMonthscolumnDefs = [
+      {
+        field: "month", headerName: "Month", width: "150", editable: true,
+        cellEditorParams: { values: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] }, required: true
+      },
+      {
+        field: "year", headerName: "Year", width: "150", editable: true,
+        cellEditorParams: {
+          values: ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030',
+            '2031', '2032', '2033', '2034', '2035', '2036', '2037', '2038', '2039', '2040',
+            '2041', '2042', '2043', '2044', '2045', '2046', '2047', '2048', '2049', '2050'
+          ]
+        }, required: true
+      },
+      {
+        field: "active", headerName: "Active", width: "120", editable: true,
+        cellEditorParams: { values: ['True', 'False'] }, required: true
+      }
+    ];
+  }
+
   getDisplayMonthsDetails() {
     return this.http.get('https://localhost:44341/GetDisplayMonthsDetails').subscribe(
       data => {

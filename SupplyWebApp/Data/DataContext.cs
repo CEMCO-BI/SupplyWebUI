@@ -17,6 +17,7 @@ namespace SupplyWebApp.Data
         public DbSet<Warehouse> Warehouse { get; set; }
         public DbSet<Vendor> Vendor { get; set; }
         public DbSet<Carrier> Carrier { get; set; }
+        public DbSet<ClassCode> ClassCode { get; set; }
         public DbSet<Part> Part { get; set; }
         public DbSet<SalesForecast> SalesForecast { get; set; }
         public DbSet<PlannedBuy> PlannedBuy { get; set; }

@@ -13,6 +13,7 @@ using SupplyWebApp.Helpers;
 using SupplyWebApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace SupplyWebApp.Controllers
 {
@@ -62,6 +63,27 @@ namespace SupplyWebApp.Controllers
         }
 
         [HttpGet]
+        [Route("/GetLocations")]
+        public IQueryable<Location> GetLocations()
+        {
+            try
+            {
+                List<string> locationList = new List<string>();
+                locationList.Add("IND");
+                locationList.Add("PIT");
+                locationList.Add("DEN");
+                locationList.Add("FTW");
+                var locations = _dataContext.Location.Where(l => locationList.Contains(l.LocationCode)).OrderBy(l =>l.LocationId);
+                return locations;
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("/GetAddedFreightsDetails")]
         public IQueryable<AddedFreight> GetAddedFreightsDetails()
         {
@@ -71,8 +93,7 @@ namespace SupplyWebApp.Controllers
                                         .Include(c=> c.Carrier)
                                         .Include(w => w.Warehouse)
                                         .Include(v => v.Vendor).AsQueryable();
-                IQueryable<AddedFreight> addedFreightsFromdb = addedFreightData;
-                return addedFreightsFromdb;
+                return addedFreightData;
 
             }
             catch (Exception e)
@@ -91,8 +112,7 @@ namespace SupplyWebApp.Controllers
                                             .Include(x => x.LocationFrom)
                                             .Include(x => x.LocationTo).AsQueryable();
 
-                IQueryable<TransferFreight> transferFreightsFromdb = transferFreightsData;
-                return transferFreightsFromdb;
+                return transferFreightsData;
 
             }
             catch (Exception e)
@@ -112,8 +132,7 @@ namespace SupplyWebApp.Controllers
                                            .Include(x => x.ClassCode)
                                            .Include(x => x.Part)
                                            .AsQueryable();
-                IQueryable<ClassCodeManagement> classCodeManagementFromdb = classCodeManagementData;
-                return classCodeManagementFromdb;
+                return classCodeManagementData;
             }
             catch (Exception e)
             {
@@ -148,11 +167,12 @@ namespace SupplyWebApp.Controllers
             {
                 try
                 {
+                    var carriertype = addedFreightfromRequest[2].Value.GetType();
                     AddedFreight addedFreight = new AddedFreight();
-                    addedFreight.POLocationId = Convert.ToInt32(addedFreightfromRequest[0].Value);
-                    addedFreight.POWarehouseId = Convert.ToInt32(addedFreightfromRequest[1].Value);
-                    addedFreight.POCarrierId = Convert.ToInt32(addedFreightfromRequest[2].Value);
-                    addedFreight.VendorId = Convert.ToInt32(addedFreightfromRequest[3].Value);
+                    addedFreight.POLocationId = _dataContext.Location.FirstOrDefault(loc => loc.LocationCode.Equals(addedFreightfromRequest[0].Value))?.LocationId;
+                    addedFreight.POWarehouseId = _dataContext.Warehouse.FirstOrDefault(w => w.Abbr.Equals(addedFreightfromRequest[1].Value))?.WarehouseId;
+                    addedFreight.POCarrierId = _dataContext.Carrier.FirstOrDefault(c => c.Description.Equals(addedFreightfromRequest[2].Value))?.CarrierId;
+                    addedFreight.VendorId = _dataContext.Vendor.FirstOrDefault(v => v.CheckName.Equals(addedFreightfromRequest[3].Value))?.VendorId;
                     addedFreight.CWT = Convert.ToDouble(addedFreightfromRequest[4].Value);
                     addedFreight.TruckLoad = addedFreightfromRequest[5].Value;
                     _dataContext.AddedFreight.Add(addedFreight);
@@ -166,7 +186,7 @@ namespace SupplyWebApp.Controllers
                         message = "Added Freight records insertion failed";
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     throw;
                 }
@@ -187,8 +207,8 @@ namespace SupplyWebApp.Controllers
                 try
                 {
                     TransferFreight transferFreight = new TransferFreight();
-                    transferFreight.TransferFromId = Convert.ToInt32(transferFreightfromRequest[0].Value);
-                    transferFreight.TransferToId = Convert.ToInt32(transferFreightfromRequest[1].Value);
+                    transferFreight.TransferFromId = _dataContext.Location.FirstOrDefault(loc => loc.LocationCode.Equals(transferFreightfromRequest[0].Value)).LocationId;
+                    transferFreight.TransferToId = _dataContext.Location.FirstOrDefault(loc => loc.LocationCode.Equals(transferFreightfromRequest[1].Value)).LocationId;
                     transferFreight.ProductCode = transferFreightfromRequest[2].Value;
                     transferFreight.TransferCost = Convert.ToDouble(transferFreightfromRequest[3].Value);
                     _dataContext.TransferFreight.Add(transferFreight);
@@ -223,9 +243,9 @@ namespace SupplyWebApp.Controllers
                 try
                 {
                     ClassCodeManagement classCodes = new ClassCodeManagement();
-                    classCodes.ClassCodeID = Convert.ToInt32(classCodesfromRequest[0].Value);
-                    classCodes.ProductCodeId = Convert.ToInt32(classCodesfromRequest[1].Value);
-                    classCodes.LocationId = Convert.ToInt32(classCodesfromRequest[2].Value);
+                    classCodes.ClassCodeID = _dataContext.ClassCode.FirstOrDefault(c =>c.Code.Equals(classCodesfromRequest[0].Value)).ClassCodeId;
+                    classCodes.ProductCodeId = _dataContext.Part.FirstOrDefault(p => p.PartNo.Equals(classCodesfromRequest[1].Value)).PartId;
+                    classCodes.LocationId = _dataContext.Location.FirstOrDefault(loc => loc.LocationCode.Equals(classCodesfromRequest[2].Value)).LocationId;
                     classCodes.Active = Convert.ToInt32(classCodesfromRequest[3].Value);
                     _dataContext.ClassCodeManagement.Add(classCodes);
                     int result = await _dataContext.SaveChangesAsync();

@@ -17,7 +17,7 @@ namespace SupplyWebApp.Models
         public int Id { get; set; }
 
         [ForeignKey("Location")]
-        public int POLocationId { get; set; }
+        public int? POLocationId { get; set; }
         public Location Location { get; set; }
 
         [ForeignKey("Warehouse")]

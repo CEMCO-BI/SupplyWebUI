@@ -35,7 +35,7 @@ namespace SupplyWebApp.Models
         public Vendor Vendor { get; set; }
 
 
-        public string CWT { get; set; }
+        public double CWT { get; set; }
         public string TruckLoad { get; set; }
 
         

@@ -143,7 +143,7 @@ namespace SupplyWebApp.Controllers
                     addedFreight.POWarehouseId = Convert.ToInt32(addedFreightfromRequest[1].Value);
                     addedFreight.POCarrierId = Convert.ToInt32(addedFreightfromRequest[2].Value);
                     addedFreight.VendorId = Convert.ToInt32(addedFreightfromRequest[3].Value);
-                    addedFreight.CWT = addedFreightfromRequest[4].Value;
+                    addedFreight.CWT = Convert.ToDouble(addedFreightfromRequest[4].Value);
                     addedFreight.TruckLoad = addedFreightfromRequest[5].Value;
                     _dataContext.AddedFreight.Add(addedFreight);
                     int result = await _dataContext.SaveChangesAsync();
@@ -292,7 +292,7 @@ namespace SupplyWebApp.Controllers
                     addedFreight.POWarehouseId = Convert.ToInt32(addedFreightFromReq[2].Value);
                     addedFreight.POCarrierId = Convert.ToInt32(addedFreightFromReq[3].Value);
                     addedFreight.VendorId = Convert.ToInt32(addedFreightFromReq[4].Value);
-                    addedFreight.CWT = addedFreightFromReq[5].Value;
+                    addedFreight.CWT = Convert.ToDouble(addedFreightFromReq[5].Value);
                     addedFreight.TruckLoad = addedFreightFromReq[6].Value;
                 }
                 _dataContext.AddedFreight.Update(addedFreight);

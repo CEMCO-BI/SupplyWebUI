@@ -22,7 +22,7 @@ namespace SupplyWebApp.Models
         public int? POWarehouseId { get; set; }
         public int? POCarrierId { get; set; }
         public int? VendorId { get; set; }
-        public string CWT { get; set; }
+        public double CWT { get; set; }
         public string TruckLoad { get; set; }
 
         

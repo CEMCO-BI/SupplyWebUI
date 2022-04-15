@@ -68,19 +68,105 @@ namespace SupplyWebApp.Controllers
         {
             try
             {
-                //Dictionary<int, string> locationMapping = new Dictionary<int, string>();
                 List<string> locationList = new List<string>();
                 locationList.Add("IND");
                 locationList.Add("PIT");
                 locationList.Add("DEN");
                 locationList.Add("FTW");
                 var locations =  _dataContext.Location.Where(l => locationList.Contains(l.LocationCode)).OrderBy(l => l.LocationId).ToArray();
-                //foreach (var loc in locations)
-                //{
-                //    locationMapping.Add(loc.LocationId, loc.LocationCode);
-                //}
                 return  locations.AsQueryable();
 
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetWarehouse")]
+        public IQueryable<Warehouse> GetWarehouse()
+        {
+            try
+            {
+                var warehouse = _dataContext.Warehouse.ToArray();
+                return warehouse.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetCarrier")]
+        public IQueryable<Carrier> GetCarrier()
+        {
+            try
+            {
+                List<string> requiredCarrier = new List<string>();
+                requiredCarrier.Add("WILL CALL");
+                requiredCarrier.Add("Delivery");
+                var locations = _dataContext.Carrier.Where(c => requiredCarrier.Contains(c.Description)).OrderBy(c=> c.CarrierId).ToArray();
+                return locations.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetVendor")]
+        public IQueryable<Vendor> GetVendor()
+        {
+            try
+            {
+                Vendor v1 = new Vendor();
+                Vendor v2 = new Vendor();
+
+                v1.VendorId = -1;
+                v1.CheckName = "All";
+                v1.CompanyId = 0;
+                v2.VendorId = -2;
+                v2.CheckName = "All Import";
+                v2.CompanyId = 0;
+                var vendorList = _dataContext.Vendor.ToList();
+                vendorList.Add(v1);
+                vendorList.Add(v2);
+                var vendors = vendorList.OrderBy(v => v.VendorId).ToArray();
+
+                return vendors.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetProductCode")]
+        public IQueryable<Part> GetProductCode()
+        {
+            try
+            {
+                var part = _dataContext.Part.Where(p =>p.Active == true).ToArray();
+                return part.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetClassCode")]
+        public IQueryable<ClassCode> GetClassCode()
+        {
+            try
+            {
+                var part = _dataContext.ClassCode.OrderBy(c => c.Code).ToArray();
+                return part.AsQueryable();
             }
             catch (Exception e)
             {
@@ -99,7 +185,6 @@ namespace SupplyWebApp.Controllers
                                         .Include(w => w.Warehouse)
                                         .Include(v => v.Vendor).AsQueryable();
                 return addedFreightData;
-
             }
             catch (Exception e)
             {
@@ -115,7 +200,8 @@ namespace SupplyWebApp.Controllers
             {
                 var transferFreightsData = _dataContext.TransferFreight
                                             .Include(x => x.LocationFrom)
-                                            .Include(x => x.LocationTo).AsQueryable();
+                                            .Include(x => x.LocationTo)
+                                            .AsQueryable();
 
                 return transferFreightsData;
 
@@ -151,7 +237,6 @@ namespace SupplyWebApp.Controllers
         {
             try
             {
-
                 IQueryable<DisplayMonths> displayMonthsFromdb = _dataContext.DisplayMonths.AsQueryable();
                 return displayMonthsFromdb;
             }
@@ -175,9 +260,9 @@ namespace SupplyWebApp.Controllers
                     var carriertype = addedFreightfromRequest[2].Value.GetType();
                     AddedFreight addedFreight = new AddedFreight();
                     addedFreight.POLocationId = Convert.ToInt32(addedFreightfromRequest[0].Value);
-                    //addedFreight.POWarehouseId = _dataContext.Warehouse.FirstOrDefault(w => w.Abbr.Equals(addedFreightfromRequest[1].Value))?.WarehouseId;
-                    //addedFreight.POCarrierId = _dataContext.Carrier.FirstOrDefault(c => c.Description.Equals(addedFreightfromRequest[2].Value))?.CarrierId;
-                    //addedFreight.VendorId = _dataContext.Vendor.FirstOrDefault(v => v.CheckName.Equals(addedFreightfromRequest[3].Value))?.VendorId;
+                    addedFreight.POWarehouseId = Convert.ToInt32(addedFreightfromRequest[1].Value);
+                    addedFreight.POCarrierId = Convert.ToInt32(addedFreightfromRequest[2].Value);
+                    addedFreight.VendorId = Convert.ToInt32(addedFreightfromRequest[3].Value);
                     addedFreight.CWT = Convert.ToDouble(addedFreightfromRequest[4].Value);
                     addedFreight.TruckLoad = addedFreightfromRequest[5].Value;
                     _dataContext.AddedFreight.Add(addedFreight);
@@ -248,8 +333,8 @@ namespace SupplyWebApp.Controllers
                 try
                 {
                     ClassCodeManagement classCodes = new ClassCodeManagement();
-                    classCodes.ClassCodeID = _dataContext.ClassCode.FirstOrDefault(c =>c.Code.Equals(classCodesfromRequest[0].Value)).ClassCodeId;
-                    classCodes.ProductCodeId = _dataContext.Part.FirstOrDefault(p => p.PartNo.Equals(classCodesfromRequest[1].Value)).PartId;
+                    classCodes.ClassCodeID = Convert.ToInt32(classCodesfromRequest[0].Value);
+                    classCodes.ProductCodeId = Convert.ToInt32(classCodesfromRequest[1].Value);
                     classCodes.LocationId = Convert.ToInt32(classCodesfromRequest[2].Value);
                     classCodes.Active = Convert.ToInt32(classCodesfromRequest[3].Value);
                     _dataContext.ClassCodeManagement.Add(classCodes);

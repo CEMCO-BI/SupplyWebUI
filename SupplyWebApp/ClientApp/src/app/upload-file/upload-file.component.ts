@@ -9,8 +9,6 @@ import { AddedFreight } from '../model/AddedFreight';
 import { UploadService } from '../service/upload.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { GridOptions } from 'ag-grid-community';
-import { forkJoin, Observable } from 'rxjs';
-import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-upload-file',
@@ -68,7 +66,11 @@ export class UploadFileComponent implements OnInit {
   private displayMonthsgridApi;
   private displayMonthsColumnApi;
   private locations: object = {};
-  
+  private warehouse: object = {};
+  private carrier: object = {};
+  private vendor: object = {};
+  private productCode: object = {};
+  private classCode: object = {};
   active = {
     1: "True",
     0: "False"
@@ -77,13 +79,14 @@ export class UploadFileComponent implements OnInit {
     1: "January", 2: "February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"
   };
 
-  carrier = {
-    24: "Will Call", 142: "Delivery"
-  };
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
     this.getLocations();
-
+    this.getWarehouse();
+    this.getCarrier();
+    this.getVendor();
+    this.getProductCode();
+    this.getClassCode();
   }
 
   ngOnInit(): void {
@@ -123,6 +126,98 @@ export class UploadFileComponent implements OnInit {
     return Object.keys(mappings);
   }
 
+  //Get locations from database for location columns
+  getLocations() {
+    return this.http.get('https://localhost:44341/GetLocations').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.locationId] = i.locationCode;
+          return acc;
+        }, {});
+        this.locations = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  //Get warehouse from database for warehouse columns
+  getWarehouse() {
+    return this.http.get('https://localhost:44341/GetWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehouse = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  //Get carrier from database for carrier columns
+  getCarrier() {
+    return this.http.get('https://localhost:44341/GetCarrier').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.carrierId] = i.description;
+          return acc;
+        }, {});
+        this.carrier = obj;
+        this.ngOnInit();
+      }
+    )
+  }
+
+  //Get vendor from database for vendor columns
+  getVendor() {
+    return this.http.get('https://localhost:44341/GetVendor').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.vendorId] = i.checkName;
+          return acc;
+        }, {});
+        this.vendor = obj;
+        this.ngOnInit();
+      }
+    )
+  }
+
+  //Get productCodes from database for Product Code columns
+  getProductCode() {
+    return this.http.get('https://localhost:44341/GetProductCode').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.partId] = i.partNo;
+          return acc;
+        }, {});
+        this.productCode = obj;
+        this.ngOnInit();
+      }
+    )
+  }
+
+  //Get class code from database for class code columns
+  getClassCode() {
+    return this.http.get('https://localhost:44341/GetClassCode').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.classCodeId] = i.code;
+          return acc;
+        }, {});
+        this.classCode = obj;
+        this.ngOnInit();
+      }
+    )
+  }
+
   //Added Freight
   createAddedFreightColumnDefs() {
     this.AddedFreightcolumnDefs = [
@@ -136,10 +231,11 @@ export class UploadFileComponent implements OnInit {
       },
       {
         field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true//TODO: values from Warehouse.Abb
-        , valueGetter: params => {
-          return params.data.warehouse == null ? "" : params.data.warehouse.abbr;
+        cellEditorParams: {
+          values: this.extractValues(this.warehouse),
         }
+        , refData: this.warehouse
+        ,required: true//TODO: values from Warehouse.Abb depending upon location
       },
       {
         field: "poCarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
@@ -150,34 +246,19 @@ export class UploadFileComponent implements OnInit {
         , required: true
       },
       {
-        field: "vendorId", headerName: "Vendor", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true //TODO:type ahead search + 'CheckName’ values in the Vendor db table.
-        , valueGetter: params => {
-          return params.data.vendor == null ? "" : params.data.vendor.checkName;
+        field: "vendorId", headerName: "Vendor", width: "125", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: {
+          values: this.extractValues(this.vendor),
         }
-        
+        , refData: this.vendor
+        , required: true //TODO:type ahead search
       },
-      { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "150", editable: true, required: true },
+      { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "105", editable: true, required: true },
       { field: "truckLoad", headerName: "$/Truckload", width: "100", editable: true, required: true }
     ];
   }
 
-  getLocations() {
-    return this.http.get('https://localhost:44341/GetLocations').subscribe(
-      data => {
-        var parsedArray = JSON.parse(JSON.stringify(data));
-        var obj = parsedArray.reduce((acc, i) => {
-          acc[i.locationId] = i.locationCode;
-          return acc;
-        }, {});
-        this.locations = obj;
-        this.ngOnInit();
-        console.log(this.locations);
-        
-      }
-    )
-
-  }
+  
 
   getAddedFreightDetails() {
     return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
@@ -291,7 +372,14 @@ export class UploadFileComponent implements OnInit {
         , refData: this.locations
         , required: true
       },
-      { field: "productCode", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
+      {
+        field: "productCode", headerName: "Product Code", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: {
+          values: this.extractValues(this.productCode),
+        }
+        , refData: this.productCode
+        , required: true
+      },//TODO: type ahead search
       { field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true }
     ];
 
@@ -385,19 +473,21 @@ export class UploadFileComponent implements OnInit {
   createClassCodeManagementcolumnDefs() {
     this.ClassCodeManagementcolumnDefs = [
       {
-        field: "classCodeID", headerName: "Class Code", width: "160", editable: true, required: true
-        , valueGetter: params => {
-          return params.data.classCode.code;
+        field: "classCodeID", headerName: "Class Code", width: "160", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: {
+          values: this.extractValues(this.classCode),
         }
-        
-      },//TODO: ‘Code’ column from the ‘ClassCode’ table
+        , refData: this.classCode
+        , required: true
+      },
       {
-        field: "productCodeId", headerName: "Product Code", width: "140", editable: true, required: true
-        , valueGetter: params => {
-          return params.data.part.partNo;
+        field: "productCodeId", headerName: "Product Code", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: {
+          values: this.extractValues(this.productCode),
         }
-        
-      },//TODO: PartNo column from the Part table.
+        , refData: this.productCode
+        , required: true
+      },
       {
         field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {

@@ -9,7 +9,8 @@ import { AddedFreight } from '../model/AddedFreight';
 import { UploadService } from '../service/upload.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { GridOptions } from 'ag-grid-community';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-upload-file',
@@ -32,6 +33,7 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
   displayerrors: boolean = false;
+  
 
   //type of file
   typeOfFile: string = "F_01";
@@ -65,14 +67,26 @@ export class UploadFileComponent implements OnInit {
   private classCodeManagementColumnApi;
   private displayMonthsgridApi;
   private displayMonthsColumnApi;
+  private locations: object = {};
+  
+  active = {
+    1: "True",
+    0: "False"
+  }
+  month = {
+    1: "January", 2: "February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"
+  };
 
+  carrier = {
+    24: "Will Call", 142: "Delivery"
+  };
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
-    
+    this.getLocations();
+
   }
 
   ngOnInit(): void {
-    
 
     if (this.route.snapshot.params.typo == 'F_02' || this.route.snapshot.params.typo == 'F_03' || this.route.snapshot.params.typo == 'F_01' || this.route.snapshot.params.typo == 'F_04') {
       this.typeOfFile = this.route.snapshot.params.typo;
@@ -86,18 +100,18 @@ export class UploadFileComponent implements OnInit {
       this.displayBrowseFile = false;
       this.displayMarginTables = true;
 
-      //this.getLocations();
-      //Creating column defs
-      this.createAddedFreightColumnDefs();
-      this.createTransferFreightcolumnDefs();
-      this.createClassCodeManagementcolumnDefs();
-      this.createDisplayMonthscolumnDefs();
+    //Creating column defs
+    this.createAddedFreightColumnDefs();
+    this.createTransferFreightcolumnDefs();
+    this.createClassCodeManagementcolumnDefs();
+    this.createDisplayMonthscolumnDefs();
 
-      //Get Data from db
-      this.getAddedFreightDetails();
-      this.getTransferFreightDetails();
-      this.getClassCodeManagementDetails();
-      this.getDisplayMonthsDetails();
+    //Get Data from db
+    this.getAddedFreightDetails();
+    this.getTransferFreightDetails();
+    this.getClassCodeManagementDetails();
+    this.getDisplayMonthsDetails();
+      
     }
     else {
       this.displayBrowseFile = true;
@@ -105,30 +119,20 @@ export class UploadFileComponent implements OnInit {
     }
     
   };
+  extractValues(mappings) {
+    return Object.keys(mappings);
+  }
 
   //Added Freight
   createAddedFreightColumnDefs() {
     this.AddedFreightcolumnDefs = [
       {
-        field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
-        //cellEditorParams:
-        //  { values: ['IND', 'PIT', 'DEN', 'FTW'] }
-        cellEditorParams:  {
-          valuesKeys: { valueKey: 'locationId', contentKey: 'locationCode' },
-          values: [{ locationId: 1, locationCode: 'IND' }, { locationId: 2, locationCode: 'PIT' }]
+        field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'select',
+        cellEditorParams: {
+          values: this.extractValues(this.locations),
         }
-
+        , refData: this.locations
         , required: true
-        , valueGetter: params => {
-          //console.log(params.data.location.locationCode);
-          return params.data.location.locationCode;
-        }
-        //,valueSetter: params => {
-        //  params.data.poLocationId = params.newValue;
-        //  console.log(params.data.poLocationId);
-        //  return params.data.poLocationId;
-        //}
-
       },
       {
         field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
@@ -136,23 +140,14 @@ export class UploadFileComponent implements OnInit {
         , valueGetter: params => {
           return params.data.warehouse == null ? "" : params.data.warehouse.abbr;
         }
-        , valueSetter: params => {
-          params.data.poWarehouseId = params.newValue;
-          console.log(params.data.poWarehouseId);
-          return params.data.poWarehouseId;
-        }
       },
       {
         field: "poCarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: { values: ['Will Call', 'Delivery'] }
-        , valueGetter: params => {
-          return params.data.carrier == null ? "" : params.data.carrier.description;
+        cellEditorParams: {
+          values: this.extractValues(this.carrier),
         }
-        , valueSetter: params => {
-          params.data.poCarrierId = params.newValue;
-          console.log(params.data.poCarrierId);
-          return params.data.poCarrierId;
-        }
+        , refData: this.carrier
+        , required: true
       },
       {
         field: "vendorId", headerName: "Vendor", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
@@ -160,11 +155,7 @@ export class UploadFileComponent implements OnInit {
         , valueGetter: params => {
           return params.data.vendor == null ? "" : params.data.vendor.checkName;
         }
-        , valueSetter: params => {
-          params.data.vendorId = params.newValue;
-          console.log(params.data.vendorId);
-          return params.data.vendorId;
-        }
+        
       },
       { field: "cwt", headerName: "\"Added Freight/CWT\"", width: "150", editable: true, required: true },
       { field: "truckLoad", headerName: "$/Truckload", width: "100", editable: true, required: true }
@@ -174,17 +165,24 @@ export class UploadFileComponent implements OnInit {
   getLocations() {
     return this.http.get('https://localhost:44341/GetLocations').subscribe(
       data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.locationId] = i.locationCode;
+          return acc;
+        }, {});
+        this.locations = obj;
+        this.ngOnInit();
+        console.log(this.locations);
         
-        console.log(data);
       }
     )
+
   }
 
   getAddedFreightDetails() {
     return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
       data => {
         this.addedFreightrowData = data;
-        console.log(data);
       }
     )
   }
@@ -279,29 +277,19 @@ export class UploadFileComponent implements OnInit {
     this.TransferFreightcolumnDefs = [
       {
         field: "transferFromId", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
-        , valueGetter: params => {
-          //console.log(params.data.location.locationCode);
-          return params.data.locationFrom.locationCode;
+        cellEditorParams: {
+          values: this.extractValues(this.locations),
         }
-        , valueSetter: params => {
-          params.data.transferFromId = params.newValue;
-          console.log(params.data.transferFromId);
-          return params.data.transferFromId;
-        }
+        , refData: this.locations
+        , required: true
       },
       {
         field: "transferToId", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
-        , valueGetter: params => {
-          //console.log(params.data.location.locationCode);
-          return params.data.locationTo.locationCode;
+        cellEditorParams: {
+          values: this.extractValues(this.locations),
         }
-        , valueSetter: params => {
-          params.data.transferToId = params.newValue;
-          console.log(params.data.transferToId);
-          return params.data.transferToId;
-        }
+        , refData: this.locations
+        , required: true
       },
       { field: "productCode", headerName: "Product Code", width: "120", editable: true, required: true },//TODO: type ahead search + PartNo column from the Part table.
       { field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true }
@@ -401,38 +389,31 @@ export class UploadFileComponent implements OnInit {
         , valueGetter: params => {
           return params.data.classCode.code;
         }
-        , valueSetter: params => {
-          params.data.classCodeID = params.newValue;
-          console.log(params.data.classCodeID);
-          return params.data.classCodeID;
-        }
+        
       },//TODO: ‘Code’ column from the ‘ClassCode’ table
       {
         field: "productCodeId", headerName: "Product Code", width: "140", editable: true, required: true
         , valueGetter: params => {
           return params.data.part.partNo;
         }
-        , valueSetter: params => {
-          params.data.productCodeId = params.newValue;
-          console.log(params.data.productCodeId);
-          return params.data.productCodeId;
-        }
+        
       },//TODO: PartNo column from the Part table.
       {
         field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: { values: ['IND', 'PIT', 'DEN', 'FTW'] }, required: true
-        , valueGetter: params => {
-          return params.data.location.locationCode;
+        cellEditorParams: {
+          values: this.extractValues(this.locations),
         }
-        , valueSetter: params => {
-          params.data.locationId = params.newValue;
-          console.log(params.data.locationId);
-          return params.data.locationId;
-        }
+        , refData: this.locations
+        , required: true
+        
       },
       {
         field: "active", headerName: "Active", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: { values: ['True', 'False'] }, required: true
+        cellEditorParams: {
+          values: this.extractValues(this.active),
+        }
+        , refData: this.active
+        ,required: true
       }
     ];
   }
@@ -528,21 +509,30 @@ export class UploadFileComponent implements OnInit {
   createDisplayMonthscolumnDefs() {
     this.DisplayMonthscolumnDefs = [
       {
-        field: "month", headerName: "Month", width: "150", editable: true,
-        cellEditorParams: { values: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] }, required: true
+        field: "month", headerName: "Month", width: "150", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: {
+          values: this.extractValues(this.month),
+        }
+        , refData: this.month
+        , required: true
       },
       {
-        field: "year", headerName: "Year", width: "150", editable: true,
+        field: "year", headerName: "Year", width: "150", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030',
             '2031', '2032', '2033', '2034', '2035', '2036', '2037', '2038', '2039', '2040',
             '2041', '2042', '2043', '2044', '2045', '2046', '2047', '2048', '2049', '2050'
           ]
-        }, required: true
+        }
+        , required: true
       },
       {
-        field: "active", headerName: "Active", width: "120", editable: true,
-        cellEditorParams: { values: ['True', 'False'] }, required: true
+        field: "active", headerName: "Active", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+        cellEditorParams: {
+          values: this.extractValues(this.active),
+        }
+        , refData: this.active
+        , required: true
       }
     ];
   }

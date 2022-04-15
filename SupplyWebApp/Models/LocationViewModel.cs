@@ -13,7 +13,7 @@ namespace SupplyWebApp.Models
         [Key]
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LocationId { get; set; }
-        public string LocationName { get; set; }
+        //public string LocationName { get; set; }
         public string LocationCode { get; set; }
         //public ICollection<AddedFreight> AddedFreight { get; set; }
 

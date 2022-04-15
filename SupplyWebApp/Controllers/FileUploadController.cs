@@ -68,13 +68,18 @@ namespace SupplyWebApp.Controllers
         {
             try
             {
+                //Dictionary<int, string> locationMapping = new Dictionary<int, string>();
                 List<string> locationList = new List<string>();
                 locationList.Add("IND");
                 locationList.Add("PIT");
                 locationList.Add("DEN");
                 locationList.Add("FTW");
-                var locations = _dataContext.Location.Where(l => locationList.Contains(l.LocationCode)).OrderBy(l =>l.LocationId);
-                return locations;
+                var locations =  _dataContext.Location.Where(l => locationList.Contains(l.LocationCode)).OrderBy(l => l.LocationId).ToArray();
+                //foreach (var loc in locations)
+                //{
+                //    locationMapping.Add(loc.LocationId, loc.LocationCode);
+                //}
+                return  locations.AsQueryable();
 
             }
             catch (Exception e)
@@ -169,10 +174,10 @@ namespace SupplyWebApp.Controllers
                 {
                     var carriertype = addedFreightfromRequest[2].Value.GetType();
                     AddedFreight addedFreight = new AddedFreight();
-                    addedFreight.POLocationId = _dataContext.Location.FirstOrDefault(loc => loc.LocationCode.Equals(addedFreightfromRequest[0].Value))?.LocationId;
-                    addedFreight.POWarehouseId = _dataContext.Warehouse.FirstOrDefault(w => w.Abbr.Equals(addedFreightfromRequest[1].Value))?.WarehouseId;
-                    addedFreight.POCarrierId = _dataContext.Carrier.FirstOrDefault(c => c.Description.Equals(addedFreightfromRequest[2].Value))?.CarrierId;
-                    addedFreight.VendorId = _dataContext.Vendor.FirstOrDefault(v => v.CheckName.Equals(addedFreightfromRequest[3].Value))?.VendorId;
+                    addedFreight.POLocationId = Convert.ToInt32(addedFreightfromRequest[0].Value);
+                    //addedFreight.POWarehouseId = _dataContext.Warehouse.FirstOrDefault(w => w.Abbr.Equals(addedFreightfromRequest[1].Value))?.WarehouseId;
+                    //addedFreight.POCarrierId = _dataContext.Carrier.FirstOrDefault(c => c.Description.Equals(addedFreightfromRequest[2].Value))?.CarrierId;
+                    //addedFreight.VendorId = _dataContext.Vendor.FirstOrDefault(v => v.CheckName.Equals(addedFreightfromRequest[3].Value))?.VendorId;
                     addedFreight.CWT = Convert.ToDouble(addedFreightfromRequest[4].Value);
                     addedFreight.TruckLoad = addedFreightfromRequest[5].Value;
                     _dataContext.AddedFreight.Add(addedFreight);
@@ -207,8 +212,8 @@ namespace SupplyWebApp.Controllers
                 try
                 {
                     TransferFreight transferFreight = new TransferFreight();
-                    transferFreight.TransferFromId = _dataContext.Location.FirstOrDefault(loc => loc.LocationCode.Equals(transferFreightfromRequest[0].Value)).LocationId;
-                    transferFreight.TransferToId = _dataContext.Location.FirstOrDefault(loc => loc.LocationCode.Equals(transferFreightfromRequest[1].Value)).LocationId;
+                    transferFreight.TransferFromId = Convert.ToInt32(transferFreightfromRequest[0].Value);
+                    transferFreight.TransferToId = Convert.ToInt32(transferFreightfromRequest[1].Value);
                     transferFreight.ProductCode = transferFreightfromRequest[2].Value;
                     transferFreight.TransferCost = Convert.ToDouble(transferFreightfromRequest[3].Value);
                     _dataContext.TransferFreight.Add(transferFreight);
@@ -245,7 +250,7 @@ namespace SupplyWebApp.Controllers
                     ClassCodeManagement classCodes = new ClassCodeManagement();
                     classCodes.ClassCodeID = _dataContext.ClassCode.FirstOrDefault(c =>c.Code.Equals(classCodesfromRequest[0].Value)).ClassCodeId;
                     classCodes.ProductCodeId = _dataContext.Part.FirstOrDefault(p => p.PartNo.Equals(classCodesfromRequest[1].Value)).PartId;
-                    classCodes.LocationId = _dataContext.Location.FirstOrDefault(loc => loc.LocationCode.Equals(classCodesfromRequest[2].Value)).LocationId;
+                    classCodes.LocationId = Convert.ToInt32(classCodesfromRequest[2].Value);
                     classCodes.Active = Convert.ToInt32(classCodesfromRequest[3].Value);
                     _dataContext.ClassCodeManagement.Add(classCodes);
                     int result = await _dataContext.SaveChangesAsync();

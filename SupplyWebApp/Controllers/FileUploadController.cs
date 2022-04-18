@@ -14,6 +14,7 @@ using SupplyWebApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace SupplyWebApp.Controllers
 {
@@ -23,11 +24,13 @@ namespace SupplyWebApp.Controllers
     {
         private DataContext _dataContext;
         private ImportService _fileImporter;
+        private Models.HttpResponse _httpResponse;
 
         public FileUploadController(DataContext context)
         {
             _dataContext = context;
             _fileImporter = new ImportService(context);
+            _httpResponse = new Models.HttpResponse();
         }
 
         [HttpPost]
@@ -250,14 +253,13 @@ namespace SupplyWebApp.Controllers
         [Route("/PostAddedFreightsDetails")]
         public async Task<IActionResult> PostAddedFreightsDetails()
         {
-            string message = "";
+            string response = null;
             var addedFreightfromRequest  = Request.Form.ToList();
 
             if (addedFreightfromRequest != null)
             {
                 try
                 {
-                    var carriertype = addedFreightfromRequest[2].Value.GetType();
                     AddedFreight addedFreight = new AddedFreight();
                     addedFreight.POLocationId = Convert.ToInt32(addedFreightfromRequest[0].Value);
                     addedFreight.POWarehouseId = Convert.ToInt32(addedFreightfromRequest[1].Value);
@@ -269,12 +271,15 @@ namespace SupplyWebApp.Controllers
                     int result = await _dataContext.SaveChangesAsync();
                     if (result > 0)
                     {
-                        message = "Added Freight records has been successfully added";
+                        _httpResponse.Successful = true;
+                        _httpResponse.Message = "Added Freight records has been successfully added";
                     }
                     else
                     {
-                        message = "Added Freight records insertion failed";
+                        _httpResponse.Successful = false;
+                        _httpResponse.Message = "Added Freight records insertion failed";
                     }
+                    response = JsonConvert.SerializeObject(_httpResponse);
                 }
                 catch (Exception e)
                 {
@@ -282,14 +287,14 @@ namespace SupplyWebApp.Controllers
                 }
             }
 
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("/PostTransferFreightsDetails")]
         public async Task<IActionResult> PostTransferFreightsDetails()
         {
-            string message = "";
+            string response = null;
             var transferFreightfromRequest = Request.Form.ToList();
 
             if (transferFreightfromRequest != null)
@@ -305,12 +310,15 @@ namespace SupplyWebApp.Controllers
                     int result = await _dataContext.SaveChangesAsync();
                     if (result > 0)
                     {
-                        message = "Transfer Freight records has been successfully added";
+                        _httpResponse.Successful = true;
+                        _httpResponse.Message = "Transfer Freight records has been successfully added";
                     }
                     else
                     {
-                        message = "Transfer Freight records insertion failed";
+                        _httpResponse.Successful = false;
+                        _httpResponse.Message = "Transfer Freight records insertion failed";
                     }
+                    response = JsonConvert.SerializeObject(_httpResponse);
                 }
                 catch (Exception)
                 {
@@ -318,14 +326,14 @@ namespace SupplyWebApp.Controllers
                 }
             }
 
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("/PostClassCodesDetails")]
         public async Task<IActionResult> PostClassCodesDetails()
         {
-            string message = "";
+            string response = null;
             var classCodesfromRequest = Request.Form.ToList();
 
             if (classCodesfromRequest != null)
@@ -341,12 +349,15 @@ namespace SupplyWebApp.Controllers
                     int result = await _dataContext.SaveChangesAsync();
                     if (result > 0)
                     {
-                        message = "classCodes records has been successfully added";
+                        _httpResponse.Successful = true;
+                        _httpResponse.Message = "Class Code Management records has been successfully added";
                     }
                     else
                     {
-                        message = "classCodes records insertion failed";
+                        _httpResponse.Successful = false;
+                        _httpResponse.Message = "Class Code Management records insertion failed";
                     }
+                    response = JsonConvert.SerializeObject(_httpResponse);
                 }
                 catch (Exception e)
                 {
@@ -354,14 +365,14 @@ namespace SupplyWebApp.Controllers
                 }
             }
 
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("/PostDisplayMonthsDetails")]
         public async Task<IActionResult> PostDisplayMonthsDetails()
         {
-            string message = "";
+            string response = null;
             var displayMonthsfromRequest = Request.Form.ToList();
 
             if (displayMonthsfromRequest != null)
@@ -376,12 +387,15 @@ namespace SupplyWebApp.Controllers
                     int result = await _dataContext.SaveChangesAsync();
                     if (result > 0)
                     {
-                        message = "displayMonths records has been successfully added";
+                        _httpResponse.Successful = true;
+                        _httpResponse.Message = "Display Months records has been successfully added";
                     }
                     else
                     {
-                        message = "displayMonths records insertion failed";
+                        _httpResponse.Successful = false;
+                        _httpResponse.Message = "Display Months records insertion failed";
                     }
+                    response = JsonConvert.SerializeObject(_httpResponse);
                 }
                 catch (Exception)
                 {
@@ -389,14 +403,14 @@ namespace SupplyWebApp.Controllers
                 }
             }
 
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpPut]
         [Route("/UpdateAddedFreightDetails")]
         public async Task<IActionResult> UpdateAddedFreightDetails()
         {
-            string message = "";
+            string response = null;
             var addedFreightFromReq = Request.Form.ToList();
             if (!ModelState.IsValid)
             {
@@ -419,25 +433,28 @@ namespace SupplyWebApp.Controllers
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
                 {
-                    message = "Added Freight Record has been sussfully updated";
+                    _httpResponse.Successful = true;
+                    _httpResponse.Message = "Added Freight Record has been sucessfully updated";
                 }
                 else
                 {
-                    message = "Added Freight Record updation Failed";
+                    _httpResponse.Successful = false;
+                    _httpResponse.Message = "Added Freight Record updation Failed";
                 }
+                response = JsonConvert.SerializeObject(_httpResponse);
             }
             catch (Exception e)
             {
                 throw;
             }
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpPut]
         [Route("/UpdateTransferFreightDetails")]
         public async Task<IActionResult> UpdateTransferFreightDetails()
         {
-            string message = "";
+            string response = null;
             var transferFreightFromReq = Request.Form.ToList();
             if (!ModelState.IsValid)
             {
@@ -458,25 +475,28 @@ namespace SupplyWebApp.Controllers
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
                 {
-                    message = "Transfer Freight Record has been sussfully updated";
+                    _httpResponse.Successful = true;
+                    _httpResponse.Message = "Transfer Freight Record has been sucessfully updated";
                 }
                 else
                 {
-                    message = "Transfer Freight Record updation Failed";
+                    _httpResponse.Successful = false;
+                    _httpResponse.Message = "Transfer Freight Record updation Failed";
                 }
+                response = JsonConvert.SerializeObject(_httpResponse);
             }
             catch (Exception e)
             {
                 throw;
             }
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpPut]
         [Route("/UpdateClassCodeDetails")]
         public async Task<IActionResult> UpdateClassCodeDetails()
         {
-            string message = "";
+            string response = null;
             var classCodesFromReq = Request.Form.ToList();
             if (!ModelState.IsValid)
             {
@@ -497,25 +517,28 @@ namespace SupplyWebApp.Controllers
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
                 {
-                    message = "ClassCodeManagement Record has been sussfully updated";
+                    _httpResponse.Successful = true;
+                    _httpResponse.Message = "Class Code Management Record has been sucessfully updated";
                 }
                 else
                 {
-                    message = "ClassCodeManagement Record updation Failed";
+                    _httpResponse.Successful = false;
+                    _httpResponse.Message = "Class Code Management Record updation Failed";
                 }
+                response = JsonConvert.SerializeObject(_httpResponse);
             }
             catch (Exception e)
             {
                 throw;
             }
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpPut]
         [Route("/UpdateDisplayMonthsDetails")]
         public async Task<IActionResult> UpdateDisplayMonthsDetails()
         {
-            string message = "";
+            string response = null;
             var displayMonthsFromReq = Request.Form.ToList();
             if (!ModelState.IsValid)
             {
@@ -535,25 +558,28 @@ namespace SupplyWebApp.Controllers
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
                 {
-                    message = "Display Months Record has been sussfully updated";
+                    _httpResponse.Successful = true;
+                    _httpResponse.Message = "Display Months Record has been sucessfully updated";
                 }
                 else
                 {
-                    message = "Display Months Record updation Failed";
+                    _httpResponse.Successful = false;
+                    _httpResponse.Message = "Display Months Record updation Failed";
                 }
+                response = JsonConvert.SerializeObject(_httpResponse);
             }
             catch (Exception e)
             {
                 throw;
             }
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpDelete]
         [Route("/DeleteAddedFreightRecord")]
         public async Task<IActionResult> DeleteAddedFreightRecord(int id)
         {
-            string message = "";
+            string response = null;
             try
             {
                 AddedFreight addedFreight = _dataContext.AddedFreight.Find(id);
@@ -561,26 +587,29 @@ namespace SupplyWebApp.Controllers
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
                 {
-                    message = "Added Freight Record has been sucessfully deleted";
+                    _httpResponse.Successful = true;
+                    _httpResponse.Message = "Added Freight Record has been sucessfully deleted";
                 }
                 else
                 {
-                    message = "failed";
+                    _httpResponse.Successful = false;
+                    _httpResponse.Message = "Record deletion failed";
                 }
+                response = JsonConvert.SerializeObject(_httpResponse);
             }
             catch (Exception e)
             {
                 throw;
             }
             
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpDelete]
         [Route("/DeleteTransferFreightRecord")]
         public async Task<IActionResult> DeleteTransferFreightRecord(int id)
         {
-            string message = "";
+            string response = "";
             try
             {
                 TransferFreight transferFreight = _dataContext.TransferFreight.Find(id);
@@ -588,26 +617,29 @@ namespace SupplyWebApp.Controllers
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
                 {
-                    message = "Transfer Freight Record has been sucessfully deleted";
+                    _httpResponse.Successful = true;
+                    _httpResponse.Message = "Transfer Freight Record has been sucessfully deleted";
                 }
                 else
                 {
-                    message = "failed";
+                    _httpResponse.Successful = false;
+                    _httpResponse.Message = "Record deletion failed";
                 }
+                response = JsonConvert.SerializeObject(_httpResponse);
             }
             catch (Exception e)
             {
                 throw;
             }
 
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpDelete]
         [Route("/DeleteClassCodesRecord")]
         public async Task<IActionResult> DeleteClassCodesRecord(int id)
         {
-            string message = "";
+            string response = "";
             try
             {
                 ClassCodeManagement classCode = _dataContext.ClassCodeManagement.Find(id);
@@ -615,26 +647,29 @@ namespace SupplyWebApp.Controllers
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
                 {
-                    message = "Added Freight Record has been sucessfully deleted";
+                    _httpResponse.Successful = true;
+                    _httpResponse.Message = "Class Code Management Record has been sucessfully deleted";
                 }
                 else
                 {
-                    message = "failed";
+                    _httpResponse.Successful = false;
+                    _httpResponse.Message = "Record deletion failed";
                 }
+                response = JsonConvert.SerializeObject(_httpResponse);
             }
             catch (Exception e)
             {
                 throw;
             }
 
-            return Ok(message);
+            return Ok(response);
         }
 
         [HttpDelete]
         [Route("/DeleteDisplayMonthsRecord")]
         public async Task<IActionResult> DeleteDisplayMonthsRecord(int id)
         {
-            string message = "";
+            string response = "";
             try
             {
                 DisplayMonths displayMonths = _dataContext.DisplayMonths.Find(id);
@@ -642,19 +677,22 @@ namespace SupplyWebApp.Controllers
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
                 {
-                    message = "Added Freight Record has been sucessfully deleted";
+                    _httpResponse.Successful = true;
+                    _httpResponse.Message = "Display Month Record has been sucessfully deleted";
                 }
                 else
                 {
-                    message = "failed";
+                    _httpResponse.Successful = false;
+                    _httpResponse.Message = "Record deletion failed";
                 }
+                response = JsonConvert.SerializeObject(_httpResponse);
             }
             catch (Exception e)
             {
                 throw;
             }
 
-            return Ok(message);
+            return Ok(response);
         }
     }
 }

@@ -13,6 +13,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { GlobalConstants } from './common/global-constant'
+import { AgGridModule } from 'ag-grid-angular'
+
 
 
 @NgModule({
@@ -28,11 +30,13 @@ import { GlobalConstants } from './common/global-constant'
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    AgGridModule.withComponents([]),
     RouterModule.forRoot([
       { path: '', component: UploadFileComponent, pathMatch: 'full' },
       { path: 'SalesForecast/:typo', component: UploadFileComponent, pathMatch: 'full' },
       { path: 'CRUPricing/:typo', component: UploadFileComponent, pathMatch: 'full' },
-      { path: 'PlannedBuy/:typo', component: UploadFileComponent, pathMatch: 'full' }
+      { path: 'PlannedBuy/:typo', component: UploadFileComponent, pathMatch: 'full' },
+      { path: 'MarginTables/:typo', component: UploadFileComponent, pathMatch: 'full' }
 
  
       //{ path: 'crupricing', component: CRUPricingComponent }

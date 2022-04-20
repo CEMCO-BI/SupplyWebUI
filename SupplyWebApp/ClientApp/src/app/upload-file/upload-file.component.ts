@@ -126,7 +126,7 @@ export class UploadFileComponent implements OnInit {
 
   //Get locations from database for location columns
   getLocations() {
-    return this.http.get('https://localhost:44341/GetLocations').subscribe(
+    return this.http.get('./GetLocations').subscribe(
       data => {
         var parsedArray = JSON.parse(JSON.stringify(data));
         var obj = parsedArray.reduce((acc, i) => {
@@ -142,7 +142,7 @@ export class UploadFileComponent implements OnInit {
 
   //Get warehouse from database for warehouse columns
   getWarehouse() {
-    return this.http.get('https://localhost:44341/GetWarehouse').subscribe(
+    return this.http.get('./GetWarehouse').subscribe(
       data => {
         var parsedArray = JSON.parse(JSON.stringify(data));
         var obj = parsedArray.reduce((acc, i) => {
@@ -158,7 +158,7 @@ export class UploadFileComponent implements OnInit {
 
   //Get carrier from database for carrier columns
   getCarrier() {
-    return this.http.get('https://localhost:44341/GetCarrier').subscribe(
+    return this.http.get('./GetCarrier').subscribe(
       data => {
         var parsedArray = JSON.parse(JSON.stringify(data));
         var obj = parsedArray.reduce((acc, i) => {
@@ -173,7 +173,7 @@ export class UploadFileComponent implements OnInit {
 
   //Get vendor from database for vendor columns
   getVendor() {
-    return this.http.get('https://localhost:44341/GetVendor').subscribe(
+    return this.http.get('./GetVendor').subscribe(
       data => {
         var parsedArray = JSON.parse(JSON.stringify(data));
         var obj = parsedArray.reduce((acc, i) => {
@@ -188,7 +188,7 @@ export class UploadFileComponent implements OnInit {
 
   //Get productCodes from database for Product Code columns
   getProductCode() {
-    return this.http.get('https://localhost:44341/GetProductCode').subscribe(
+    return this.http.get('./GetProductCode').subscribe(
       data => {
         var parsedArray = JSON.parse(JSON.stringify(data));
         var obj = parsedArray.reduce((acc, i) => {
@@ -203,7 +203,7 @@ export class UploadFileComponent implements OnInit {
 
   //Get class code from database for class code columns
   getClassCode() {
-    return this.http.get('https://localhost:44341/GetClassCode').subscribe(
+    return this.http.get('./GetClassCode').subscribe(
       data => {
         var parsedArray = JSON.parse(JSON.stringify(data));
         var obj = parsedArray.reduce((acc, i) => {
@@ -292,7 +292,7 @@ export class UploadFileComponent implements OnInit {
   
 
   getAddedFreightDetails() {
-    return this.http.get('https://localhost:44341/GetAddedFreightsDetails').subscribe(
+    return this.http.get('./GetAddedFreightsDetails').subscribe(
       data => {
         this.addedFreightrowData = data;
       }
@@ -336,7 +336,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('truckLoad', modifiedRows[0].truckLoad);
 
     // passing the params to server
-    const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostAddedFreightsDetails', formData);
+    const uploadReq = new HttpRequest('POST', './PostAddedFreightsDetails', formData);
     this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
     this.http.request(uploadReq).subscribe(event => {
@@ -373,7 +373,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('cwt', row[0].cwt);
     formData.append('truckLoad', row[0].truckLoad);
 
-    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateAddedFreightDetails', formData);
+    const req = new HttpRequest('PUT', './UpdateAddedFreightDetails', formData);
 
     this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -402,7 +402,7 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     console.log('id'+ selectedRow[0].id);
-    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteAddedFreightRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', './DeleteAddedFreightRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -460,7 +460,7 @@ export class UploadFileComponent implements OnInit {
 
   }
   getTransferFreightDetails() {
-    return this.http.get('https://localhost:44341/GetTransferFreightsDetails').subscribe(
+    return this.http.get('./GetTransferFreightsDetails').subscribe(
       data => {
         this.transferFreightrowData = data;
 
@@ -483,7 +483,7 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteTransferFreightRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', './DeleteTransferFreightRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -528,7 +528,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('transferCost', modifiedRows[0].transferCost);
 
     // passing the params to server
-    const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostTransferFreightsDetails', formData);
+    const uploadReq = new HttpRequest('POST', './PostTransferFreightsDetails', formData);
     this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
     this.http.request(uploadReq).subscribe(event => {
@@ -563,7 +563,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('productCode', row[0].productCode);
     formData.append('transferCost', row[0].transferCost);
 
-    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateTransferFreightDetails', formData);
+    const req = new HttpRequest('PUT', './UpdateTransferFreightDetails', formData);
 
     this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -625,7 +625,7 @@ export class UploadFileComponent implements OnInit {
   }
 
   getClassCodeManagementDetails() {
-    return this.http.get('https://localhost:44341/GetClassCodeManagementDetails').subscribe(
+    return this.http.get('./GetClassCodeManagementDetails').subscribe(
       data => {
         this.classCodeManagementrowData = data;
 
@@ -648,7 +648,7 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteClassCodesRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', './DeleteClassCodesRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -695,7 +695,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('active', modifiedRows[0].active);
 
     // passing the params to server
-    const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostClassCodesDetails', formData);
+    const uploadReq = new HttpRequest('POST', './PostClassCodesDetails', formData);
     this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
     this.http.request(uploadReq).subscribe(event => {
@@ -730,7 +730,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('locationId', row[0].locationId);
     formData.append('active', row[0].active);
 
-    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateClassCodeDetails', formData);
+    const req = new HttpRequest('PUT', './UpdateClassCodeDetails', formData);
 
     this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -786,7 +786,7 @@ export class UploadFileComponent implements OnInit {
   }
 
   getDisplayMonthsDetails() {
-    return this.http.get('https://localhost:44341/GetDisplayMonthsDetails').subscribe(
+    return this.http.get('./GetDisplayMonthsDetails').subscribe(
       data => {
         this.displayMonthsrowData = data;
 
@@ -809,7 +809,7 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', 'https://localhost:44341/DeleteDisplayMonthsRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', './DeleteDisplayMonthsRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -854,7 +854,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('active', modifiedRows[0].active);
 
     // passing the params to server
-    const uploadReq = new HttpRequest('POST', 'https://localhost:44341/PostDisplayMonthsDetails', formData);
+    const uploadReq = new HttpRequest('POST', './PostDisplayMonthsDetails', formData);
     this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
     this.http.request(uploadReq).subscribe(event => {
@@ -888,7 +888,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('year', row[0].year);
     formData.append('active', row[0].active);
 
-    const req = new HttpRequest('PUT', 'https://localhost:44341/UpdateDisplayMonthsDetails', formData);
+    const req = new HttpRequest('PUT', './UpdateDisplayMonthsDetails', formData);
     var selectedData = this.displayMonthsGrid.api.getSelectedRows();
     this.displayMonthsGrid.api.updateRowData({ update: selectedData });
     this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });

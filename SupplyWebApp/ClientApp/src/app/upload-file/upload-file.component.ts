@@ -260,7 +260,7 @@ export class UploadFileComponent implements OnInit {
         , required: true //TODO:type ahead search
       },
       {
-        field: "cwt", headerName: "\"Added Freight/CWT\"", width: "105"
+        field: "cwt", headerName: "Added Freight/CWT", width: "140"
         , required: true
         //, valueFormatter: params => this.cwtFormatter(params.data.cwt, '$')
         , valueFormatter: (params) => {
@@ -616,7 +616,7 @@ export class UploadFileComponent implements OnInit {
         
       },
       {
-        field: "active", headerName: "Active", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+        field: "active", headerName: "Active", width: "100", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: this.extractValues(this.active),
         }

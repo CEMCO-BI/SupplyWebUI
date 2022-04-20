@@ -40,6 +40,8 @@ export class UploadFileComponent implements OnInit {
   displayGrid: boolean = false;
   to: string = null;
   from: string = null;
+  selectedFile: any;
+
 
   //Margin Tables constants
   addedFreightrowData: any;
@@ -946,8 +948,8 @@ export class UploadFileComponent implements OnInit {
   }
 
  
-  upload(files) {
-
+  upload() {
+    var files = this.selectedFile;
     if (this.typeOfFile == 'F_04') {
       return;
     }
@@ -1025,7 +1027,9 @@ export class UploadFileComponent implements OnInit {
     if (target.files.length > 1) {
       this.toastr.error('Cannot upload multiple files');
     }
-    
+
+    this.selectedFile = target.files;
+    console.log(this.selectedFile);
     this.fileName = target.files[0].name != null ? target.files[0].name : "";
     let allowedExtensions = /(\.xls|\.xlsx)$/i;  // to allow only excel files
     if (!allowedExtensions.exec(this.fileName)) {

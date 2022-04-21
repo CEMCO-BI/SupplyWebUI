@@ -29,7 +29,6 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
   displayerrors: boolean = false;
-  
 
   //type of file
   typeOfFile: string = "F_01";
@@ -41,7 +40,7 @@ export class UploadFileComponent implements OnInit {
   to: string = null;
   from: string = null;
   selectedFile: any;
-
+  isNewRowAdded: boolean = false;
 
   //Margin Tables constants
   addedFreightrowData: any;
@@ -67,6 +66,10 @@ export class UploadFileComponent implements OnInit {
   private displayMonthsColumnApi;
   private locations: object = {};
   private warehouse: object = {};
+  private warehouseIND: object = {};
+  private warehousePIT: object = {};
+  private warehouseDEN: object = {};
+  private warehouseFTW: object = {};
   private carrier: object = {};
   private vendor: object = {};
   private productCode: object = {};
@@ -82,7 +85,11 @@ export class UploadFileComponent implements OnInit {
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
     this.getLocations();
-    this.getWarehouse();
+    this.getAllWarehouse();
+    this.getINDWarehouse();
+    this.getPITWarehouse();
+    this.getDENWarehouse();
+    this.getFTWWarehouse();
     this.getCarrier();
     this.getVendor();
     this.getProductCode();
@@ -143,8 +150,8 @@ export class UploadFileComponent implements OnInit {
   }
 
   //Get warehouse from database for warehouse columns
-  getWarehouse() {
-    return this.http.get('./GetWarehouse').subscribe(
+  getAllWarehouse() {
+    return this.http.get('./GetAllWarehouse').subscribe(
       data => {
         var parsedArray = JSON.parse(JSON.stringify(data));
         var obj = parsedArray.reduce((acc, i) => {
@@ -152,6 +159,66 @@ export class UploadFileComponent implements OnInit {
           return acc;
         }, {});
         this.warehouse = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  getINDWarehouse() {
+    return this.http.get('./GetINDWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehouseIND = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  getPITWarehouse() {
+    return this.http.get('./GetPITWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehousePIT = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  getDENWarehouse() {
+    return this.http.get('./GetDENWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehouseDEN = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  getFTWWarehouse() {
+    return this.http.get('./GetFTWWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehouseFTW = obj;
         this.ngOnInit();
       }
     )
@@ -228,20 +295,44 @@ export class UploadFileComponent implements OnInit {
   createAddedFreightColumnDefs() {
     this.AddedFreightcolumnDefs = [
       {
-        field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'select',
+        field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: this.extractValues(this.locations),
         }
         , refData: this.locations
-        , required: true,
+        , required: true
+        
       },
       {
         field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.warehouse),
+        //cellEditorParams: {
+        //  values: this.extractValues(this.warehouse),
+        //}
+        cellEditorParams: (params) => {
+          var selectedLocationId = params.data.poLocationId;
+          if (selectedLocationId == 1) {
+            return {
+              values: this.extractValues(this.warehouseIND)
+            };
+          }
+          else if (selectedLocationId == 2) {
+            return {
+              values: this.extractValues(this.warehousePIT)
+            };
+          }
+          else if (selectedLocationId == 33) {
+            return {
+              values: this.extractValues(this.warehouseDEN)
+            };
+          }
+          else {
+            return {
+              values: this.extractValues(this.warehouseFTW)
+            };
+          }
         }
         , refData: this.warehouse
-        ,required: true//TODO: values from Warehouse.Abb depending upon location
+        ,required: true
       },
       {
         field: "poCarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
@@ -260,7 +351,7 @@ export class UploadFileComponent implements OnInit {
         , required: true //TODO:type ahead search
       },
       {
-        field: "cwt", headerName: "\"Added Freight/CWT\"", width: "105"
+        field: "cwt", headerName: "Added Freight/CWT", width: "140"
         , required: true
         //, valueFormatter: params => this.cwtFormatter(params.data.cwt, '$')
         , valueFormatter: (params) => {
@@ -306,6 +397,7 @@ export class UploadFileComponent implements OnInit {
       add: [{ poLocationId: '', poWarehouseId: '', poCarrierId: '', vendorId: '', cwt: '', truckLoad: '' }],
       addIndex: 0
     });
+    this.isNewRowAdded = true;
   }
 
   //DeleteAddedFreightRecord() {
@@ -320,80 +412,84 @@ export class UploadFileComponent implements OnInit {
 
   onAddedFreightCellValueChanged(event) {
     event.data.modified = true;
+    console.log(event)
   }
 
   SaveAddedFreightRecord() {
-    const allRowData = [];
-    this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
+    if (this.isNewRowAdded) {
+      const allRowData = [];
+      this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
 
-    const modifiedRows = allRowData.filter(row => row['modified']);
+      const modifiedRows = allRowData.filter(row => row['modified']);
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append('poLocationId',modifiedRows[0].poLocationId);
-    formData.append('poWarehouseId', modifiedRows[0].poWarehouseId);
-    formData.append('poCarrierId', modifiedRows[0].poCarrierId);
-    formData.append('vendorId', modifiedRows[0].vendorId);
-    formData.append('cwt', modifiedRows[0].cwt);
-    formData.append('truckLoad', modifiedRows[0].truckLoad);
+      formData.append('poLocationId', modifiedRows[0].poLocationId);
+      formData.append('poWarehouseId', modifiedRows[0].poWarehouseId);
+      formData.append('poCarrierId', modifiedRows[0].poCarrierId);
+      formData.append('vendorId', modifiedRows[0].vendorId);
+      formData.append('cwt', modifiedRows[0].cwt);
+      formData.append('truckLoad', modifiedRows[0].truckLoad);
 
-    // passing the params to server
-    const uploadReq = new HttpRequest('POST', './PostAddedFreightsDetails', formData);
-    this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+      // passing the params to server
+      const uploadReq = new HttpRequest('POST', './PostAddedFreightsDetails', formData);
+      this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
-    this.http.request(uploadReq).subscribe(event => {
-      console.log(event);
-      if (event instanceof HttpResponse) {
-        var response = event.body;
+      this.http.request(uploadReq).subscribe(event => {
+        console.log(event);
+        if (event instanceof HttpResponse) {
+          var response = event.body;
 
-        if (response['Successful']) {
-          this.toastr.clear(); 
-          this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-          this.reset();
-        } else { //if there are errors   
-          this.toastr.clear();
-          this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+          if (response['Successful']) {
+            this.toastr.clear();
+            this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+            this.reset();
+          } else { //if there are errors   
+            this.toastr.clear();
+            this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+          }
         }
-      }
-    });
-  }
-
-  EditAddedFreightRecord() {
-    debugger;
-    if (this.addedFreightgridApi.getSelectedRows().length == 0) {
-      this.toastr.error("error", "Please select Record for update");
-      return;
+      });
+      this.isNewRowAdded = false;
     }
-    var row = this.addedFreightgridApi.getSelectedRows();
-    console.log(row);
-    const formData = new FormData();
-    formData.append('id', row[0].id);
-    formData.append('poLocationId', row[0].poLocationId);
-    formData.append('poWarehouseId', row[0].poWarehouseId);
-    formData.append('poCarrierId', row[0].poCarrierId);
-    formData.append('vendorId', row[0].vendorId);
-    formData.append('cwt', row[0].cwt);
-    formData.append('truckLoad', row[0].truckLoad);
-
-    const req = new HttpRequest('PUT', './UpdateAddedFreightDetails', formData);
-
-    this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
-
-    this.http.request(req).subscribe(event => {
-      console.log(event);
-      if (event instanceof HttpResponse) {
-        var response = event.body;
-
-        if (response['Successful']) {
-          this.toastr.clear();
-          this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-          this.reset();
-        } else { //if there are errors   
-          this.toastr.clear();
-          this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
-        }
+    else {
+      debugger;
+      if (this.addedFreightgridApi.getSelectedRows().length == 0) {
+        this.toastr.error("error", "Please select Record for update");
+        return;
       }
-    });
+      var row = this.addedFreightgridApi.getSelectedRows();
+      console.log(row);
+      const formData = new FormData();
+      formData.append('id', row[0].id);
+      formData.append('poLocationId', row[0].poLocationId);
+      formData.append('poWarehouseId', row[0].poWarehouseId);
+      formData.append('poCarrierId', row[0].poCarrierId);
+      formData.append('vendorId', row[0].vendorId);
+      formData.append('cwt', row[0].cwt);
+      formData.append('truckLoad', row[0].truckLoad);
+
+      const req = new HttpRequest('PUT', './UpdateAddedFreightDetails', formData);
+
+      this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+
+      this.http.request(req).subscribe(event => {
+        console.log(event);
+        if (event instanceof HttpResponse) {
+          var response = event.body;
+
+          if (response['Successful']) {
+            this.toastr.clear();
+            this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+            this.reset();
+          } else { //if there are errors   
+            this.toastr.clear();
+            this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
+          }
+        }
+      });
+    }
+    
   }
 
   DeleteAddedFreightRecord() {
@@ -475,6 +571,7 @@ export class UploadFileComponent implements OnInit {
       add: [{ transfer_from_Id: '', transfer_to_Id: '', product_Code: '', transfer_Cost: '' }],
       addIndex: 0
     });
+    this.isNewRowAdded = true;
   }
 
   DeleteTransferFreightRecord() {
@@ -519,71 +616,73 @@ export class UploadFileComponent implements OnInit {
   }
 
   SaveTransferFreightRecord() {
-    const allRowData = [];
-    this.transferFreightgridApi.forEachNode(node => allRowData.push(node.data));
-    const modifiedRows = allRowData.filter(row => row['modified']);
-    const formData = new FormData();
+    if (this.isNewRowAdded) {
+      const allRowData = [];
+      this.transferFreightgridApi.forEachNode(node => allRowData.push(node.data));
+      const modifiedRows = allRowData.filter(row => row['modified']);
+      const formData = new FormData();
 
-    formData.append('transferFromId', modifiedRows[0].transferFromId);
-    formData.append('transferToId', modifiedRows[0].transferToId);
-    formData.append('productCode', modifiedRows[0].productCode);
-    formData.append('transferCost', modifiedRows[0].transferCost);
+      formData.append('transferFromId', modifiedRows[0].transferFromId);
+      formData.append('transferToId', modifiedRows[0].transferToId);
+      formData.append('productCode', modifiedRows[0].productCode);
+      formData.append('transferCost', modifiedRows[0].transferCost);
 
-    // passing the params to server
-    const uploadReq = new HttpRequest('POST', './PostTransferFreightsDetails', formData);
-    this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+      // passing the params to server
+      const uploadReq = new HttpRequest('POST', './PostTransferFreightsDetails', formData);
+      this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
-    this.http.request(uploadReq).subscribe(event => {
-      console.log(event);
-      if (event instanceof HttpResponse) {
-        var response = event.body;
+      this.http.request(uploadReq).subscribe(event => {
+        console.log(event);
+        if (event instanceof HttpResponse) {
+          var response = event.body;
 
-        if (response['Successful']) {
-          this.toastr.clear();
-          this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-          this.reset();
-        } else { //if there are errors   
-          this.toastr.clear();
-          this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+          if (response['Successful']) {
+            this.toastr.clear();
+            this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+            this.reset();
+          } else { //if there are errors   
+            this.toastr.clear();
+            this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+          }
         }
-      }
-    });
-  }
-
-  EditTransferFreightRecord() {
-    debugger;
-    if (this.transferFreightgridApi.getSelectedRows().length == 0) {
-      this.toastr.error("error", "Please select Record for update");
-      return;
+      });
+      this.isNewRowAdded = false;
     }
-    var row = this.transferFreightgridApi.getSelectedRows();
-    console.log(row);
-    const formData = new FormData();
-    formData.append('id', row[0].id);
-    formData.append('transferFromId', row[0].transferFromId);
-    formData.append('transferToId', row[0].transferToId);
-    formData.append('productCode', row[0].productCode);
-    formData.append('transferCost', row[0].transferCost);
-
-    const req = new HttpRequest('PUT', './UpdateTransferFreightDetails', formData);
-
-    this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
-
-    this.http.request(req).subscribe(event => {
-      console.log(event);
-      if (event instanceof HttpResponse) {
-        var response = event.body;
-
-        if (response['Successful']) {
-          this.toastr.clear();
-          this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-          this.reset();
-        } else { //if there are errors   
-          this.toastr.clear();
-          this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
-        }
+    else {
+      debugger;
+      if (this.transferFreightgridApi.getSelectedRows().length == 0) {
+        this.toastr.error("error", "Please select Record for update");
+        return;
       }
-    });
+      var row = this.transferFreightgridApi.getSelectedRows();
+      console.log(row);
+      const formData = new FormData();
+      formData.append('id', row[0].id);
+      formData.append('transferFromId', row[0].transferFromId);
+      formData.append('transferToId', row[0].transferToId);
+      formData.append('productCode', row[0].productCode);
+      formData.append('transferCost', row[0].transferCost);
+
+      const req = new HttpRequest('PUT', './UpdateTransferFreightDetails', formData);
+
+      this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+
+      this.http.request(req).subscribe(event => {
+        console.log(event);
+        if (event instanceof HttpResponse) {
+          var response = event.body;
+
+          if (response['Successful']) {
+            this.toastr.clear();
+            this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+            this.reset();
+          } else { //if there are errors   
+            this.toastr.clear();
+            this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
+          }
+        }
+      });
+    }
   }
 
 
@@ -616,7 +715,7 @@ export class UploadFileComponent implements OnInit {
         
       },
       {
-        field: "active", headerName: "Active", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+        field: "active", headerName: "Active", width: "100", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: this.extractValues(this.active),
         }
@@ -640,6 +739,7 @@ export class UploadFileComponent implements OnInit {
       add: [{ class_CodeID: '', product_codeId: '', locationId: '', active: '' }],
       addIndex: 0
     });
+    this.isNewRowAdded = true;
   }
 
   DeleteClassCodeMgtRecord() {
@@ -684,76 +784,76 @@ export class UploadFileComponent implements OnInit {
   }
 
   SaveClassCodeMgtRecord() {
-    const allRowData = [];
-    this.classCodeManagementgridApi.forEachNode(node => allRowData.push(node.data));
+    if (this.isNewRowAdded) {
+      const allRowData = [];
+      this.classCodeManagementgridApi.forEachNode(node => allRowData.push(node.data));
 
-    const modifiedRows = allRowData.filter(row => row['modified']);
+      const modifiedRows = allRowData.filter(row => row['modified']);
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append('classCodeID', modifiedRows[0].classCodeID);
-    formData.append('productCodeId', modifiedRows[0].productCodeId);
-    formData.append('locationId', modifiedRows[0].locationId);
-    formData.append('active', modifiedRows[0].active);
+      formData.append('classCodeID', modifiedRows[0].classCodeID);
+      formData.append('productCodeId', modifiedRows[0].productCodeId);
+      formData.append('locationId', modifiedRows[0].locationId);
+      formData.append('active', modifiedRows[0].active);
 
-    // passing the params to server
-    const uploadReq = new HttpRequest('POST', './PostClassCodesDetails', formData);
-    this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+      // passing the params to server
+      const uploadReq = new HttpRequest('POST', './PostClassCodesDetails', formData);
+      this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
-    this.http.request(uploadReq).subscribe(event => {
-      console.log(event);
-      if (event instanceof HttpResponse) {
-        var response = event.body;
+      this.http.request(uploadReq).subscribe(event => {
+        console.log(event);
+        if (event instanceof HttpResponse) {
+          var response = event.body;
 
-        if (response['Successful']) {
-          this.toastr.clear();
-          this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-          this.reset();
-        } else { //if there are errors   
-          this.toastr.clear();
-          this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+          if (response['Successful']) {
+            this.toastr.clear();
+            this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+            this.reset();
+          } else { //if there are errors   
+            this.toastr.clear();
+            this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+          }
         }
-      }
-    });
-  }
-
-  EditClassCodeMgtRecord() {
-    debugger;
-    if (this.classCodeManagementgridApi.getSelectedRows().length == 0) {
-      this.toastr.error("error", "Please select Record for update");
-      return;
+      });
+      this.isNewRowAdded = false;
     }
-    var row = this.classCodeManagementgridApi.getSelectedRows();
-    console.log(row);
-    const formData = new FormData();
-    formData.append('id', row[0].id);
-    formData.append('classCodeID', row[0].classCodeID);
-    formData.append('productCodeId', row[0].productCodeId);
-    formData.append('locationId', row[0].locationId);
-    formData.append('active', row[0].active);
-
-    const req = new HttpRequest('PUT', './UpdateClassCodeDetails', formData);
-
-    this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
-
-    this.http.request(req).subscribe(event => {
-      console.log(event);
-      if (event instanceof HttpResponse) {
-        var response = event.body;
-
-        if (response['Successful']) {
-          this.toastr.clear();
-          this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-          this.reset();
-        } else { //if there are errors   
-          this.toastr.clear();
-          this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
-        }
+    else {
+      debugger;
+      if (this.classCodeManagementgridApi.getSelectedRows().length == 0) {
+        this.toastr.error("error", "Please select Record for update");
+        return;
       }
-    });
-  }
+      var row = this.classCodeManagementgridApi.getSelectedRows();
+      console.log(row);
+      const formData = new FormData();
+      formData.append('id', row[0].id);
+      formData.append('classCodeID', row[0].classCodeID);
+      formData.append('productCodeId', row[0].productCodeId);
+      formData.append('locationId', row[0].locationId);
+      formData.append('active', row[0].active);
 
- 
+      const req = new HttpRequest('PUT', './UpdateClassCodeDetails', formData);
+
+      this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+
+      this.http.request(req).subscribe(event => {
+        console.log(event);
+        if (event instanceof HttpResponse) {
+          var response = event.body;
+
+          if (response['Successful']) {
+            this.toastr.clear();
+            this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+            this.reset();
+          } else { //if there are errors   
+            this.toastr.clear();
+            this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
+          }
+        }
+      });
+    }
+  }
 
   //Display Months
   createDisplayMonthscolumnDefs() {
@@ -801,6 +901,7 @@ export class UploadFileComponent implements OnInit {
       add: [{ month: '', year: '', active: '' }],
       addIndex: 0
     });
+    this.isNewRowAdded = true;
   }
 
   DeleteDisplayMonthsRecord() {
@@ -844,72 +945,74 @@ export class UploadFileComponent implements OnInit {
   }
 
   SaveDisplayMonthsRecord() {
-    const allRowData = [];
-    this.displayMonthsgridApi.forEachNode(node => allRowData.push(node.data));
+    if (this.isNewRowAdded) {
+      const allRowData = [];
+      this.displayMonthsgridApi.forEachNode(node => allRowData.push(node.data));
 
-    const modifiedRows = allRowData.filter(row => row['modified']);
+      const modifiedRows = allRowData.filter(row => row['modified']);
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append('month', modifiedRows[0].month);
-    formData.append('year', modifiedRows[0].year);
-    formData.append('active', modifiedRows[0].active);
+      formData.append('month', modifiedRows[0].month);
+      formData.append('year', modifiedRows[0].year);
+      formData.append('active', modifiedRows[0].active);
 
-    // passing the params to server
-    const uploadReq = new HttpRequest('POST', './PostDisplayMonthsDetails', formData);
-    this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+      // passing the params to server
+      const uploadReq = new HttpRequest('POST', './PostDisplayMonthsDetails', formData);
+      this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
-    this.http.request(uploadReq).subscribe(event => {
-      console.log(event);
-      if (event instanceof HttpResponse) {
-        var response = event.body;
+      this.http.request(uploadReq).subscribe(event => {
+        console.log(event);
+        if (event instanceof HttpResponse) {
+          var response = event.body;
 
-        if (response['Successful']) {
-          this.toastr.clear();
-          this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-          this.reset();
-        } else { //if there are errors   
-          this.toastr.clear();
-          this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+          if (response['Successful']) {
+            this.toastr.clear();
+            this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+            this.reset();
+          } else { //if there are errors   
+            this.toastr.clear();
+            this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+          }
         }
-      }
-    });
-  }
-
-  EditDisplayMonthsRecord() {
-    debugger;
-    if (this.displayMonthsgridApi.getSelectedRows().length == 0) {
-      this.toastr.error("error", "Please select Display Month Record for update");
-      return;
+      });
+      this.isNewRowAdded = false;
     }
-    var row = this.displayMonthsgridApi.getSelectedRows();
-    console.log(row);
-    const formData = new FormData();
-    formData.append('id', row[0].id);
-    formData.append('month', row[0].month);
-    formData.append('year', row[0].year);
-    formData.append('active', row[0].active);
-
-    const req = new HttpRequest('PUT', './UpdateDisplayMonthsDetails', formData);
-    var selectedData = this.displayMonthsGrid.api.getSelectedRows();
-    this.displayMonthsGrid.api.updateRowData({ update: selectedData });
-    this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
-
-    this.http.request(req).subscribe(event => {
-      console.log(event);
-      if (event instanceof HttpResponse) {
-        var response = event.body;
-
-        if (response['Successful']) {
-          this.toastr.clear();
-          this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-          this.reset();
-        } else { //if there are errors   
-          this.toastr.clear();
-          this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
-        }
+    else {
+      debugger;
+      if (this.displayMonthsgridApi.getSelectedRows().length == 0) {
+        this.toastr.error("error", "Please select Display Month Record for update");
+        return;
       }
-    });
+      var row = this.displayMonthsgridApi.getSelectedRows();
+      console.log(row);
+      const formData = new FormData();
+      formData.append('id', row[0].id);
+      formData.append('month', row[0].month);
+      formData.append('year', row[0].year);
+      formData.append('active', row[0].active);
+
+      const req = new HttpRequest('PUT', './UpdateDisplayMonthsDetails', formData);
+      var selectedData = this.displayMonthsGrid.api.getSelectedRows();
+      this.displayMonthsGrid.api.updateRowData({ update: selectedData });
+      this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+
+      this.http.request(req).subscribe(event => {
+        console.log(event);
+        if (event instanceof HttpResponse) {
+          var response = event.body;
+
+          if (response['Successful']) {
+            this.toastr.clear();
+            this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+            this.reset();
+          } else { //if there are errors   
+            this.toastr.clear();
+            this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
+          }
+        }
+      });
+    }
   }
 
   openDatePicker() {

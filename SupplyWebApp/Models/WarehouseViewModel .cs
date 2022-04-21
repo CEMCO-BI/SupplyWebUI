@@ -15,5 +15,9 @@ namespace SupplyWebApp.Models
         public string WarehouseName { get; set; }
         public string Abbr { get; set; }
 
+        [ForeignKey("Location")]
+        public int LocationId { get; set; }
+        public Location Location { get; set; }
+
     }
 }

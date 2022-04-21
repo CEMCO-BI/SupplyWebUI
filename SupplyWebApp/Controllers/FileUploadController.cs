@@ -87,6 +87,21 @@ namespace SupplyWebApp.Controllers
         }
 
         [HttpGet]
+        [Route("/GetAllWarehouse")]
+        public IQueryable<Warehouse> GetAllWarehouse()
+        {
+            try
+            {
+                var warehouse = _dataContext.Warehouse.ToArray();
+                return warehouse.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
         [Route("/GetINDWarehouse")]
         public IQueryable<Warehouse> GetINDWarehouse()
         {

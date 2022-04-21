@@ -29,7 +29,6 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('file', { static: false })
   InputVar: ElementRef;
   displayerrors: boolean = false;
-  
 
   //type of file
   typeOfFile: string = "F_01";
@@ -86,6 +85,7 @@ export class UploadFileComponent implements OnInit {
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
     this.getLocations();
+    this.getAllWarehouse();
     this.getINDWarehouse();
     this.getPITWarehouse();
     this.getDENWarehouse();
@@ -150,6 +150,21 @@ export class UploadFileComponent implements OnInit {
   }
 
   //Get warehouse from database for warehouse columns
+  getAllWarehouse() {
+    return this.http.get('./GetAllWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehouse = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
   getINDWarehouse() {
     return this.http.get('./GetINDWarehouse').subscribe(
       data => {
@@ -280,12 +295,13 @@ export class UploadFileComponent implements OnInit {
   createAddedFreightColumnDefs() {
     this.AddedFreightcolumnDefs = [
       {
-        field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'select',
+        field: "poLocationId", headerName: "PO Location", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: this.extractValues(this.locations),
         }
         , refData: this.locations
-        , required: true,
+        , required: true
+        
       },
       {
         field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
@@ -315,23 +331,8 @@ export class UploadFileComponent implements OnInit {
             };
           }
         }
-        , refData: (params) => params.data.poLocationId == 1 ? this.warehouseIND : params.data.poLocationId == 2 ? this.warehousePIT : params.data.poLocationId == 33 ? this.warehouseDEN : this.warehouseFTW
-        //, refData: (params) => {
-        //  var selectedLocationId = params.data.poLocationId;
-        //  if (selectedLocationId == 1) {
-        //    this.warehouseIND
-        //  }
-        //  else if (selectedLocationId == 2) {
-        //    this.warehousePIT
-        //  }
-        //  else if (selectedLocationId == 33) {
-        //    this.warehouseDEN
-        //  }
-        //  else {
-        //    this.warehouseFTW
-        //  }
-        //}
-        ,required: true//TODO: values from Warehouse.Abb depending upon location
+        , refData: this.warehouse
+        ,required: true
       },
       {
         field: "poCarrierId", headerName: "PO Carrier", width: "90", editable: true, cellEditor: 'agSelectCellEditor',
@@ -411,6 +412,7 @@ export class UploadFileComponent implements OnInit {
 
   onAddedFreightCellValueChanged(event) {
     event.data.modified = true;
+    console.log(event)
   }
 
   SaveAddedFreightRecord() {

@@ -67,6 +67,10 @@ export class UploadFileComponent implements OnInit {
   private displayMonthsColumnApi;
   private locations: object = {};
   private warehouse: object = {};
+  private warehouseIND: object = {};
+  private warehousePIT: object = {};
+  private warehouseDEN: object = {};
+  private warehouseFTW: object = {};
   private carrier: object = {};
   private vendor: object = {};
   private productCode: object = {};
@@ -82,7 +86,10 @@ export class UploadFileComponent implements OnInit {
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
     this.getLocations();
-    this.getWarehouse();
+    this.getINDWarehouse();
+    this.getPITWarehouse();
+    this.getDENWarehouse();
+    this.getFTWWarehouse();
     this.getCarrier();
     this.getVendor();
     this.getProductCode();
@@ -143,15 +150,60 @@ export class UploadFileComponent implements OnInit {
   }
 
   //Get warehouse from database for warehouse columns
-  getWarehouse() {
-    return this.http.get('./GetWarehouse').subscribe(
+  getINDWarehouse() {
+    return this.http.get('./GetINDWarehouse').subscribe(
       data => {
         var parsedArray = JSON.parse(JSON.stringify(data));
         var obj = parsedArray.reduce((acc, i) => {
           acc[i.warehouseId] = i.abbr;
           return acc;
         }, {});
-        this.warehouse = obj;
+        this.warehouseIND = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  getPITWarehouse() {
+    return this.http.get('./GetPITWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehousePIT = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  getDENWarehouse() {
+    return this.http.get('./GetDENWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehouseDEN = obj;
+        this.ngOnInit();
+      }
+    )
+
+  }
+
+  getFTWWarehouse() {
+    return this.http.get('./GetFTWWarehouse').subscribe(
+      data => {
+        var parsedArray = JSON.parse(JSON.stringify(data));
+        var obj = parsedArray.reduce((acc, i) => {
+          acc[i.warehouseId] = i.abbr;
+          return acc;
+        }, {});
+        this.warehouseFTW = obj;
         this.ngOnInit();
       }
     )
@@ -237,10 +289,48 @@ export class UploadFileComponent implements OnInit {
       },
       {
         field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.warehouse),
+        //cellEditorParams: {
+        //  values: this.extractValues(this.warehouse),
+        //}
+        cellEditorParams: (params) => {
+          var selectedLocationId = params.data.poLocationId;
+          if (selectedLocationId == 1) {
+            return {
+              values: this.extractValues(this.warehouseIND)
+            };
+          }
+          else if (selectedLocationId == 2) {
+            return {
+              values: this.extractValues(this.warehousePIT)
+            };
+          }
+          else if (selectedLocationId == 33) {
+            return {
+              values: this.extractValues(this.warehouseDEN)
+            };
+          }
+          else {
+            return {
+              values: this.extractValues(this.warehouseFTW)
+            };
+          }
         }
-        , refData: this.warehouse
+        , refData: (params) => params.data.poLocationId == 1 ? this.warehouseIND : params.data.poLocationId == 2 ? this.warehousePIT : params.data.poLocationId == 33 ? this.warehouseDEN : this.warehouseFTW
+        //, refData: (params) => {
+        //  var selectedLocationId = params.data.poLocationId;
+        //  if (selectedLocationId == 1) {
+        //    this.warehouseIND
+        //  }
+        //  else if (selectedLocationId == 2) {
+        //    this.warehousePIT
+        //  }
+        //  else if (selectedLocationId == 33) {
+        //    this.warehouseDEN
+        //  }
+        //  else {
+        //    this.warehouseFTW
+        //  }
+        //}
         ,required: true//TODO: values from Warehouse.Abb depending upon location
       },
       {

@@ -87,12 +87,57 @@ namespace SupplyWebApp.Controllers
         }
 
         [HttpGet]
-        [Route("/GetWarehouse")]
-        public IQueryable<Warehouse> GetWarehouse()
+        [Route("/GetINDWarehouse")]
+        public IQueryable<Warehouse> GetINDWarehouse()
         {
             try
             {
-                var warehouse = _dataContext.Warehouse.ToArray();
+                var warehouse = _dataContext.Warehouse.Include(x => x.Location).Where(w => w.Location.LocationCode.Equals("IND")).ToArray();
+                return warehouse.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetPITWarehouse")]
+        public IQueryable<Warehouse> GetPITWarehouse()
+        {
+            try
+            {
+                var warehouse = _dataContext.Warehouse.Include(x => x.Location).Where(w => w.Location.LocationCode.Equals("PIT")).ToArray();
+                return warehouse.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetDENWarehouse")]
+        public IQueryable<Warehouse> GetDENWarehouse()
+        {
+            try
+            {
+                var warehouse = _dataContext.Warehouse.Include(x => x.Location).Where(w => w.Location.LocationCode.Equals("DEN")).ToArray();
+                return warehouse.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("/GetFTWWarehouse")]
+        public IQueryable<Warehouse> GetFTWWarehouse()
+        {
+            try
+            {
+                var warehouse = _dataContext.Warehouse.Include(x => x.Location).Where(w => w.Location.LocationCode.Equals("FTW")).ToArray();
                 return warehouse.AsQueryable();
             }
             catch (Exception e)

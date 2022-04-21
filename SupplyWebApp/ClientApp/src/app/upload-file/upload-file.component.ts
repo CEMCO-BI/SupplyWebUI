@@ -432,7 +432,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('truckLoad', modifiedRows[0].truckLoad);
 
       // passing the params to server
-      const uploadReq = new HttpRequest('POST', './PostAddedFreightsDetails', formData);
+      const uploadReq = new HttpRequest('POST', this.baseUrl + 'PostAddedFreightsDetails', formData);
       this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
       this.http.request(uploadReq).subscribe(event => {
@@ -469,7 +469,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('cwt', row[0].cwt);
       formData.append('truckLoad', row[0].truckLoad);
 
-      const req = new HttpRequest('PUT', './UpdateAddedFreightDetails', formData);
+      const req = new HttpRequest('PUT', this.baseUrl + 'UpdateAddedFreightDetails', formData);
 
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -500,7 +500,7 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     console.log('id'+ selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteAddedFreightRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', this.baseUrl + 'DeleteAddedFreightRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -582,7 +582,7 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteTransferFreightRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', this.baseUrl + 'DeleteTransferFreightRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -628,7 +628,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('transferCost', modifiedRows[0].transferCost);
 
       // passing the params to server
-      const uploadReq = new HttpRequest('POST', './PostTransferFreightsDetails', formData);
+      const uploadReq = new HttpRequest('POST', this.baseUrl + 'PostTransferFreightsDetails', formData);
       this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
       this.http.request(uploadReq).subscribe(event => {
@@ -663,7 +663,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('productCode', row[0].productCode);
       formData.append('transferCost', row[0].transferCost);
 
-      const req = new HttpRequest('PUT', './UpdateTransferFreightDetails', formData);
+      const req = new HttpRequest('PUT', this.baseUrl + 'UpdateTransferFreightDetails', formData);
 
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -750,7 +750,7 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteClassCodesRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', this.baseUrl + 'DeleteClassCodesRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -798,7 +798,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('active', modifiedRows[0].active);
 
       // passing the params to server
-      const uploadReq = new HttpRequest('POST', './PostClassCodesDetails', formData);
+      const uploadReq = new HttpRequest('POST', this.baseUrl + 'PostClassCodesDetails', formData);
       this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
       this.http.request(uploadReq).subscribe(event => {
@@ -833,7 +833,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('locationId', row[0].locationId);
       formData.append('active', row[0].active);
 
-      const req = new HttpRequest('PUT', './UpdateClassCodeDetails', formData);
+      const req = new HttpRequest('PUT', this.baseUrl + 'UpdateClassCodeDetails', formData);
 
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -912,7 +912,7 @@ export class UploadFileComponent implements OnInit {
       return;
     }
     console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteDisplayMonthsRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', this.baseUrl + 'DeleteDisplayMonthsRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -958,7 +958,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('active', modifiedRows[0].active);
 
       // passing the params to server
-      const uploadReq = new HttpRequest('POST', './PostDisplayMonthsDetails', formData);
+      const uploadReq = new HttpRequest('POST', this.baseUrl + 'PostDisplayMonthsDetails', formData);
       this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
       this.http.request(uploadReq).subscribe(event => {
@@ -992,7 +992,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('year', row[0].year);
       formData.append('active', row[0].active);
 
-      const req = new HttpRequest('PUT', './UpdateDisplayMonthsDetails', formData);
+      const req = new HttpRequest('PUT', this.baseUrl + 'UpdateDisplayMonthsDetails', formData);
       var selectedData = this.displayMonthsGrid.api.getSelectedRows();
       this.displayMonthsGrid.api.updateRowData({ update: selectedData });
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });

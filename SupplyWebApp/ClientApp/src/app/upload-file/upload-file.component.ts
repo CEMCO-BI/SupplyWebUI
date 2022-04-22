@@ -453,7 +453,7 @@ export class UploadFileComponent implements OnInit {
       this.isNewRowAdded = false;
     }
     else {
-      debugger;
+      
       if (this.addedFreightgridApi.getSelectedRows().length == 0) {
         this.toastr.error("error", "Please select Record for update");
         return;
@@ -469,7 +469,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('cwt', row[0].cwt);
       formData.append('truckLoad', row[0].truckLoad);
 
-      const req = new HttpRequest('PUT', './UpdateAddedFreightDetails', formData);
+      const req = new HttpRequest('POST', './UpdateAddedFreightDetails', formData);
 
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -493,14 +493,15 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteAddedFreightRecord() {
-    debugger;
     var selectedRow = this.addedFreightgridApi.getSelectedRows();
     if (selectedRow.length == 0) {
       this.toastr.error("error", "Please select a Record for deletion");
       return;
     }
-    console.log('id'+ selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteAddedFreightRecord?id=' + selectedRow[0].id);
+    const formData = new FormData();
+    formData.append('id', selectedRow[0].id);
+    const req = new HttpRequest('POST', './DeleteAddedFreightRecord', formData);
+
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -575,14 +576,17 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteTransferFreightRecord() {
-    debugger;
+    
     var selectedRow = this.transferFreightgridApi.getSelectedRows();
     if (selectedRow.length == 0) {
       this.toastr.error("error", "Please select a Record for deletion");
       return;
     }
     console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteTransferFreightRecord?id=' + selectedRow[0].id);
+    const formData = new FormData();
+    formData.append('id', selectedRow[0].id);
+    const req = new HttpRequest('POST', './DeleteTransferFreightRecord', formData);
+    //const req = new HttpRequest('DELETE', './DeleteTransferFreightRecord?id=' + selectedRow[0].id);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -649,7 +653,7 @@ export class UploadFileComponent implements OnInit {
       this.isNewRowAdded = false;
     }
     else {
-      debugger;
+      
       if (this.transferFreightgridApi.getSelectedRows().length == 0) {
         this.toastr.error("error", "Please select Record for update");
         return;
@@ -663,7 +667,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('productCode', row[0].productCode);
       formData.append('transferCost', row[0].transferCost);
 
-      const req = new HttpRequest('PUT', './UpdateTransferFreightDetails', formData);
+      const req = new HttpRequest('POST', './UpdateTransferFreightDetails', formData);
 
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -743,14 +747,16 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteClassCodeMgtRecord() {
-    debugger;
+    
     var selectedRow = this.classCodeManagementgridApi.getSelectedRows();
     if (selectedRow.length == 0) {
       this.toastr.error("error", "Please select a Record for deletion");
       return;
     }
-    console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteClassCodesRecord?id=' + selectedRow[0].id);
+    const formData = new FormData();
+    formData.append('id', selectedRow[0].id);
+    //const req = new HttpRequest('DELETE', './DeleteClassCodesRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('POST', './DeleteClassCodesRecord', formData);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -819,7 +825,7 @@ export class UploadFileComponent implements OnInit {
       this.isNewRowAdded = false;
     }
     else {
-      debugger;
+      
       if (this.classCodeManagementgridApi.getSelectedRows().length == 0) {
         this.toastr.error("error", "Please select Record for update");
         return;
@@ -833,7 +839,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('locationId', row[0].locationId);
       formData.append('active', row[0].active);
 
-      const req = new HttpRequest('PUT', './UpdateClassCodeDetails', formData);
+      const req = new HttpRequest('POST', './UpdateClassCodeDetails', formData);
 
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -905,14 +911,16 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteDisplayMonthsRecord() {
-    debugger;
+    
     var selectedRow = this.displayMonthsgridApi.getSelectedRows();
     if (selectedRow.length == 0) {
       this.toastr.error("error", "Please select a Record for deletion");
       return;
     }
-    console.log('id' + selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteDisplayMonthsRecord?id=' + selectedRow[0].id);
+    const formData = new FormData();
+    formData.append('id', selectedRow[0].id);
+    //const req = new HttpRequest('DELETE', './DeleteDisplayMonthsRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('POST', './DeleteDisplayMonthsRecord', formData);
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -979,7 +987,7 @@ export class UploadFileComponent implements OnInit {
       this.isNewRowAdded = false;
     }
     else {
-      debugger;
+      
       if (this.displayMonthsgridApi.getSelectedRows().length == 0) {
         this.toastr.error("error", "Please select Display Month Record for update");
         return;
@@ -992,7 +1000,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('year', row[0].year);
       formData.append('active', row[0].active);
 
-      const req = new HttpRequest('PUT', './UpdateDisplayMonthsDetails', formData);
+      const req = new HttpRequest('POST', './UpdateDisplayMonthsDetails', formData);
       var selectedData = this.displayMonthsGrid.api.getSelectedRows();
       this.displayMonthsGrid.api.updateRowData({ update: selectedData });
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });

@@ -466,7 +466,7 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("/UpdateAddedFreightDetails")]
         public async Task<IActionResult> UpdateAddedFreightDetails()
         {
@@ -510,7 +510,7 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("/UpdateTransferFreightDetails")]
         public async Task<IActionResult> UpdateTransferFreightDetails()
         {
@@ -552,7 +552,7 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("/UpdateClassCodeDetails")]
         public async Task<IActionResult> UpdateClassCodeDetails()
         {
@@ -594,7 +594,7 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("/UpdateDisplayMonthsDetails")]
         public async Task<IActionResult> UpdateDisplayMonthsDetails()
         {
@@ -635,14 +635,16 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("/DeleteAddedFreightRecord")]
-        public async Task<IActionResult> DeleteAddedFreightRecord(int id)
+        public async Task<IActionResult> DeleteAddedFreightRecord()
         {
             string response = null;
             try
             {
-                AddedFreight addedFreight = _dataContext.AddedFreight.Find(id);
+                var addedFreightFromReq = Request.Form.ToList();
+
+                AddedFreight addedFreight = _dataContext.AddedFreight.Find(Convert.ToInt32(addedFreightFromReq[0].Value));
                 _dataContext.AddedFreight.Remove(addedFreight);
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
@@ -665,14 +667,15 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("/DeleteTransferFreightRecord")]
-        public async Task<IActionResult> DeleteTransferFreightRecord(int id)
+        public async Task<IActionResult> DeleteTransferFreightRecord()
         {
             string response = "";
             try
             {
-                TransferFreight transferFreight = _dataContext.TransferFreight.Find(id);
+                var transferFreightFromReq = Request.Form.ToList();
+                TransferFreight transferFreight = _dataContext.TransferFreight.Find(Convert.ToInt32(transferFreightFromReq[0].Value));
                 _dataContext.TransferFreight.Remove(transferFreight);
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
@@ -695,14 +698,16 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("/DeleteClassCodesRecord")]
-        public async Task<IActionResult> DeleteClassCodesRecord(int id)
+        public async Task<IActionResult> DeleteClassCodesRecord()
         {
             string response = "";
             try
             {
-                ClassCodeManagement classCode = _dataContext.ClassCodeManagement.Find(id);
+                var classCodesFromReq = Request.Form.ToList();
+
+                ClassCodeManagement classCode = _dataContext.ClassCodeManagement.Find(Convert.ToInt32(classCodesFromReq[0].Value));
                 _dataContext.ClassCodeManagement.Remove(classCode);
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)
@@ -725,14 +730,16 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("/DeleteDisplayMonthsRecord")]
-        public async Task<IActionResult> DeleteDisplayMonthsRecord(int id)
+        public async Task<IActionResult> DeleteDisplayMonthsRecord()
         {
             string response = "";
             try
             {
-                DisplayMonths displayMonths = _dataContext.DisplayMonths.Find(id);
+                var displayMonthsFromReq = Request.Form.ToList();
+
+                DisplayMonths displayMonths = _dataContext.DisplayMonths.Find(Convert.ToInt32(displayMonthsFromReq[0].Value));
                 _dataContext.DisplayMonths.Remove(displayMonths);
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)

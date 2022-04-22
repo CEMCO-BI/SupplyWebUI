@@ -354,27 +354,30 @@ export class UploadFileComponent implements OnInit {
         field: "cwt", headerName: "Added Freight/CWT", width: "140"
         , required: true
         //, valueFormatter: params => this.cwtFormatter(params.data.cwt, '$')
-        , valueFormatter: (params) => {
-          if (params.data.cwt) {
-            return this.cwtFormatter(params.data.cwt, '$');
-          }
-          return "";
+        //, valueFormatter: (params) => {
+        //  if (params.data.cwt) {
+        //    return this.cwtFormatter(params.data.cwt, '$');
+        //  }
+        //  return "";
+        //}
+        , valueFormatter: params => {
+          return '$' + this.formatTruckLoad(params.data.cwt);
         }
         , editable: true
       },
       {
         field: "truckLoad", headerName: "$/Truckload", width: "100"
         , required: true
-        , valueFormatter: (params) => {
-          if (params.data.truckLoad) {
-            return '$' + this.formatTruckLoad(params.data.truckLoad);
-          }
-          return "";
-        }
-        , editable: true
-        //, valueFormatter:  params => {
-        //  return '$' + this.formatTruckLoad(params.data.truckLoad);
+        //, valueFormatter: (params) => {
+        //  if (params.data.truckLoad) {
+        //    return '$' + this.formatTruckLoad(params.data.truckLoad);
+        //  }
+        //  return "";
         //}
+        , editable: true
+        , valueFormatter:  params => {
+          return '$' + this.formatTruckLoad(params.data.truckLoad);
+        }
       }
     ];
   }
@@ -529,7 +532,7 @@ export class UploadFileComponent implements OnInit {
   createTransferFreightcolumnDefs() {
     this.TransferFreightcolumnDefs = [
       {
-        field: "transferFromId", headerName: "Transfer From", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+        field: "transferFromId", headerName: "Transfer From", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: this.extractValues(this.locations),
         }
@@ -537,7 +540,7 @@ export class UploadFileComponent implements OnInit {
         , required: true
       },
       {
-        field: "transferToId", headerName: "Transfer To", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+        field: "transferToId", headerName: "Transfer To", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: this.extractValues(this.locations),
         }
@@ -553,7 +556,11 @@ export class UploadFileComponent implements OnInit {
         , required: true
       },//TODO: type ahead search
       {
-        field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true, required: true
+        field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true
+        , valueFormatter: params => {
+          return '$' + this.formatTruckLoad(params.data.transferCost);
+        }
+        , required: true
       }
     ];
 
@@ -569,7 +576,7 @@ export class UploadFileComponent implements OnInit {
 
   AddTransferFreightRecord() {
     this.transferFreightGrid.api.updateRowData({
-      add: [{ transfer_from_Id: '', transfer_to_Id: '', product_Code: '', transfer_Cost: '' }],
+      add: [{ transferFromId: '', transferToId: '', productCode: '', transferCost: '' }],
       addIndex: 0
     });
     this.isNewRowAdded = true;
@@ -740,7 +747,7 @@ export class UploadFileComponent implements OnInit {
 
   AddClassCodeMgtRecord() {
     this.classCodeManagementGrid.api.updateRowData({
-      add: [{ class_CodeID: '', product_codeId: '', locationId: '', active: '' }],
+      add: [{ classCodeID: '', productCodeId: '', locationId: '', active: '' }],
       addIndex: 0
     });
     this.isNewRowAdded = true;

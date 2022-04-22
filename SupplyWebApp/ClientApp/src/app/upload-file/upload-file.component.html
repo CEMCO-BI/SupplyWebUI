@@ -65,20 +65,20 @@
                 <div class="row">
                   <div class="col-md-8"></div>
                   <div class="col-md-8">
-                    <button class="btn btn-sm btn-success button mr-1" (click)="AddAddedFreightRecord()">Add</button>
+                    <button class="btn btn-sm btn-success button mr-2" (click)="AddAddedFreightRecord()">Add</button>
 
-                    <button class="btn btn-sm btn-danger mr-1" (click)="DeleteAddedFreightRecord()">Delete</button>
+                    <button class="btn btn-sm btn-danger mr-2" (click)="DeleteAddedFreightRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-primary mr-1" (click)="SaveAddedFreightRecord()">Save</button>
+                    <button class="btn btn-sm btn-primary mr-2" (click)="SaveAddedFreightRecord()">Save</button>
 
                   </div>
-                </div>
+                </div><br/>
                 <ag-grid-angular #addedFreightGrid
                                  style="width: 700px; height: 300px"
                                  class="ag-theme-balham"
                                  [columnDefs]="AddedFreightcolumnDefs"
                                  [rowData]="addedFreightrowData"
-                                 rowSelection="multiple"
+                                 rowSelection="single"
                                  (gridReady)="onAddedFreightGridReady($event)"
                                  (cellValueChanged)="onAddedFreightCellValueChanged($event)">
                 </ag-grid-angular>
@@ -90,19 +90,19 @@
                 <div class="row">
                   <div class="col-md-8"></div>
                   <div class="col-md-8">
-                    <button class="btn btn-sm btn-success button mr-1" (click)="AddTransferFreightRecord()">Add</button>
+                    <button class="btn btn-sm btn-success button mr-2" (click)="AddTransferFreightRecord()">Add</button>
 
-                    <button class="btn btn-sm btn-danger mr-1" (click)="DeleteTransferFreightRecord()">Delete</button>
+                    <button class="btn btn-sm btn-danger mr-2" (click)="DeleteTransferFreightRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-primary mr-1" (click)="SaveTransferFreightRecord()">Save</button>
+                    <button class="btn btn-sm btn-primary mr-2" (click)="SaveTransferFreightRecord()">Save</button>
                   </div>
-                </div>
+                </div><br />
                 <ag-grid-angular #transferFreightGrid
                                  style="width: 515px; height: 300px"
                                  class="ag-theme-balham"
                                  [columnDefs]="TransferFreightcolumnDefs"
                                  [rowData]="transferFreightrowData"
-                                 rowSelection="multiple"
+                                 rowSelection="single"
                                  (gridReady)="onTransferFreightGridReady($event)"
                                  (cellValueChanged)="onTransferFreightCellValueChanged($event)">
                 </ag-grid-angular>
@@ -116,19 +116,19 @@
                 <div class="row">
                   <div class="col-md-8"></div>
                   <div class="col-md-8">
-                    <button class="btn btn-sm btn-success button mr-1" (click)="AddClassCodeMgtRecord()">Add</button>
+                    <button class="btn btn-sm btn-success button mr-2" (click)="AddClassCodeMgtRecord()">Add</button>
 
-                    <button class="btn btn-sm btn-danger mr-1" (click)="DeleteClassCodeMgtRecord()">Delete</button>
+                    <button class="btn btn-sm btn-danger mr-2" (click)="DeleteClassCodeMgtRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-primary mr-1" (click)="SaveClassCodeMgtRecord()">Save</button>
+                    <button class="btn btn-sm btn-primary mr-2" (click)="SaveClassCodeMgtRecord()">Save</button>
                   </div>
-                </div>
+                </div><br/>
                 <ag-grid-angular #classCodeManagementGrid
                                  style="width: 635px; height: 300px"
                                  class="ag-theme-balham"
                                  [columnDefs]="ClassCodeManagementcolumnDefs"
                                  [rowData]="classCodeManagementrowData"
-                                 rowSelection="multiple"
+                                 rowSelection="single"
                                  (gridReady)="onClassCodeMgtGridReady($event)"
                                  (cellValueChanged)="onClassCodeMgtCellValueChanged($event)">
                 </ag-grid-angular>
@@ -140,19 +140,19 @@
                 <div class="row">
                   <div class="col-md-8"></div>
                   <div class="col-md-8">
-                    <button class="btn btn-sm btn-success button mr-1" (click)="AddDisplayMonthsRecord()">Add</button>
+                    <button class="btn btn-sm btn-success button mr-2" (click)="AddDisplayMonthsRecord()">Add</button>
 
-                    <button class="btn btn-sm btn-danger mr-1" (click)="DeleteDisplayMonthsRecord()">Delete</button>
+                    <button class="btn btn-sm btn-danger mr-2" (click)="DeleteDisplayMonthsRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-primary mr-1" (click)="SaveDisplayMonthsRecord()">Save</button>
+                    <button class="btn btn-sm btn-primary mr-2" (click)="SaveDisplayMonthsRecord()">Save</button>
                   </div>
-                </div>
+                </div><br/>
                 <ag-grid-angular #displayMonthsGrid
                                  style="width: 515; height: 300px"
                                  class="ag-theme-balham"
                                  [columnDefs]="DisplayMonthscolumnDefs"
                                  [rowData]="displayMonthsrowData"
-                                 rowSelection="multiple"
+                                 rowSelection="single"
                                  (gridReady)="onDisplayMonthsGridReady($event)"
                                  (cellValueChanged)="onDisplayMonthCellValueChanged($event)">
                 </ag-grid-angular>

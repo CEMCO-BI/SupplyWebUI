@@ -468,7 +468,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('cwt', row[0].cwt);
       formData.append('truckLoad', row[0].truckLoad);
 
-      const req = new HttpRequest('PUT', this.baseUrl + 'UpdateAddedFreightDetails', formData);
+      const req = new HttpRequest('PUT', this.baseUrl + '/UpdateAddedFreightDetails?id=' + row[0].id, formData);
       console.log(req)
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 
@@ -497,7 +497,7 @@ export class UploadFileComponent implements OnInit {
       this.toastr.error("error", "Please select a Record for deletion");
       return;
     }
-    const req = new HttpRequest('DELETE', this.baseUrl + 'DeleteAddedFreightRecord?id=' + selectedRow[0].id);
+    const req = new HttpRequest('DELETE', this.baseUrl + '/DeleteAddedFreightRecord?id=' + selectedRow[0].id);
     console.log(req)
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 

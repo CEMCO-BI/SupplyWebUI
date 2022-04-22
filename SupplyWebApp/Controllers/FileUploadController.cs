@@ -466,9 +466,9 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [Route("/UpdateAddedFreightDetails")]
-        public async Task<IActionResult> UpdateAddedFreightDetails()
+        public async Task<IActionResult> UpdateAddedFreightDetails(int id)
         {
             string response = null;
             var addedFreightFromReq = Request.Form.ToList();
@@ -635,7 +635,7 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpDelete]
+        [HttpDelete("id")]
         [Route("/DeleteAddedFreightRecord")]
         public async Task<IActionResult> DeleteAddedFreightRecord(int id)
         {

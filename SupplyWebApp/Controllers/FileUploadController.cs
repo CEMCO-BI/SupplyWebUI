@@ -479,7 +479,7 @@ namespace SupplyWebApp.Controllers
             try
             {
                 AddedFreight addedFreight = new AddedFreight();
-                addedFreight = _dataContext.AddedFreight.Find(Convert.ToInt32(addedFreightFromReq[0].Value));
+                addedFreight = _dataContext.AddedFreight.Find(Convert.ToInt32(id));
                 if (addedFreight != null)
                 {
                     addedFreight.POLocationId = Convert.ToInt32(addedFreightFromReq[1].Value);

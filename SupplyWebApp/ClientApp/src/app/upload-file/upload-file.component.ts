@@ -1172,31 +1172,47 @@ export class UploadFileComponent implements OnInit {
   checkFileValidation(): boolean {
     let isValidFile: boolean
     //the '' column is to differentiate the salesforecast and the plannedbuy
-    let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount',''], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount','CWT']];
+    let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount'], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount','CWT']];
 
     if (this.typeOfFile == GlobalConstants.F_01) { // no role of the 5th column in salesforecast.
-      for (var i = 0; i < 4; i++) {
-        if (this.header[0][i] == fileColumnHeader[0][i])
-          isValidFile = true;
-        else
-          isValidFile = false
+      if (this.header[0].length.valueOf() == 4) {
+        for (var i = 0; i < 4; i++) {
+          if (this.header[0][i] == fileColumnHeader[0][i])
+            isValidFile = true;
+          else
+            isValidFile = false
+        }
       }
+      else {
+        isValidFile = false;
+      }
+      
     }
     else if (this.typeOfFile == GlobalConstants.F_02) {
-      for (var i = 0; i < 5; i++) {
-        if (this.header[0][i] == fileColumnHeader[1][i])
-          isValidFile = true;
-        else
-          isValidFile = false
+      if (this.header[0].length.valueOf() == 6) {
+        for (var i = 0; i < 6; i++) {
+          if (this.header[0][i] == fileColumnHeader[1][i])
+            isValidFile = true;
+          else
+            isValidFile = false
+          }
+        }
+      else {
+        isValidFile = false;
       }
     }
-    else if (this.typeOfFile == GlobalConstants.F_03) {
-      for (var i = 0; i < 5; i++) {
-        if (this.header[0][i] == fileColumnHeader[2][i])
-          isValidFile = true;
-        else
-          isValidFile = false
-      }
+      else if (this.typeOfFile == GlobalConstants.F_03) {
+        if (this.header[0].length.valueOf() == 5) {
+        for (var i = 0; i < 5; i++) {
+          if (this.header[0][i] == fileColumnHeader[2][i])
+            isValidFile = true;
+          else
+            isValidFile = false
+            }
+          }
+        else {
+          isValidFile = false;
+        }
     }
     return isValidFile;
   }

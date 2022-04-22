@@ -635,14 +635,16 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("/DeleteAddedFreightRecord")]
-        public async Task<IActionResult> DeleteAddedFreightRecord(int id)
+        public async Task<IActionResult> DeleteAddedFreightRecord()
         {
             string response = null;
             try
             {
-                AddedFreight addedFreight = _dataContext.AddedFreight.Find(id);
+                var addedFreightFromReq = Request.Form.ToList();
+
+                AddedFreight addedFreight = _dataContext.AddedFreight.Find(Convert.ToInt32(addedFreightFromReq[0].Value));
                 _dataContext.AddedFreight.Remove(addedFreight);
                 int result = await _dataContext.SaveChangesAsync();
                 if (result > 0)

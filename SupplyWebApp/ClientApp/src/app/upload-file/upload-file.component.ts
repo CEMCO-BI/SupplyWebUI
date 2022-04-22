@@ -493,14 +493,15 @@ export class UploadFileComponent implements OnInit {
   }
 
   DeleteAddedFreightRecord() {
-    debugger;
     var selectedRow = this.addedFreightgridApi.getSelectedRows();
     if (selectedRow.length == 0) {
       this.toastr.error("error", "Please select a Record for deletion");
       return;
     }
-    console.log('id'+ selectedRow[0].id);
-    const req = new HttpRequest('DELETE', './DeleteAddedFreightRecord?id=' + selectedRow[0].id);
+    const formData = new FormData();
+    formData.append('id', selectedRow[0].id);
+    const req = new HttpRequest('POST', './DeleteAddedFreightRecord', formData);
+
     
     this.toastr.info("Please wait while removing your data.", " Deletion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 

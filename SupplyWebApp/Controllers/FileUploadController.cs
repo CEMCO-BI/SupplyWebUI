@@ -466,9 +466,9 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [Route("/UpdateAddedFreightDetails")]
-        public async Task<IActionResult> UpdateAddedFreightDetails(int id)
+        public async Task<IActionResult> UpdateAddedFreightDetails()
         {
             string response = null;
             var addedFreightFromReq = Request.Form.ToList();
@@ -479,7 +479,7 @@ namespace SupplyWebApp.Controllers
             try
             {
                 AddedFreight addedFreight = new AddedFreight();
-                addedFreight = _dataContext.AddedFreight.Find(Convert.ToInt32(id));
+                addedFreight = _dataContext.AddedFreight.Find(addedFreightFromReq[0].Value);
                 if (addedFreight != null)
                 {
                     addedFreight.POLocationId = Convert.ToInt32(addedFreightFromReq[1].Value);
@@ -635,7 +635,7 @@ namespace SupplyWebApp.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("id")]
+        [HttpDelete]
         [Route("/DeleteAddedFreightRecord")]
         public async Task<IActionResult> DeleteAddedFreightRecord(int id)
         {

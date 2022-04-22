@@ -468,7 +468,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('cwt', row[0].cwt);
       formData.append('truckLoad', row[0].truckLoad);
 
-      const req = new HttpRequest('PUT', this.baseUrl + 'UpdateAddedFreightDetails?id=' + row[0].id, formData);
+      const req = new HttpRequest('PUT', this.baseUrl + 'UpdateAddedFreightDetails', formData);
       console.log(req)
       this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
 

@@ -291,11 +291,7 @@ export class UploadFileComponent implements OnInit {
     )
   }
 
-  cwtFormatter(currency, sign) {
-  var sansDec = currency.toFixed(2);
-  var formatted = sansDec.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return sign + `${formatted}`;
-  }
+  
 
   //Added Freight
   createAddedFreightColumnDefs() {
@@ -384,7 +380,7 @@ export class UploadFileComponent implements OnInit {
         field: "cwt", headerName: "Added Freight/CWT", width: "140"
         , required: true
         , valueFormatter: params => {
-          return '$' + this.formatTruckLoad(params.data.cwt);
+          return '$' + this.currencyFormatter(params.data.cwt);
         }
         , editable: true
       },
@@ -393,16 +389,15 @@ export class UploadFileComponent implements OnInit {
         , required: true
         , editable: true
         , valueFormatter:  params => {
-          return '$' + this.formatTruckLoad(params.data.truckLoad);
+          return '$' + this.currencyFormatter(params.data.truckLoad);
         }
       }
     ];
   }
 
-  formatTruckLoad(number) {
-    return Math.floor(number).toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  currencyFormatter(number) {
+    return Math.abs(number).toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
-  
 
   getAddedFreightDetails() {
     return this.http.get('./GetAddedFreightsDetails').subscribe(
@@ -577,7 +572,7 @@ export class UploadFileComponent implements OnInit {
       {
         field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true
         , valueFormatter: params => {
-          return '$' + this.formatTruckLoad(params.data.transferCost);
+          return '$' + this.currencyFormatter(params.data.transferCost);
         }
         , required: true
       }

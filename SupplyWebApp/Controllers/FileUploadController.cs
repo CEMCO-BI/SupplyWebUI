@@ -323,7 +323,7 @@ namespace SupplyWebApp.Controllers
                     AddedFreight addedFreight = new AddedFreight();
                     addedFreight.POLocationId = Convert.ToInt32(addedFreightfromRequest[0].Value);
                     addedFreight.POWarehouseId = Convert.ToInt32(addedFreightfromRequest[1].Value);
-                    addedFreight.POCarrierId = Convert.ToInt32(addedFreightfromRequest[2].Value);
+                    addedFreight.POCarrierId = addedFreightfromRequest[2].Value == "" ? 0 : Convert.ToInt32(addedFreightfromRequest[2].Value);
                     addedFreight.VendorId = Convert.ToInt32(addedFreightfromRequest[3].Value);
                     addedFreight.CWT = Convert.ToDouble(addedFreightfromRequest[4].Value);
                     addedFreight.TruckLoad = addedFreightfromRequest[5].Value;

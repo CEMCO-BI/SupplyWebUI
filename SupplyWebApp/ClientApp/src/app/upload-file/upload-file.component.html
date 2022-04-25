@@ -69,7 +69,7 @@
 
                     <button class="btn btn-sm btn-danger mr-2" (click)="DeleteAddedFreightRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-primary mr-2" (click)="SaveAddedFreightRecord()">Save</button>
+                    <button [disabled] ="disabledSaveAddedFreight" class="btn btn-sm btn-primary mr-2" (click)="SaveAddedFreightRecord()">Save</button>
 
                   </div>
                 </div><br/>
@@ -94,7 +94,7 @@
 
                     <button class="btn btn-sm btn-danger mr-2" (click)="DeleteTransferFreightRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-primary mr-2" (click)="SaveTransferFreightRecord()">Save</button>
+                    <button [disabled] ="disabledSaveTransferFreight" class="btn btn-sm btn-primary mr-2" (click)="SaveTransferFreightRecord()">Save</button>
                   </div>
                 </div><br />
                 <ag-grid-angular #transferFreightGrid
@@ -120,7 +120,7 @@
 
                     <button class="btn btn-sm btn-danger mr-2" (click)="DeleteClassCodeMgtRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-primary mr-2" (click)="SaveClassCodeMgtRecord()">Save</button>
+                    <button [disabled] ="disabledSaveClassCodeMgt" class="btn btn-sm btn-primary mr-2" (click)="SaveClassCodeMgtRecord()">Save</button>
                   </div>
                 </div><br/>
                 <ag-grid-angular #classCodeManagementGrid
@@ -144,7 +144,7 @@
 
                     <button class="btn btn-sm btn-danger mr-2" (click)="DeleteDisplayMonthsRecord()">Delete</button>
 
-                    <button class="btn btn-sm btn-primary mr-2" (click)="SaveDisplayMonthsRecord()">Save</button>
+                    <button [disabled] ="disabledSaveDisplayMonths" class="btn btn-sm btn-primary mr-2" (click)="SaveDisplayMonthsRecord()">Save</button>
                   </div>
                 </div><br/>
                 <ag-grid-angular #displayMonthsGrid

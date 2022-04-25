@@ -7,6 +7,8 @@ import { GlobalConstants } from '../common/global-constant';
 import { ActivatedRoute } from '@angular/router';
 import { UploadService } from '../service/upload.service';
 import { AgGridAngular } from 'ag-grid-angular';
+import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor';
+import 'ag-grid-autocomplete-editor/dist/main.css';
 
 @Component({
   selector: 'app-upload-file',
@@ -41,6 +43,10 @@ export class UploadFileComponent implements OnInit {
   from: string = null;
   selectedFile: any;
   isNewRowAdded: boolean = false;
+  disabledSaveAddedFreight: boolean = true;
+  disabledSaveTransferFreight: boolean = true;
+  disabledSaveClassCodeMgt: boolean = true;
+  disabledSaveDisplayMonths: boolean = true;
 
   //Margin Tables constants
   addedFreightrowData: any;
@@ -305,9 +311,6 @@ export class UploadFileComponent implements OnInit {
       },
       {
         field: "poWarehouseId", headerName: "PO Warehouse", width: "110", editable: true, cellEditor: 'agSelectCellEditor',
-        //cellEditorParams: {
-        //  values: this.extractValues(this.warehouse),
-        //}
         cellEditorParams: (params) => {
           var selectedLocationId = params.data.poLocationId;
           if (selectedLocationId == 1) {
@@ -350,16 +353,36 @@ export class UploadFileComponent implements OnInit {
         , refData: this.vendor
         , required: true //TODO:type ahead search
       },
+      //{
+      //  field: "vendorId", headerName: "Vendor", width: "125", editable: true, cellEditor: AutocompleteSelectCellEditor,
+      //  //cellEditorParams: {
+      //  //  values: this.extractValues(this.vendor),
+      //  //}
+      //  cellEditorParams: {
+      //    selectData: [
+      //      { value: '-1', label: 'All' },
+      //      { value: '-2', label: 'All Import' },
+      //      { value: '40', label: 'CSI' },
+      //    ]
+      //    //values: this.extractValues(this.vendor)
+      //    ,placeholder: 'Select vendor',
+      //    autocomplete: {
+      //      strict: false,
+      //      autoselectfirst: false,
+      //    }
+      //  }
+      //  //, refData: this.vendor
+      //  ,valueFormatter: (params) => {
+      //    if (params.value) {
+      //      return params.value.value || params.value.label || params.value;
+      //    }
+      //    return "";
+      //  }
+      //  , required: true
+      //},
       {
         field: "cwt", headerName: "Added Freight/CWT", width: "140"
         , required: true
-        //, valueFormatter: params => this.cwtFormatter(params.data.cwt, '$')
-        //, valueFormatter: (params) => {
-        //  if (params.data.cwt) {
-        //    return this.cwtFormatter(params.data.cwt, '$');
-        //  }
-        //  return "";
-        //}
         , valueFormatter: params => {
           return '$' + this.formatTruckLoad(params.data.cwt);
         }
@@ -368,12 +391,6 @@ export class UploadFileComponent implements OnInit {
       {
         field: "truckLoad", headerName: "$/Truckload", width: "100"
         , required: true
-        //, valueFormatter: (params) => {
-        //  if (params.data.truckLoad) {
-        //    return '$' + this.formatTruckLoad(params.data.truckLoad);
-        //  }
-        //  return "";
-        //}
         , editable: true
         , valueFormatter:  params => {
           return '$' + this.formatTruckLoad(params.data.truckLoad);
@@ -401,6 +418,7 @@ export class UploadFileComponent implements OnInit {
       addIndex: 0
     });
     this.isNewRowAdded = true;
+    this.disabledSaveAddedFreight = false;
   }
 
   //DeleteAddedFreightRecord() {
@@ -415,7 +433,7 @@ export class UploadFileComponent implements OnInit {
 
   onAddedFreightCellValueChanged(event) {
     event.data.modified = true;
-    console.log(event)
+    this.disabledSaveAddedFreight = false;
   }
 
   SaveAddedFreightRecord() {
@@ -454,6 +472,7 @@ export class UploadFileComponent implements OnInit {
         }
       });
       this.isNewRowAdded = false;
+      this.disabledSaveAddedFreight = true;
     }
     else {
       
@@ -491,8 +510,8 @@ export class UploadFileComponent implements OnInit {
           }
         }
       });
+      this.disabledSaveAddedFreight = true;
     }
-    
   }
 
   DeleteAddedFreightRecord() {
@@ -580,6 +599,8 @@ export class UploadFileComponent implements OnInit {
       addIndex: 0
     });
     this.isNewRowAdded = true;
+    this.disabledSaveTransferFreight = false;
+
   }
 
   DeleteTransferFreightRecord() {
@@ -624,6 +645,8 @@ export class UploadFileComponent implements OnInit {
 
   onTransferFreightCellValueChanged(event) {
     event.data.modified = true;
+    this.disabledSaveTransferFreight = false;
+
   }
 
   SaveTransferFreightRecord() {
@@ -658,6 +681,7 @@ export class UploadFileComponent implements OnInit {
         }
       });
       this.isNewRowAdded = false;
+      this.disabledSaveTransferFreight = true;
     }
     else {
       
@@ -693,6 +717,7 @@ export class UploadFileComponent implements OnInit {
           }
         }
       });
+      this.disabledSaveTransferFreight = true;
     }
   }
 
@@ -751,6 +776,8 @@ export class UploadFileComponent implements OnInit {
       addIndex: 0
     });
     this.isNewRowAdded = true;
+    this.disabledSaveClassCodeMgt = false;
+
   }
 
   DeleteClassCodeMgtRecord() {
@@ -794,6 +821,8 @@ export class UploadFileComponent implements OnInit {
 
   onClassCodeMgtCellValueChanged(event) {
     event.data.modified = true;
+    this.disabledSaveClassCodeMgt = false;
+
   }
 
   SaveClassCodeMgtRecord() {
@@ -830,6 +859,7 @@ export class UploadFileComponent implements OnInit {
         }
       });
       this.isNewRowAdded = false;
+      this.disabledSaveClassCodeMgt = true;
     }
     else {
       
@@ -865,6 +895,7 @@ export class UploadFileComponent implements OnInit {
           }
         }
       });
+      this.disabledSaveClassCodeMgt = true;
     }
   }
 
@@ -915,6 +946,8 @@ export class UploadFileComponent implements OnInit {
       addIndex: 0
     });
     this.isNewRowAdded = true;
+    this.disabledSaveDisplayMonths = false;
+
   }
 
   DeleteDisplayMonthsRecord() {
@@ -957,6 +990,8 @@ export class UploadFileComponent implements OnInit {
 
   onDisplayMonthCellValueChanged(event) {
     event.data.modified = true;
+    this.disabledSaveDisplayMonths = false;
+
   }
 
   SaveDisplayMonthsRecord() {
@@ -992,6 +1027,7 @@ export class UploadFileComponent implements OnInit {
         }
       });
       this.isNewRowAdded = false;
+      this.disabledSaveDisplayMonths = true;
     }
     else {
       
@@ -1027,6 +1063,7 @@ export class UploadFileComponent implements OnInit {
           }
         }
       });
+      this.disabledSaveDisplayMonths = true;
     }
   }
 
@@ -1039,6 +1076,9 @@ export class UploadFileComponent implements OnInit {
   }
 
   reset() {
+    if (this.typeOfFile == 'F_04') {
+      return;
+    }
     // We will clear the value of the input 
     // field using the reference variable.
     document.getElementById("btnUpload").blur();

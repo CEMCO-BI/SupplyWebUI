@@ -424,11 +424,16 @@ export class UploadFileComponent implements OnInit {
   onAddedFreightGridReady(params) {
     this.addedFreightgridApi = params.api;
     this.addedFreightgridColumnApi = params.columnApi;
+
   }
 
   onAddedFreightCellValueChanged(event) {
     event.data.modified = true;
     this.disabledSaveAddedFreight = false;
+  }
+
+  onAddedFreightFocusOut(event) {
+    this.addedFreightgridApi.deselectAll();
   }
 
   SaveAddedFreightRecord() {
@@ -644,6 +649,10 @@ export class UploadFileComponent implements OnInit {
 
   }
 
+  onTransferFreightFocusOut(event) {
+    this.transferFreightgridApi.deselectAll();
+  }
+
   SaveTransferFreightRecord() {
     if (this.isNewRowAdded) {
       const allRowData = [];
@@ -820,6 +829,10 @@ export class UploadFileComponent implements OnInit {
 
   }
 
+  onClassCodeMgtFocusOut(event) {
+    this.classCodeManagementgridApi.deselectAll();
+  }
+
   SaveClassCodeMgtRecord() {
     if (this.isNewRowAdded) {
       const allRowData = [];
@@ -987,6 +1000,10 @@ export class UploadFileComponent implements OnInit {
     event.data.modified = true;
     this.disabledSaveDisplayMonths = false;
 
+  }
+
+  onDisplayMonthFocusOut(event) {
+    this.displayMonthsgridApi.deselectAll();
   }
 
   SaveDisplayMonthsRecord() {

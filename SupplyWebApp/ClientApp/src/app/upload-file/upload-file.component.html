@@ -80,7 +80,8 @@
                                  [rowData]="addedFreightrowData"
                                  rowSelection="single"
                                  (gridReady)="onAddedFreightGridReady($event)"
-                                 (cellValueChanged)="onAddedFreightCellValueChanged($event)">
+                                 (cellValueChanged)="onAddedFreightCellValueChanged($event)"
+                                 (focusout)="onAddedFreightFocusOut($event)">
                 </ag-grid-angular>
               </td>
               <td class="col-md-8">
@@ -104,7 +105,8 @@
                                  [rowData]="transferFreightrowData"
                                  rowSelection="single"
                                  (gridReady)="onTransferFreightGridReady($event)"
-                                 (cellValueChanged)="onTransferFreightCellValueChanged($event)">
+                                 (cellValueChanged)="onTransferFreightCellValueChanged($event)"
+                                 (focusout)="onTransferFreightFocusOut($event)">
                 </ag-grid-angular>
               </td>
             </tr>
@@ -130,7 +132,8 @@
                                  [rowData]="classCodeManagementrowData"
                                  rowSelection="single"
                                  (gridReady)="onClassCodeMgtGridReady($event)"
-                                 (cellValueChanged)="onClassCodeMgtCellValueChanged($event)">
+                                 (cellValueChanged)="onClassCodeMgtCellValueChanged($event)"
+                                 (focusout)="onClassCodeMgtFocusOut($event)">
                 </ag-grid-angular>
               </td>
               <td class="col-md-8">
@@ -154,7 +157,8 @@
                                  [rowData]="displayMonthsrowData"
                                  rowSelection="single"
                                  (gridReady)="onDisplayMonthsGridReady($event)"
-                                 (cellValueChanged)="onDisplayMonthCellValueChanged($event)">
+                                 (cellValueChanged)="onDisplayMonthCellValueChanged($event)"
+                                 (focusout)="onDisplayMonthFocusOut($event)">
                 </ag-grid-angular>
               </td>
             </tr>

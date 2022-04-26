@@ -291,11 +291,7 @@ export class UploadFileComponent implements OnInit {
     )
   }
 
-  cwtFormatter(currency, sign) {
-  var sansDec = currency.toFixed(2);
-  var formatted = sansDec.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return sign + `${formatted}`;
-  }
+  
 
   //Added Freight
   createAddedFreightColumnDefs() {
@@ -328,10 +324,13 @@ export class UploadFileComponent implements OnInit {
               values: this.extractValues(this.warehouseDEN)
             };
           }
-          else {
+          else if (selectedLocationId == 73) {
             return {
               values: this.extractValues(this.warehouseFTW)
             };
+          }
+          else{
+            this.toastr.error("error", "Please select desired PO Location first");
           }
         }
         , refData: this.warehouse
@@ -384,7 +383,7 @@ export class UploadFileComponent implements OnInit {
         field: "cwt", headerName: "Added Freight/CWT", width: "140"
         , required: true
         , valueFormatter: params => {
-          return '$' + this.formatTruckLoad(params.data.cwt);
+          return '$' + this.currencyFormatter(params.data.cwt);
         }
         , editable: true
       },
@@ -393,16 +392,15 @@ export class UploadFileComponent implements OnInit {
         , required: true
         , editable: true
         , valueFormatter:  params => {
-          return '$' + this.formatTruckLoad(params.data.truckLoad);
+          return '$' + this.currencyFormatter(params.data.truckLoad);
         }
       }
     ];
   }
 
-  formatTruckLoad(number) {
-    return Math.floor(number).toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  currencyFormatter(number) {
+    return Math.abs(number).toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   }
-  
 
   getAddedFreightDetails() {
     return this.http.get('./GetAddedFreightsDetails').subscribe(
@@ -429,11 +427,16 @@ export class UploadFileComponent implements OnInit {
   onAddedFreightGridReady(params) {
     this.addedFreightgridApi = params.api;
     this.addedFreightgridColumnApi = params.columnApi;
+
   }
 
   onAddedFreightCellValueChanged(event) {
     event.data.modified = true;
     this.disabledSaveAddedFreight = false;
+  }
+
+  onAddedFreightFocusOut(event) {
+    this.addedFreightgridApi.deselectAll();
   }
 
   SaveAddedFreightRecord() {
@@ -577,7 +580,7 @@ export class UploadFileComponent implements OnInit {
       {
         field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true
         , valueFormatter: params => {
-          return '$' + this.formatTruckLoad(params.data.transferCost);
+          return '$' + this.currencyFormatter(params.data.transferCost);
         }
         , required: true
       }
@@ -647,6 +650,10 @@ export class UploadFileComponent implements OnInit {
     event.data.modified = true;
     this.disabledSaveTransferFreight = false;
 
+  }
+
+  onTransferFreightFocusOut(event) {
+    this.transferFreightgridApi.deselectAll();
   }
 
   SaveTransferFreightRecord() {
@@ -825,6 +832,10 @@ export class UploadFileComponent implements OnInit {
 
   }
 
+  onClassCodeMgtFocusOut(event) {
+    this.classCodeManagementgridApi.deselectAll();
+  }
+
   SaveClassCodeMgtRecord() {
     if (this.isNewRowAdded) {
       const allRowData = [];
@@ -992,6 +1003,10 @@ export class UploadFileComponent implements OnInit {
     event.data.modified = true;
     this.disabledSaveDisplayMonths = false;
 
+  }
+
+  onDisplayMonthFocusOut(event) {
+    this.displayMonthsgridApi.deselectAll();
   }
 
   SaveDisplayMonthsRecord() {

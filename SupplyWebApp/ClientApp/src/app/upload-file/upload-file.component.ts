@@ -324,10 +324,13 @@ export class UploadFileComponent implements OnInit {
               values: this.extractValues(this.warehouseDEN)
             };
           }
-          else {
+          else if (selectedLocationId == 73) {
             return {
               values: this.extractValues(this.warehouseFTW)
             };
+          }
+          else{
+            this.toastr.error("error", "Please select desired PO Location first");
           }
         }
         , refData: this.warehouse

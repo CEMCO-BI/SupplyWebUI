@@ -439,82 +439,141 @@ export class UploadFileComponent implements OnInit {
     this.addedFreightgridApi.deselectAll();
   }
 
-  SaveAddedFreightRecord() {
-    if (this.isNewRowAdded) {
-      const allRowData = [];
-      this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
-
-      const modifiedRows = allRowData.filter(row => row['modified']);
-
-      const formData = new FormData();
-
-      formData.append('poLocationId', modifiedRows[0].poLocationId);
-      formData.append('poWarehouseId', modifiedRows[0].poWarehouseId);
-      formData.append('poCarrierId', modifiedRows[0].poCarrierId);
-      formData.append('vendorId', modifiedRows[0].vendorId);
-      formData.append('cwt', modifiedRows[0].cwt);
-      formData.append('truckLoad', modifiedRows[0].truckLoad);
-
-      // passing the params to server
-      const uploadReq = new HttpRequest('POST', './PostAddedFreightsDetails', formData);
-      this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
-
-      this.http.request(uploadReq).subscribe(event => {
-        console.log(event);
-        if (event instanceof HttpResponse) {
-          var response = event.body;
-
-          if (response['Successful']) {
-            this.toastr.clear();
-            this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-            this.reset();
-          } else { //if there are errors   
-            this.toastr.clear();
-            this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
-          }
+  checkWarehouseValidation() {
+    const allRowData = [];
+    this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
+    const modifiedRow = allRowData.filter(row => row['modified']);
+    var selectedLocationId = modifiedRow[0].poLocationId;
+    var selectedWarehouseId = modifiedRow[0].poWarehouseId;
+    if (selectedLocationId == 1) {
+      var warehouseINDList = this.extractValues(this.warehouseIND);
+      for (var i = 0; i < warehouseINDList.length; i++) {
+        if (warehouseINDList[i].valueOf() == selectedWarehouseId) {
+          return true;
         }
-      });
-      this.isNewRowAdded = false;
-      this.disabledSaveAddedFreight = true;
+        else {
+          return false;
+        }
+      }
+    }
+    else if (selectedLocationId == 2) {
+      var warehousePITList = this.extractValues(this.warehousePIT);
+      for (var i = 0; i < warehousePITList.length; i++) {
+        if (warehousePITList[i].valueOf() == selectedWarehouseId) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+    }
+    else if (selectedLocationId == 33) {
+      var warehouseDENList = this.extractValues(this.warehouseDEN);
+      for (var i = 0; i < warehouseDENList.length; i++) {
+        if (warehouseDENList[i].valueOf() == selectedWarehouseId) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+    }
+    else if (selectedLocationId == 73) {
+      var warehouseFTWList = this.extractValues(this.warehouseFTW);
+      for (var i = 0; i < warehouseFTWList.length; i++) {
+        if (warehouseFTWList[i].valueOf() == selectedWarehouseId) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+    }
+  }
+
+  SaveAddedFreightRecord() {
+    var isValidWarehouseLocationCombo = this.checkWarehouseValidation();
+    if (isValidWarehouseLocationCombo) {
+      if (this.isNewRowAdded) {
+        const allRowData = [];
+        this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
+
+        const modifiedRows = allRowData.filter(row => row['modified']);
+
+        const formData = new FormData();
+
+        formData.append('poLocationId', modifiedRows[0].poLocationId);
+        formData.append('poWarehouseId', modifiedRows[0].poWarehouseId);
+        formData.append('poCarrierId', modifiedRows[0].poCarrierId);
+        formData.append('vendorId', modifiedRows[0].vendorId);
+        formData.append('cwt', modifiedRows[0].cwt);
+        formData.append('truckLoad', modifiedRows[0].truckLoad);
+
+        // passing the params to server
+        const uploadReq = new HttpRequest('POST', './PostAddedFreightsDetails', formData);
+        this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+
+        this.http.request(uploadReq).subscribe(event => {
+          console.log(event);
+          if (event instanceof HttpResponse) {
+            var response = event.body;
+
+            if (response['Successful']) {
+              this.toastr.clear();
+              this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+              this.reset();
+            } else { //if there are errors   
+              this.toastr.clear();
+              this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+            }
+          }
+        });
+        this.isNewRowAdded = false;
+        this.disabledSaveAddedFreight = true;
+      }
+      else {
+
+        if (this.addedFreightgridApi.getSelectedRows().length == 0) {
+          this.toastr.error("error", "Please select Record for update");
+          return;
+        }
+        var row = this.addedFreightgridApi.getSelectedRows();
+        console.log(row);
+        const formData = new FormData();
+        formData.append('id', row[0].id);
+        formData.append('poLocationId', row[0].poLocationId);
+        formData.append('poWarehouseId', row[0].poWarehouseId);
+        formData.append('poCarrierId', row[0].poCarrierId);
+        formData.append('vendorId', row[0].vendorId);
+        formData.append('cwt', row[0].cwt);
+        formData.append('truckLoad', row[0].truckLoad);
+
+        const req = new HttpRequest('POST', './UpdateAddedFreightDetails', formData);
+
+        this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+
+        this.http.request(req).subscribe(event => {
+          console.log(event);
+          if (event instanceof HttpResponse) {
+            var response = event.body;
+
+            if (response['Successful']) {
+              this.toastr.clear();
+              this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+              this.reset();
+            } else { //if there are errors   
+              this.toastr.clear();
+              this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
+            }
+          }
+        });
+        this.disabledSaveAddedFreight = true;
+      }
     }
     else {
-      
-      if (this.addedFreightgridApi.getSelectedRows().length == 0) {
-        this.toastr.error("error", "Please select Record for update");
-        return;
-      }
-      var row = this.addedFreightgridApi.getSelectedRows();
-      console.log(row);
-      const formData = new FormData();
-      formData.append('id', row[0].id);
-      formData.append('poLocationId', row[0].poLocationId);
-      formData.append('poWarehouseId', row[0].poWarehouseId);
-      formData.append('poCarrierId', row[0].poCarrierId);
-      formData.append('vendorId', row[0].vendorId);
-      formData.append('cwt', row[0].cwt);
-      formData.append('truckLoad', row[0].truckLoad);
-
-      const req = new HttpRequest('POST', './UpdateAddedFreightDetails', formData);
-
-      this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
-
-      this.http.request(req).subscribe(event => {
-        console.log(event);
-        if (event instanceof HttpResponse) {
-          var response = event.body;
-
-          if (response['Successful']) {
-            this.toastr.clear();
-            this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-            this.reset();
-          } else { //if there are errors   
-            this.toastr.clear();
-            this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
-          }
-        }
-      });
-      this.disabledSaveAddedFreight = true;
+      this.toastr.error("error", "Please select desired PO Warehouse for selected PO Location");
     }
+    
   }
 
   DeleteAddedFreightRecord() {

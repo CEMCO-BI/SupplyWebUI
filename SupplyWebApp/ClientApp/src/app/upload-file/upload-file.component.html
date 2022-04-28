@@ -81,6 +81,8 @@
                                  rowSelection="single"
                                  (gridReady)="onAddedFreightGridReady($event)"
                                  (cellValueChanged)="onAddedFreightCellValueChanged($event)"
+                                 [frameworkComponents]="frameworkComponents"
+                                 (cellEditingStopped)="cellEditingStopped($event)"
                                  >
                 </ag-grid-angular>
               </td>

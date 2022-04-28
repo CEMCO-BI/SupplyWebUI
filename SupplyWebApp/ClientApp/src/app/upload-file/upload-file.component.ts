@@ -9,6 +9,7 @@ import { UploadService } from '../service/upload.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor';
 import 'ag-grid-autocomplete-editor/dist/main.css';
+import { AutoCompleteComponent } from '../shared/auto-complete.component'
 
 @Component({
   selector: 'app-upload-file',
@@ -62,6 +63,7 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('transferFreightGrid', { static: false }) transferFreightGrid: AgGridAngular;
   @ViewChild('classCodeManagementGrid', { static: false }) classCodeManagementGrid: AgGridAngular;
   @ViewChild('displayMonthsGrid', { static: false }) displayMonthsGrid: AgGridAngular;
+  private frameworkComponents;
   private addedFreightgridApi;
   private addedFreightgridColumnApi;
   private transferFreightgridApi;
@@ -77,7 +79,8 @@ export class UploadFileComponent implements OnInit {
   private warehouseDEN: object = {};
   private warehouseFTW: object = {};
   private carrier: object = {};
-  private vendor: object = {};
+  private vendorObj: object = {};
+  private vendor: any = [];
   private productCode: object = {};
   private classCode: object = {};
   active = {
@@ -90,6 +93,9 @@ export class UploadFileComponent implements OnInit {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
+    this.frameworkComponents = {
+      autoComplete: AutoCompleteComponent,
+    };
     this.getLocations();
     this.getAllWarehouse();
     this.getINDWarehouse();
@@ -256,6 +262,11 @@ export class UploadFileComponent implements OnInit {
           return acc;
         }, {});
         this.vendor = obj;
+        let op = Object.entries(obj)
+          .map(([value, label]) => ({ value, label }))
+        this.vendorObj = op;
+
+        console.log(this.vendorObj)
         this.ngOnInit();
       }
     )
@@ -291,7 +302,16 @@ export class UploadFileComponent implements OnInit {
     )
   }
 
-  
+  cellEditingStopped(event) {
+    this.addedFreightgridApi.setFocusedCell(event.rowIndex, event.colDef.field);
+  }
+
+  selectData = [
+    { vendorId: 1, label: "C.S.I." },
+    { vendorId: 2, label: "All" },
+    { vendorId: 3, label: "All Import" },
+    { vendorId: 4, label: "yolo" }
+  ];
 
   //Added Freight
   createAddedFreightColumnDefs() {
@@ -344,42 +364,54 @@ export class UploadFileComponent implements OnInit {
         , refData: this.carrier
         , required: true
       },
-      {
-        field: "vendorId", headerName: "Vendor", width: "125", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.vendor),
-        }
-        , refData: this.vendor
-        , required: true //TODO:type ahead search
-      },
       //{
-      //  field: "vendorId", headerName: "Vendor", width: "125", editable: true, cellEditor: AutocompleteSelectCellEditor,
-      //  //cellEditorParams: {
-      //  //  values: this.extractValues(this.vendor),
-      //  //}
+      //  field: "vendorId", headerName: "Vendor", width: "125", editable: true, cellEditor: 'agSelectCellEditor'
+      //  ,cellEditorParams: {
+      //    values: this.extractValues(this.vendor),
+      //  }
+      //  , refData: this.vendor
+      //  , required: true //TODO:type ahead search
+      //}
+
+      //{
+      //  headerName: 'Vendor', field: 'vendorId', width: "125", editable: true,
+      //  cellEditor: AutocompleteSelectCellEditor,
       //  cellEditorParams: {
-      //    selectData: [
-      //      { value: '-1', label: 'All' },
-      //      { value: '-2', label: 'All Import' },
-      //      { value: '40', label: 'CSI' },
-      //    ]
-      //    //values: this.extractValues(this.vendor)
-      //    ,placeholder: 'Select vendor',
-      //    autocomplete: {
-      //      strict: false,
-      //      autoselectfirst: false,
-      //    }
+      //    propertyRendered: this.vendor,
+      //    returnObject: true,
+      //    rowData: [
+      //      { 'vendorId': 41, 'checkName': 'India' },
+      //      { 'vendorId': 40, 'checkName': 'London' },
+      //      { 'vendorId': 47, 'checkName': 'Berlin' }
+      //      ],
+      //    columnDefs: [
+      //      { headerName: 'Vendor', field: 'vendorId' }]
       //  }
-      //  //, refData: this.vendor
+      //  , refData: this.vendorObj
       //  ,valueFormatter: (params) => {
-      //    if (params.value) {
-      //      return params.value.value || params.value.label || params.value;
-      //    }
+      //    if (params.value) return params.value.checkName;
       //    return "";
-      //  }
-      //  , required: true
+      //  },
       //},
-      {
+      
+      ,{
+        field: "vendorId", headerName: "Vendor", width: "125", cellEditor: AutocompleteSelectCellEditor, required: true
+        , cellEditorParams: {
+          selectData: this.vendorObj
+          , placeholder: 'Select vendor'
+          //, cellRenderer: (params) => { return params.value }
+        }
+        //, refData: this.vendor
+        , cellRenderer: (params) => {
+          if (params.value) {
+            return params.value.label || params.value.value || params.value;
+          }
+          return "";
+        }
+        , editable: true
+      }
+
+      ,{
         field: "cwt", headerName: "Added Freight/CWT", width: "140"
         , required: true
         , valueFormatter: params => {
@@ -505,7 +537,7 @@ export class UploadFileComponent implements OnInit {
         formData.append('poLocationId', modifiedRows[0].poLocationId);
         formData.append('poWarehouseId', modifiedRows[0].poWarehouseId);
         formData.append('poCarrierId', modifiedRows[0].poCarrierId);
-        formData.append('vendorId', modifiedRows[0].vendorId);
+        formData.append('vendorId', modifiedRows[0].vendorId.value);
         formData.append('cwt', modifiedRows[0].cwt);
         formData.append('truckLoad', modifiedRows[0].truckLoad);
 
@@ -544,7 +576,7 @@ export class UploadFileComponent implements OnInit {
         formData.append('poLocationId', row[0].poLocationId);
         formData.append('poWarehouseId', row[0].poWarehouseId);
         formData.append('poCarrierId', row[0].poCarrierId);
-        formData.append('vendorId', row[0].vendorId);
+        formData.append('vendorId', row[0].vendorId.value);
         formData.append('cwt', row[0].cwt);
         formData.append('truckLoad', row[0].truckLoad);
 

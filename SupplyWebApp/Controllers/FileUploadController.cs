@@ -190,10 +190,10 @@ namespace SupplyWebApp.Controllers
 
                 v1.VendorId = -1;
                 v1.CheckName = "All";
-                v1.CompanyId = 0;
+                //v1.CompanyId = 0;
                 v2.VendorId = -2;
                 v2.CheckName = "All Import";
-                v2.CompanyId = 0;
+                //v2.CompanyId = 0;
                 var vendorList = _dataContext.Vendor.ToList();
                 vendorList.Add(v1);
                 vendorList.Add(v2);

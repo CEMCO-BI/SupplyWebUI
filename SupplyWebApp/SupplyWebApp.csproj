@@ -10,6 +10,7 @@
 
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
+      <TypeScriptExperimentalDecorators>true</TypeScriptExperimentalDecorators>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,6 +45,8 @@
     <None Remove="ClientApp\src\app\model\ClassCodeManagement.ts" />
     <None Remove="ClientApp\src\app\model\DisplayMonths.ts" />
     <None Remove="ClientApp\src\app\model\TransferFreight.ts" />
+    <None Remove="ClientApp\src\app\shared\auto-complete.component.ts" />
+    <None Remove="ClientApp\src\app\shared\shared.module.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +54,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\model\ClassCodeManagement.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\model\DisplayMonths.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\model\TransferFreight.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\auto-complete.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\shared.module.ts" />
   </ItemGroup>
 
   <ItemGroup>

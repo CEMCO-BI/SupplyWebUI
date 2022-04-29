@@ -9,7 +9,7 @@ import { UploadService } from '../service/upload.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor';
 import 'ag-grid-autocomplete-editor/dist/main.css';
-import { AutoCompleteComponent } from '../shared/auto-complete.component'
+//import { AutoCompleteComponent } from '../shared/auto-complete.component'
 
 @Component({
   selector: 'app-upload-file',
@@ -93,9 +93,9 @@ export class UploadFileComponent implements OnInit {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
-    this.frameworkComponents = {
-      autoComplete: AutoCompleteComponent,
-    };
+    //this.frameworkComponents = {
+    //  autoComplete: AutoCompleteComponent,
+    //};
     this.getLocations();
     this.getAllWarehouse();
     this.getINDWarehouse();
@@ -265,6 +265,7 @@ export class UploadFileComponent implements OnInit {
         let op = Object.entries(obj)
           .map(([value, label]) => ({ value, label }))
         this.vendorObj = op;
+       // this.vendorObj = parsedArray;
 
         console.log(this.vendorObj)
         this.ngOnInit();
@@ -302,16 +303,16 @@ export class UploadFileComponent implements OnInit {
     )
   }
 
-  cellEditingStopped(event) {
-    this.addedFreightgridApi.setFocusedCell(event.rowIndex, event.colDef.field);
-  }
+  //cellEditingStopped(event) {
+  //  this.addedFreightgridApi.setFocusedCell(event.rowIndex, event.colDef.field);
+  //}
 
-  selectData = [
-    { vendorId: 1, label: "C.S.I." },
-    { vendorId: 2, label: "All" },
-    { vendorId: 3, label: "All Import" },
-    { vendorId: 4, label: "yolo" }
-  ];
+  //selectData = [
+  //  { vendorId: 1, label: "C.S.I." },
+  //  { vendorId: 2, label: "All" },
+  //  { vendorId: 3, label: "All Import" },
+  //  { vendorId: 4, label: "yolo" }
+  //];
 
   //Added Freight
   createAddedFreightColumnDefs() {
@@ -373,42 +374,20 @@ export class UploadFileComponent implements OnInit {
       //  , required: true //TODO:type ahead search
       //}
 
-      //{
-      //  headerName: 'Vendor', field: 'vendorId', width: "125", editable: true,
-      //  cellEditor: AutocompleteSelectCellEditor,
-      //  cellEditorParams: {
-      //    propertyRendered: this.vendor,
-      //    returnObject: true,
-      //    rowData: [
-      //      { 'vendorId': 41, 'checkName': 'India' },
-      //      { 'vendorId': 40, 'checkName': 'London' },
-      //      { 'vendorId': 47, 'checkName': 'Berlin' }
-      //      ],
-      //    columnDefs: [
-      //      { headerName: 'Vendor', field: 'vendorId' }]
-      //  }
-      //  , refData: this.vendorObj
-      //  ,valueFormatter: (params) => {
-      //    if (params.value) return params.value.checkName;
-      //    return "";
-      //  },
-      //},
-      
       ,{
         field: "vendorId", headerName: "Vendor", width: "125", cellEditor: AutocompleteSelectCellEditor, required: true
         , cellEditorParams: {
           selectData: this.vendorObj
           , placeholder: 'Select vendor'
-          //, cellRenderer: (params) => { return params.value }
         }
-        //, refData: this.vendor
-        , cellRenderer: (params) => {
-          if (params.value) {
-            return params.value.label || params.value.value || params.value;
-          }
-          return "";
-        }
-        , editable: true
+        , refData: this.vendor
+        //, cellRenderer: (params) => {
+        //  if (params.value) {
+        //    return params.value.label || params.value.value || params.value;
+        //  }
+        //  return "";
+        //}
+        , editable: true, resizable: true
       }
 
       ,{
@@ -473,6 +452,7 @@ export class UploadFileComponent implements OnInit {
 
   checkWarehouseValidation() {
     const allRowData = [];
+    var isValidWarehouse;
     this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
     const modifiedRow = allRowData.filter(row => row['modified']);
     var selectedLocationId = modifiedRow[0].poLocationId;
@@ -481,10 +461,11 @@ export class UploadFileComponent implements OnInit {
       var warehouseINDList = this.extractValues(this.warehouseIND);
       for (var i = 0; i < warehouseINDList.length; i++) {
         if (warehouseINDList[i].valueOf() == selectedWarehouseId) {
-          return true;
+          isValidWarehouse = true;
+          break;
         }
         else {
-          return false;
+          isValidWarehouse = false;
         }
       }
     }
@@ -492,10 +473,11 @@ export class UploadFileComponent implements OnInit {
       var warehousePITList = this.extractValues(this.warehousePIT);
       for (var i = 0; i < warehousePITList.length; i++) {
         if (warehousePITList[i].valueOf() == selectedWarehouseId) {
-          return true;
+          isValidWarehouse = true;
+          break;
         }
         else {
-          return false;
+          isValidWarehouse = false;
         }
       }
     }
@@ -503,10 +485,11 @@ export class UploadFileComponent implements OnInit {
       var warehouseDENList = this.extractValues(this.warehouseDEN);
       for (var i = 0; i < warehouseDENList.length; i++) {
         if (warehouseDENList[i].valueOf() == selectedWarehouseId) {
-          return true;
+          isValidWarehouse = true;
+          break;
         }
         else {
-          return false;
+          isValidWarehouse = false;
         }
       }
     }
@@ -514,13 +497,15 @@ export class UploadFileComponent implements OnInit {
       var warehouseFTWList = this.extractValues(this.warehouseFTW);
       for (var i = 0; i < warehouseFTWList.length; i++) {
         if (warehouseFTWList[i].valueOf() == selectedWarehouseId) {
-          return true;
+          isValidWarehouse = true;
+          break;
         }
         else {
-          return false;
+          isValidWarehouse = false;
         }
       }
     }
+    return isValidWarehouse;
   }
 
   SaveAddedFreightRecord() {
@@ -576,7 +561,7 @@ export class UploadFileComponent implements OnInit {
         formData.append('poLocationId', row[0].poLocationId);
         formData.append('poWarehouseId', row[0].poWarehouseId);
         formData.append('poCarrierId', row[0].poCarrierId);
-        formData.append('vendorId', row[0].vendorId.value);
+        formData.append('vendorId', row[0].vendorId.value == undefined ? row[0].vendorId : row[0].vendorId.value);
         formData.append('cwt', row[0].cwt);
         formData.append('truckLoad', row[0].truckLoad);
 

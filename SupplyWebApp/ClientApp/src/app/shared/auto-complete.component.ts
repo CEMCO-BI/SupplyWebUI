@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
     style: `position: absolute;
 					left: 0px; 
 					top: 0px;
-					background-color: transparant;
+					background-color: black;
 					`
   },
   template: ` 

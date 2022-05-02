@@ -22,10 +22,10 @@ namespace SupplyWebApp.Models
         public int TransferToId { get; set; }
         public Location LocationTo { get; set; }
 
-        public string? ProductCode { get; set; }
-        //[ForeignKey("Part")]
-        //public int ProductCodeId { get; set; }
-        //public Part Part { get; set; }
+        [ForeignKey("Part")]
+
+        public int ProductCodeId { get; set; }
+        public Part Part { get; set; }
         public double TransferCost { get; set; }
     }
 }

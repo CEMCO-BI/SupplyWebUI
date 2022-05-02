@@ -624,33 +624,33 @@ export class UploadFileComponent implements OnInit {
         , refData: this.locations
         , required: true
       },
+      //{
+      //  field: "productCode", headerName: "Product Code", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      //  cellEditorParams: {
+      //    values: this.extractValues(this.productCode),
+      //  }
+      //  , refData: this.productCode
+      //  , required: true
+      //},//TODO: type ahead search
       {
-        field: "productCode", headerName: "Product Code", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.productCode),
+        field: "productCodeId", headerName: "Product Code", width: "120", cellEditor: AutocompleteSelectCellEditor, required: true
+        , cellEditorParams: {
+          selectData: this.productCode
+          , placeholder: 'Select Product Code'
         }
-        , refData: this.productCode
-        , required: true
-      },//TODO: type ahead search
-      //, {
-      //  field: "productCode", headerName: "Product Code", width: "120", cellEditor: AutocompleteSelectCellEditor, required: true
-      //  , cellEditorParams: {
-      //    selectData: this.productCode
-      //    , placeholder: 'Select Product Code'
-      //  }
-      //  , cellRenderer: (params) => {
-      //    if (this.isNewRowAdded) {
-      //      return params.data.productCode.label;
-      //    }
-      //    else if (params.value.label != undefined) {
-      //      return params.value.label || params.value.value || params.value;
-      //    }
-      //    else {
-      //      return params.data.vendor.checkName;
-      //    }
-      //  }
-      //  , editable: true, resizable: true
-      //}
+        , cellRenderer: (params) => {
+          if (this.isNewRowAdded) {
+            return params.data.productCodeId.label;
+          }
+          else if (params.value.label != undefined) {
+            return params.value.label || params.value.value || params.value;
+          }
+          else {
+            return params.data.part.partNo;
+          }
+        }
+        , editable: true, resizable: true
+      }
       ,{
         field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true
         , valueFormatter: params => {
@@ -672,7 +672,7 @@ export class UploadFileComponent implements OnInit {
 
   AddTransferFreightRecord() {
     this.transferFreightGrid.api.updateRowData({
-      add: [{ transferFromId: '', transferToId: '', productCode: '', transferCost: '' }],
+      add: [{ transferFromId: '', transferToId: '', productCodeId: '', transferCost: '' }],
       addIndex: 0
     });
     this.isNewRowAdded = true;
@@ -739,7 +739,7 @@ export class UploadFileComponent implements OnInit {
 
       formData.append('transferFromId', modifiedRows[0].transferFromId);
       formData.append('transferToId', modifiedRows[0].transferToId);
-      formData.append('productCode', modifiedRows[0].productCode);
+      formData.append('productCodeId', modifiedRows[0].productCodeId.value);
       formData.append('transferCost', modifiedRows[0].transferCost);
 
       // passing the params to server
@@ -776,7 +776,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('id', row[0].id);
       formData.append('transferFromId', row[0].transferFromId);
       formData.append('transferToId', row[0].transferToId);
-      formData.append('productCode', row[0].productCode);
+      formData.append('productCodeId', row[0].productCodeId.value == undefined ? row[0].productCodeId : row[0].productCodeId.value);
       formData.append('transferCost', row[0].transferCost);
 
       const req = new HttpRequest('POST', './UpdateTransferFreightDetails', formData);

@@ -79,10 +79,12 @@ export class UploadFileComponent implements OnInit {
   private warehouseDEN: object = {};
   private warehouseFTW: object = {};
   private carrier: object = {};
-  //private vendorObj: object = {};
+  private vendorRefData: object = {};
   private vendor: any = [];
   private productCode: object = {};
+  private productCodeRefData: object = {};
   private classCode: object = {};
+  private classCodeRefData: object = {};
   active = {
     1: "True",
     0: "False"
@@ -258,7 +260,7 @@ export class UploadFileComponent implements OnInit {
           acc[i.vendorId] = i.checkName;
           return acc;
         }, {});
-        //this.vendor = obj;
+        this.vendorRefData = obj;
         let op = Object.entries(obj)
           .map(([value, label]) => ({ value, label }))
         this.vendor = op;
@@ -276,6 +278,7 @@ export class UploadFileComponent implements OnInit {
           acc[i.partId] = i.partNo;
           return acc;
         }, {});
+        this.productCodeRefData = obj;
         let op = Object.entries(obj)
           .map(([value, label]) => ({ value, label }))
         this.productCode = op;
@@ -293,6 +296,7 @@ export class UploadFileComponent implements OnInit {
           acc[i.classCodeId] = i.code;
           return acc;
         }, {});
+        this.classCodeRefData = obj;
         let op = Object.entries(obj)
           .map(([value, label]) => ({ value, label }))
         this.classCode = op;
@@ -358,6 +362,7 @@ export class UploadFileComponent implements OnInit {
           selectData: this.vendor
           , placeholder: 'Select vendor'
         }
+        , refData: this.vendorRefData
         , cellRenderer: (params) => {
           if (this.isNewRowAdded) {
             return params.data.vendorId.label;
@@ -638,6 +643,7 @@ export class UploadFileComponent implements OnInit {
           selectData: this.productCode
           , placeholder: 'Select Product Code'
         }
+        , refData: this.productCodeRefData
         , cellRenderer: (params) => {
           if (this.isNewRowAdded) {
             return params.data.productCodeId.label;
@@ -820,6 +826,7 @@ export class UploadFileComponent implements OnInit {
           selectData: this.classCode
           , placeholder: 'Select Class Code'
         }
+        , refData: this.classCodeRefData
         , cellRenderer: (params) => {
           if (this.isNewRowAdded) {
             return params.data.classCodeID.label;
@@ -847,6 +854,7 @@ export class UploadFileComponent implements OnInit {
           selectData: this.productCode
           , placeholder: 'Select Product Code'
         }
+        , refData: this.productCodeRefData
         , cellRenderer: (params) => {
           if (this.isNewRowAdded) {
             return params.data.productCodeId.label;

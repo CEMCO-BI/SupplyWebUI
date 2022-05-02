@@ -69,19 +69,19 @@
 
                     <button class="btn btn-sm btn-danger mr-2" (click)="DeleteAddedFreightRecord()">Delete</button>
 
-                    <button [disabled] ="disabledSaveAddedFreight" class="btn btn-sm btn-primary mr-2" (click)="SaveAddedFreightRecord()">Save</button>
+                    <button [disabled]="disabledSaveAddedFreight" class="btn btn-sm btn-primary mr-2" (click)="SaveAddedFreightRecord()">Save</button>
 
                   </div>
-                </div><br/>
+                </div><br />
                 <ag-grid-angular #addedFreightGrid
-                                 style="width: 700px; height: 300px"
-                                 class="ag-theme-balham"
-                                 [columnDefs]="AddedFreightcolumnDefs"
-                                 [rowData]="addedFreightrowData"
-                                 rowSelection="single"
-                                 (gridReady)="onAddedFreightGridReady($event)"
-                                 (cellValueChanged)="onAddedFreightCellValueChanged($event)"
-                                 >
+                   style="width: 700px; height: 300px"
+                   class="ag-theme-balham"
+                   [columnDefs]="AddedFreightcolumnDefs"
+                   [rowData]="addedFreightrowData"
+                   rowSelection="single"
+                   (gridReady)="onAddedFreightGridReady($event)"
+                   (cellValueChanged)="onAddedFreightCellValueChanged($event)"
+                   >
                 </ag-grid-angular>
               </td>
               <td class="col-md-8">

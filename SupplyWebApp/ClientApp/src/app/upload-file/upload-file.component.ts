@@ -9,7 +9,6 @@ import { UploadService } from '../service/upload.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { AutocompleteSelectCellEditor } from 'ag-grid-autocomplete-editor';
 import 'ag-grid-autocomplete-editor/dist/main.css';
-//import { AutoCompleteComponent } from '../shared/auto-complete.component'
 
 @Component({
   selector: 'app-upload-file',
@@ -44,6 +43,7 @@ export class UploadFileComponent implements OnInit {
   from: string = null;
   selectedFile: any;
   isNewRowAdded: boolean = false;
+  isRowEdited: boolean = false;
   disabledSaveAddedFreight: boolean = true;
   disabledSaveTransferFreight: boolean = true;
   disabledSaveClassCodeMgt: boolean = true;
@@ -79,7 +79,7 @@ export class UploadFileComponent implements OnInit {
   private warehouseDEN: object = {};
   private warehouseFTW: object = {};
   private carrier: object = {};
-  private vendorObj: object = {};
+  //private vendorObj: object = {};
   private vendor: any = [];
   private productCode: object = {};
   private classCode: object = {};
@@ -93,9 +93,6 @@ export class UploadFileComponent implements OnInit {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private toastr: ToastrService, private route: ActivatedRoute, private uploadService: UploadService) {
     this.baseUrl = baseUrl;
-    //this.frameworkComponents = {
-    //  autoComplete: AutoCompleteComponent,
-    //};
     this.getLocations();
     this.getAllWarehouse();
     this.getINDWarehouse();
@@ -261,13 +258,10 @@ export class UploadFileComponent implements OnInit {
           acc[i.vendorId] = i.checkName;
           return acc;
         }, {});
-        this.vendor = obj;
+        //this.vendor = obj;
         let op = Object.entries(obj)
           .map(([value, label]) => ({ value, label }))
-        this.vendorObj = op;
-       // this.vendorObj = parsedArray;
-
-        console.log(this.vendorObj)
+        this.vendor = op;
         this.ngOnInit();
       }
     )
@@ -302,17 +296,6 @@ export class UploadFileComponent implements OnInit {
       }
     )
   }
-
-  //cellEditingStopped(event) {
-  //  this.addedFreightgridApi.setFocusedCell(event.rowIndex, event.colDef.field);
-  //}
-
-  //selectData = [
-  //  { vendorId: 1, label: "C.S.I." },
-  //  { vendorId: 2, label: "All" },
-  //  { vendorId: 3, label: "All Import" },
-  //  { vendorId: 4, label: "yolo" }
-  //];
 
   //Added Freight
   createAddedFreightColumnDefs() {
@@ -365,28 +348,23 @@ export class UploadFileComponent implements OnInit {
         , refData: this.carrier
         , required: true
       },
-      //{
-      //  field: "vendorId", headerName: "Vendor", width: "125", editable: true, cellEditor: 'agSelectCellEditor'
-      //  ,cellEditorParams: {
-      //    values: this.extractValues(this.vendor),
-      //  }
-      //  , refData: this.vendor
-      //  , required: true //TODO:type ahead search
-      //}
-
       ,{
         field: "vendorId", headerName: "Vendor", width: "125", cellEditor: AutocompleteSelectCellEditor, required: true
         , cellEditorParams: {
-          selectData: this.vendorObj
+          selectData: this.vendor
           , placeholder: 'Select vendor'
         }
-        , refData: this.vendor
-        //, cellRenderer: (params) => {
-        //  if (params.value) {
-        //    return params.value.label || params.value.value || params.value;
-        //  }
-        //  return "";
-        //}
+        , cellRenderer: (params) => {
+          if (this.isNewRowAdded) {
+            return params.data.vendorId.label;
+          }
+          else if (params.value.label != undefined) {
+            return params.value.label || params.value.value || params.value;
+          }
+          else {
+            return params.data.vendor.checkName;
+          }
+        }
         , editable: true, resizable: true
       }
 
@@ -430,11 +408,6 @@ export class UploadFileComponent implements OnInit {
     this.disabledSaveAddedFreight = false;
   }
 
-  //DeleteAddedFreightRecord() {
-  //  var selectedData = this.addedFreightGrid.api.getSelectedRows();
-  //  this.addedFreightGrid.api.updateRowData({ remove: selectedData });
-  //}
-
   onAddedFreightGridReady(params) {
     this.addedFreightgridApi = params.api;
     this.addedFreightgridColumnApi = params.columnApi;
@@ -444,6 +417,7 @@ export class UploadFileComponent implements OnInit {
   onAddedFreightCellValueChanged(event) {
     event.data.modified = true;
     this.disabledSaveAddedFreight = false;
+    this.isRowEdited = true;
   }
 
   onAddedFreightFocusOut(event) {
@@ -585,6 +559,7 @@ export class UploadFileComponent implements OnInit {
           }
         });
         this.disabledSaveAddedFreight = true;
+        this.isRowEdited = false;
       }
     }
     else {

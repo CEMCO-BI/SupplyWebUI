@@ -276,7 +276,9 @@ export class UploadFileComponent implements OnInit {
           acc[i.partId] = i.partNo;
           return acc;
         }, {});
-        this.productCode = obj;
+        let op = Object.entries(obj)
+          .map(([value, label]) => ({ value, label }))
+        this.productCode = op;
         this.ngOnInit();
       }
     )
@@ -291,7 +293,9 @@ export class UploadFileComponent implements OnInit {
           acc[i.classCodeId] = i.code;
           return acc;
         }, {});
-        this.classCode = obj;
+        let op = Object.entries(obj)
+          .map(([value, label]) => ({ value, label }))
+        this.classCode = op;
         this.ngOnInit();
       }
     )
@@ -347,7 +351,7 @@ export class UploadFileComponent implements OnInit {
         }
         , refData: this.carrier
         , required: true
-      },
+      }
       ,{
         field: "vendorId", headerName: "Vendor", width: "125", cellEditor: AutocompleteSelectCellEditor, required: true
         , cellEditorParams: {
@@ -628,7 +632,26 @@ export class UploadFileComponent implements OnInit {
         , refData: this.productCode
         , required: true
       },//TODO: type ahead search
-      {
+      //, {
+      //  field: "productCode", headerName: "Product Code", width: "120", cellEditor: AutocompleteSelectCellEditor, required: true
+      //  , cellEditorParams: {
+      //    selectData: this.productCode
+      //    , placeholder: 'Select Product Code'
+      //  }
+      //  , cellRenderer: (params) => {
+      //    if (this.isNewRowAdded) {
+      //      return params.data.productCode.label;
+      //    }
+      //    else if (params.value.label != undefined) {
+      //      return params.value.label || params.value.value || params.value;
+      //    }
+      //    else {
+      //      return params.data.vendor.checkName;
+      //    }
+      //  }
+      //  , editable: true, resizable: true
+      //}
+      ,{
         field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true
         , valueFormatter: params => {
           return '$' + this.currencyFormatter(params.data.transferCost);
@@ -783,23 +806,61 @@ export class UploadFileComponent implements OnInit {
   //Class Code Management
   createClassCodeManagementcolumnDefs() {
     this.ClassCodeManagementcolumnDefs = [
+      //{
+      //  field: "classCodeID", headerName: "Class Code", width: "160", editable: true, cellEditor: 'agSelectCellEditor',
+      //  cellEditorParams: {
+      //    values: this.extractValues(this.classCode),
+      //  }
+      //  , refData: this.classCode
+      //  , required: true
+      //}
       {
-        field: "classCodeID", headerName: "Class Code", width: "160", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.classCode),
+        field: "classCodeID", headerName: "Class Code", width: "160", cellEditor: AutocompleteSelectCellEditor, required: true
+        , cellEditorParams: {
+          selectData: this.classCode
+          , placeholder: 'Select Class Code'
         }
-        , refData: this.classCode
-        , required: true
-      },
-      {
-        field: "productCodeId", headerName: "Product Code", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.productCode),
+        , cellRenderer: (params) => {
+          if (this.isNewRowAdded) {
+            return params.data.classCodeID.label;
+          }
+          else if (params.value.label != undefined) {
+            return params.value.label || params.value.value || params.value;
+          }
+          else {
+            return params.data.classCode.code;
+          }
         }
-        , refData: this.productCode
-        , required: true
-      },
-      {
+        , editable: true, resizable: true
+      }
+      //{
+      //  field: "productCodeId", headerName: "Product Code", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+      //  cellEditorParams: {
+      //    values: this.extractValues(this.productCode),
+      //  }
+      //  , refData: this.productCode
+      //  , required: true
+      //},
+      , {
+        field: "productCodeId", headerName: "Product Code", width: "140", cellEditor: AutocompleteSelectCellEditor, required: true
+        , cellEditorParams: {
+          selectData: this.productCode
+          , placeholder: 'Select Product Code'
+        }
+        , cellRenderer: (params) => {
+          if (this.isNewRowAdded) {
+            return params.data.productCodeId.label;
+          }
+          else if (params.value.label != undefined) {
+            return params.value.label || params.value.value || params.value;
+          }
+          else {
+            return params.data.part.partNo;
+          }
+        }
+        , editable: true, resizable: true
+      }
+      ,{
         field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: this.extractValues(this.locations),
@@ -896,8 +957,8 @@ export class UploadFileComponent implements OnInit {
 
       const formData = new FormData();
 
-      formData.append('classCodeID', modifiedRows[0].classCodeID);
-      formData.append('productCodeId', modifiedRows[0].productCodeId);
+      formData.append('classCodeID', modifiedRows[0].classCodeID.value);
+      formData.append('productCodeId', modifiedRows[0].productCodeId.value);
       formData.append('locationId', modifiedRows[0].locationId);
       formData.append('active', modifiedRows[0].active);
 
@@ -933,8 +994,8 @@ export class UploadFileComponent implements OnInit {
       console.log(row);
       const formData = new FormData();
       formData.append('id', row[0].id);
-      formData.append('classCodeID', row[0].classCodeID);
-      formData.append('productCodeId', row[0].productCodeId);
+      formData.append('classCodeID', row[0].classCodeID.value == undefined ? row[0].classCodeID : row[0].classCodeID.value);
+      formData.append('productCodeId', row[0].productCodeId.value == undefined ? row[0].productCodeId : row[0].productCodeId.value);
       formData.append('locationId', row[0].locationId);
       formData.append('active', row[0].active);
 

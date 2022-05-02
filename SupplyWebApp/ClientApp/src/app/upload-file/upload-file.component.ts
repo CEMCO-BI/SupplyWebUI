@@ -43,6 +43,7 @@ export class UploadFileComponent implements OnInit {
   from: string = null;
   selectedFile: any;
   isNewRowAdded: boolean = false;
+  isRowEdited: boolean = false;
   disabledSaveAddedFreight: boolean = true;
   disabledSaveTransferFreight: boolean = true;
   disabledSaveClassCodeMgt: boolean = true;
@@ -62,6 +63,7 @@ export class UploadFileComponent implements OnInit {
   @ViewChild('transferFreightGrid', { static: false }) transferFreightGrid: AgGridAngular;
   @ViewChild('classCodeManagementGrid', { static: false }) classCodeManagementGrid: AgGridAngular;
   @ViewChild('displayMonthsGrid', { static: false }) displayMonthsGrid: AgGridAngular;
+  private frameworkComponents;
   private addedFreightgridApi;
   private addedFreightgridColumnApi;
   private transferFreightgridApi;
@@ -77,9 +79,12 @@ export class UploadFileComponent implements OnInit {
   private warehouseDEN: object = {};
   private warehouseFTW: object = {};
   private carrier: object = {};
-  private vendor: object = {};
+  private vendorRefData: object = {};
+  private vendor: any = [];
   private productCode: object = {};
+  private productCodeRefData: object = {};
   private classCode: object = {};
+  private classCodeRefData: object = {};
   active = {
     1: "True",
     0: "False"
@@ -255,7 +260,10 @@ export class UploadFileComponent implements OnInit {
           acc[i.vendorId] = i.checkName;
           return acc;
         }, {});
-        this.vendor = obj;
+        this.vendorRefData = obj;
+        let op = Object.entries(obj)
+          .map(([value, label]) => ({ value, label }))
+        this.vendor = op;
         this.ngOnInit();
       }
     )
@@ -270,7 +278,10 @@ export class UploadFileComponent implements OnInit {
           acc[i.partId] = i.partNo;
           return acc;
         }, {});
-        this.productCode = obj;
+        this.productCodeRefData = obj;
+        let op = Object.entries(obj)
+          .map(([value, label]) => ({ value, label }))
+        this.productCode = op;
         this.ngOnInit();
       }
     )
@@ -285,13 +296,14 @@ export class UploadFileComponent implements OnInit {
           acc[i.classCodeId] = i.code;
           return acc;
         }, {});
-        this.classCode = obj;
+        this.classCodeRefData = obj;
+        let op = Object.entries(obj)
+          .map(([value, label]) => ({ value, label }))
+        this.classCode = op;
         this.ngOnInit();
       }
     )
   }
-
-  
 
   //Added Freight
   createAddedFreightColumnDefs() {
@@ -343,43 +355,29 @@ export class UploadFileComponent implements OnInit {
         }
         , refData: this.carrier
         , required: true
-      },
-      {
-        field: "vendorId", headerName: "Vendor", width: "125", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.vendor),
+      }
+      ,{
+        field: "vendorId", headerName: "Vendor", width: "125", cellEditor: AutocompleteSelectCellEditor, required: true
+        , cellEditorParams: {
+          selectData: this.vendor
+          , placeholder: 'Select vendor'
         }
-        , refData: this.vendor
-        , required: true //TODO:type ahead search
-      },
-      //{
-      //  field: "vendorId", headerName: "Vendor", width: "125", editable: true, cellEditor: AutocompleteSelectCellEditor,
-      //  //cellEditorParams: {
-      //  //  values: this.extractValues(this.vendor),
-      //  //}
-      //  cellEditorParams: {
-      //    selectData: [
-      //      { value: '-1', label: 'All' },
-      //      { value: '-2', label: 'All Import' },
-      //      { value: '40', label: 'CSI' },
-      //    ]
-      //    //values: this.extractValues(this.vendor)
-      //    ,placeholder: 'Select vendor',
-      //    autocomplete: {
-      //      strict: false,
-      //      autoselectfirst: false,
-      //    }
-      //  }
-      //  //, refData: this.vendor
-      //  ,valueFormatter: (params) => {
-      //    if (params.value) {
-      //      return params.value.value || params.value.label || params.value;
-      //    }
-      //    return "";
-      //  }
-      //  , required: true
-      //},
-      {
+        , refData: this.vendorRefData
+        , cellRenderer: (params) => {
+          if (this.isNewRowAdded) {
+            return params.data.vendorId.label;
+          }
+          else if (params.value.label != undefined) {
+            return params.value.label || params.value.value || params.value;
+          }
+          else {
+            return params.data.vendor.checkName;
+          }
+        }
+        , editable: true, resizable: true
+      }
+
+      ,{
         field: "cwt", headerName: "Added Freight/CWT", width: "140"
         , required: true
         , valueFormatter: params => {
@@ -419,11 +417,6 @@ export class UploadFileComponent implements OnInit {
     this.disabledSaveAddedFreight = false;
   }
 
-  //DeleteAddedFreightRecord() {
-  //  var selectedData = this.addedFreightGrid.api.getSelectedRows();
-  //  this.addedFreightGrid.api.updateRowData({ remove: selectedData });
-  //}
-
   onAddedFreightGridReady(params) {
     this.addedFreightgridApi = params.api;
     this.addedFreightgridColumnApi = params.columnApi;
@@ -433,88 +426,155 @@ export class UploadFileComponent implements OnInit {
   onAddedFreightCellValueChanged(event) {
     event.data.modified = true;
     this.disabledSaveAddedFreight = false;
+    this.isRowEdited = true;
   }
 
   onAddedFreightFocusOut(event) {
     this.addedFreightgridApi.deselectAll();
   }
 
-  SaveAddedFreightRecord() {
-    if (this.isNewRowAdded) {
-      const allRowData = [];
-      this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
-
-      const modifiedRows = allRowData.filter(row => row['modified']);
-
-      const formData = new FormData();
-
-      formData.append('poLocationId', modifiedRows[0].poLocationId);
-      formData.append('poWarehouseId', modifiedRows[0].poWarehouseId);
-      formData.append('poCarrierId', modifiedRows[0].poCarrierId);
-      formData.append('vendorId', modifiedRows[0].vendorId);
-      formData.append('cwt', modifiedRows[0].cwt);
-      formData.append('truckLoad', modifiedRows[0].truckLoad);
-
-      // passing the params to server
-      const uploadReq = new HttpRequest('POST', './PostAddedFreightsDetails', formData);
-      this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
-
-      this.http.request(uploadReq).subscribe(event => {
-        console.log(event);
-        if (event instanceof HttpResponse) {
-          var response = event.body;
-
-          if (response['Successful']) {
-            this.toastr.clear();
-            this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-            this.reset();
-          } else { //if there are errors   
-            this.toastr.clear();
-            this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
-          }
+  checkWarehouseValidation() {
+    const allRowData = [];
+    var isValidWarehouse;
+    this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
+    const modifiedRow = allRowData.filter(row => row['modified']);
+    var selectedLocationId = modifiedRow[0].poLocationId;
+    var selectedWarehouseId = modifiedRow[0].poWarehouseId;
+    if (selectedLocationId == 1) {
+      var warehouseINDList = this.extractValues(this.warehouseIND);
+      for (var i = 0; i < warehouseINDList.length; i++) {
+        if (warehouseINDList[i].valueOf() == selectedWarehouseId) {
+          isValidWarehouse = true;
+          break;
         }
-      });
-      this.isNewRowAdded = false;
-      this.disabledSaveAddedFreight = true;
+        else {
+          isValidWarehouse = false;
+        }
+      }
+    }
+    else if (selectedLocationId == 2) {
+      var warehousePITList = this.extractValues(this.warehousePIT);
+      for (var i = 0; i < warehousePITList.length; i++) {
+        if (warehousePITList[i].valueOf() == selectedWarehouseId) {
+          isValidWarehouse = true;
+          break;
+        }
+        else {
+          isValidWarehouse = false;
+        }
+      }
+    }
+    else if (selectedLocationId == 33) {
+      var warehouseDENList = this.extractValues(this.warehouseDEN);
+      for (var i = 0; i < warehouseDENList.length; i++) {
+        if (warehouseDENList[i].valueOf() == selectedWarehouseId) {
+          isValidWarehouse = true;
+          break;
+        }
+        else {
+          isValidWarehouse = false;
+        }
+      }
+    }
+    else if (selectedLocationId == 73) {
+      var warehouseFTWList = this.extractValues(this.warehouseFTW);
+      for (var i = 0; i < warehouseFTWList.length; i++) {
+        if (warehouseFTWList[i].valueOf() == selectedWarehouseId) {
+          isValidWarehouse = true;
+          break;
+        }
+        else {
+          isValidWarehouse = false;
+        }
+      }
+    }
+    return isValidWarehouse;
+  }
+
+  SaveAddedFreightRecord() {
+    var isValidWarehouseLocationCombo = this.checkWarehouseValidation();
+    if (isValidWarehouseLocationCombo) {
+      if (this.isNewRowAdded) {
+        const allRowData = [];
+        this.addedFreightgridApi.forEachNode(node => allRowData.push(node.data));
+
+        const modifiedRows = allRowData.filter(row => row['modified']);
+
+        const formData = new FormData();
+
+        formData.append('poLocationId', modifiedRows[0].poLocationId);
+        formData.append('poWarehouseId', modifiedRows[0].poWarehouseId);
+        formData.append('poCarrierId', modifiedRows[0].poCarrierId);
+        formData.append('vendorId', modifiedRows[0].vendorId.value);
+        formData.append('cwt', modifiedRows[0].cwt);
+        formData.append('truckLoad', modifiedRows[0].truckLoad);
+
+        // passing the params to server
+        const uploadReq = new HttpRequest('POST', './PostAddedFreightsDetails', formData);
+        this.toastr.info("Please wait while adding your data.", " Insertion in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+
+        this.http.request(uploadReq).subscribe(event => {
+          console.log(event);
+          if (event instanceof HttpResponse) {
+            var response = event.body;
+
+            if (response['Successful']) {
+              this.toastr.clear();
+              this.toastr.success(response['Message'], " Insertion Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+              this.reset();
+            } else { //if there are errors   
+              this.toastr.clear();
+              this.toastr.error(response['Message'], "Insertion Failed...", { timeOut: 5000, progressBar: false });
+            }
+          }
+        });
+        this.isNewRowAdded = false;
+        this.disabledSaveAddedFreight = true;
+      }
+      else {
+
+        if (this.addedFreightgridApi.getSelectedRows().length == 0) {
+          this.toastr.error("error", "Please select Record for update");
+          return;
+        }
+        var row = this.addedFreightgridApi.getSelectedRows();
+        console.log(row);
+        const formData = new FormData();
+        formData.append('id', row[0].id);
+        formData.append('poLocationId', row[0].poLocationId);
+        formData.append('poWarehouseId', row[0].poWarehouseId);
+        formData.append('poCarrierId', row[0].poCarrierId);
+        formData.append('vendorId', row[0].vendorId.value == undefined ? row[0].vendorId : row[0].vendorId.value);
+        formData.append('cwt', row[0].cwt);
+        formData.append('truckLoad', row[0].truckLoad);
+
+        const req = new HttpRequest('POST', './UpdateAddedFreightDetails', formData);
+
+        this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
+
+        this.http.request(req).subscribe(event => {
+          console.log(event);
+          if (event instanceof HttpResponse) {
+            var response = event.body;
+
+            if (response['Successful']) {
+              this.toastr.clear();
+              this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
+              this.reset();
+            } else { //if there are errors   
+              this.toastr.clear();
+              this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
+            }
+          }
+        });
+        this.disabledSaveAddedFreight = true;
+        this.isRowEdited = false;
+      }
     }
     else {
-      
-      if (this.addedFreightgridApi.getSelectedRows().length == 0) {
-        this.toastr.error("error", "Please select Record for update");
-        return;
-      }
-      var row = this.addedFreightgridApi.getSelectedRows();
-      console.log(row);
-      const formData = new FormData();
-      formData.append('id', row[0].id);
-      formData.append('poLocationId', row[0].poLocationId);
-      formData.append('poWarehouseId', row[0].poWarehouseId);
-      formData.append('poCarrierId', row[0].poCarrierId);
-      formData.append('vendorId', row[0].vendorId);
-      formData.append('cwt', row[0].cwt);
-      formData.append('truckLoad', row[0].truckLoad);
-
-      const req = new HttpRequest('POST', './UpdateAddedFreightDetails', formData);
-
-      this.toastr.info("Please wait while updating your data.", " Updation in Progress...", { positionClass: 'toast-top-center', progressBar: false, progressAnimation: 'increasing' });
-
-      this.http.request(req).subscribe(event => {
-        console.log(event);
-        if (event instanceof HttpResponse) {
-          var response = event.body;
-
-          if (response['Successful']) {
-            this.toastr.clear();
-            this.toastr.success(response['Message'], " Updation Successful...", { positionClass: 'toast-top-center', timeOut: 3000, progressBar: false })
-            this.reset();
-          } else { //if there are errors   
-            this.toastr.clear();
-            this.toastr.error(response['Message'], "Updation Failed...", { timeOut: 5000, progressBar: false });
-          }
-        }
-      });
-      this.disabledSaveAddedFreight = true;
+      this.toastr.error("error", "Please select desired PO Warehouse for selected PO Location");
     }
+    
   }
 
   DeleteAddedFreightRecord() {
@@ -569,15 +629,35 @@ export class UploadFileComponent implements OnInit {
         , refData: this.locations
         , required: true
       },
+      //{
+      //  field: "productCode", headerName: "Product Code", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
+      //  cellEditorParams: {
+      //    values: this.extractValues(this.productCode),
+      //  }
+      //  , refData: this.productCode
+      //  , required: true
+      //},//TODO: type ahead search
       {
-        field: "productCode", headerName: "Product Code", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.productCode),
+        field: "productCodeId", headerName: "Product Code", width: "120", cellEditor: AutocompleteSelectCellEditor, required: true
+        , cellEditorParams: {
+          selectData: this.productCode
+          , placeholder: 'Select Product Code'
         }
-        , refData: this.productCode
-        , required: true
-      },//TODO: type ahead search
-      {
+        , refData: this.productCodeRefData
+        , cellRenderer: (params) => {
+          if (this.isNewRowAdded) {
+            return params.data.productCodeId.label;
+          }
+          else if (params.value.label != undefined) {
+            return params.value.label || params.value.value || params.value;
+          }
+          else {
+            return params.data.part.partNo;
+          }
+        }
+        , editable: true, resizable: true
+      }
+      ,{
         field: "transferCost", headerName: "Transfer Cost/CWT", width: "140", editable: true
         , valueFormatter: params => {
           return '$' + this.currencyFormatter(params.data.transferCost);
@@ -598,7 +678,7 @@ export class UploadFileComponent implements OnInit {
 
   AddTransferFreightRecord() {
     this.transferFreightGrid.api.updateRowData({
-      add: [{ transferFromId: '', transferToId: '', productCode: '', transferCost: '' }],
+      add: [{ transferFromId: '', transferToId: '', productCodeId: '', transferCost: '' }],
       addIndex: 0
     });
     this.isNewRowAdded = true;
@@ -665,7 +745,7 @@ export class UploadFileComponent implements OnInit {
 
       formData.append('transferFromId', modifiedRows[0].transferFromId);
       formData.append('transferToId', modifiedRows[0].transferToId);
-      formData.append('productCode', modifiedRows[0].productCode);
+      formData.append('productCodeId', modifiedRows[0].productCodeId.value);
       formData.append('transferCost', modifiedRows[0].transferCost);
 
       // passing the params to server
@@ -702,7 +782,7 @@ export class UploadFileComponent implements OnInit {
       formData.append('id', row[0].id);
       formData.append('transferFromId', row[0].transferFromId);
       formData.append('transferToId', row[0].transferToId);
-      formData.append('productCode', row[0].productCode);
+      formData.append('productCodeId', row[0].productCodeId.value == undefined ? row[0].productCodeId : row[0].productCodeId.value);
       formData.append('transferCost', row[0].transferCost);
 
       const req = new HttpRequest('POST', './UpdateTransferFreightDetails', formData);
@@ -732,23 +812,63 @@ export class UploadFileComponent implements OnInit {
   //Class Code Management
   createClassCodeManagementcolumnDefs() {
     this.ClassCodeManagementcolumnDefs = [
+      //{
+      //  field: "classCodeID", headerName: "Class Code", width: "160", editable: true, cellEditor: 'agSelectCellEditor',
+      //  cellEditorParams: {
+      //    values: this.extractValues(this.classCode),
+      //  }
+      //  , refData: this.classCode
+      //  , required: true
+      //}
       {
-        field: "classCodeID", headerName: "Class Code", width: "160", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.classCode),
+        field: "classCodeID", headerName: "Class Code", width: "160", cellEditor: AutocompleteSelectCellEditor, required: true
+        , cellEditorParams: {
+          selectData: this.classCode
+          , placeholder: 'Select Class Code'
         }
-        , refData: this.classCode
-        , required: true
-      },
-      {
-        field: "productCodeId", headerName: "Product Code", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.extractValues(this.productCode),
+        , refData: this.classCodeRefData
+        , cellRenderer: (params) => {
+          if (this.isNewRowAdded) {
+            return params.data.classCodeID.label;
+          }
+          else if (params.value.label != undefined) {
+            return params.value.label || params.value.value || params.value;
+          }
+          else {
+            return params.data.classCode.code;
+          }
         }
-        , refData: this.productCode
-        , required: true
-      },
-      {
+        , editable: true, resizable: true
+      }
+      //{
+      //  field: "productCodeId", headerName: "Product Code", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
+      //  cellEditorParams: {
+      //    values: this.extractValues(this.productCode),
+      //  }
+      //  , refData: this.productCode
+      //  , required: true
+      //},
+      , {
+        field: "productCodeId", headerName: "Product Code", width: "140", cellEditor: AutocompleteSelectCellEditor, required: true
+        , cellEditorParams: {
+          selectData: this.productCode
+          , placeholder: 'Select Product Code'
+        }
+        , refData: this.productCodeRefData
+        , cellRenderer: (params) => {
+          if (this.isNewRowAdded) {
+            return params.data.productCodeId.label;
+          }
+          else if (params.value.label != undefined) {
+            return params.value.label || params.value.value || params.value;
+          }
+          else {
+            return params.data.part.partNo;
+          }
+        }
+        , editable: true, resizable: true
+      }
+      ,{
         field: "locationId", headerName: "Location", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
           values: this.extractValues(this.locations),
@@ -845,8 +965,8 @@ export class UploadFileComponent implements OnInit {
 
       const formData = new FormData();
 
-      formData.append('classCodeID', modifiedRows[0].classCodeID);
-      formData.append('productCodeId', modifiedRows[0].productCodeId);
+      formData.append('classCodeID', modifiedRows[0].classCodeID.value);
+      formData.append('productCodeId', modifiedRows[0].productCodeId.value);
       formData.append('locationId', modifiedRows[0].locationId);
       formData.append('active', modifiedRows[0].active);
 
@@ -882,8 +1002,8 @@ export class UploadFileComponent implements OnInit {
       console.log(row);
       const formData = new FormData();
       formData.append('id', row[0].id);
-      formData.append('classCodeID', row[0].classCodeID);
-      formData.append('productCodeId', row[0].productCodeId);
+      formData.append('classCodeID', row[0].classCodeID.value == undefined ? row[0].classCodeID : row[0].classCodeID.value);
+      formData.append('productCodeId', row[0].productCodeId.value == undefined ? row[0].productCodeId : row[0].productCodeId.value);
       formData.append('locationId', row[0].locationId);
       formData.append('active', row[0].active);
 

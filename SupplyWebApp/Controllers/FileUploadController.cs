@@ -190,10 +190,10 @@ namespace SupplyWebApp.Controllers
 
                 v1.VendorId = -1;
                 v1.CheckName = "All";
-                v1.CompanyId = 0;
+                //v1.CompanyId = 0;
                 v2.VendorId = -2;
                 v2.CheckName = "All Import";
-                v2.CompanyId = 0;
+                //v2.CompanyId = 0;
                 var vendorList = _dataContext.Vendor.ToList();
                 vendorList.Add(v1);
                 vendorList.Add(v2);
@@ -243,11 +243,32 @@ namespace SupplyWebApp.Controllers
         {
             try
             {
+                Vendor v1 = new Vendor();
+                Vendor v2 = new Vendor();
+
+                v1.VendorId = -1;
+                v1.CheckName = "All";
+                //v1.CompanyId = 0;
+                v2.VendorId = -2;
+                v2.CheckName = "All Import";
+                //v2.CompanyId = 0;
+
                 var addedFreightData = _dataContext.AddedFreight.Include(x=>x.Location)
                                         .Include(c=> c.Carrier)
                                         .Include(w => w.Warehouse)
-                                        .Include(v => v.Vendor).AsQueryable();
-                return addedFreightData;
+                                        .Include(v => v.Vendor).ToList();
+                foreach (var af in addedFreightData)
+                {
+                    if(af.VendorId == -1)
+                    {
+                        af.Vendor = v1;
+                    }
+                    else if(af.VendorId == -2)
+                    {
+                        af.Vendor = v2;
+                    }
+                }
+                return addedFreightData.AsQueryable();
             }
             catch (Exception e)
             {
@@ -264,6 +285,7 @@ namespace SupplyWebApp.Controllers
                 var transferFreightsData = _dataContext.TransferFreight
                                             .Include(x => x.LocationFrom)
                                             .Include(x => x.LocationTo)
+                                            .Include(x => x.Part)
                                             .AsQueryable();
 
                 return transferFreightsData;
@@ -364,7 +386,7 @@ namespace SupplyWebApp.Controllers
                     TransferFreight transferFreight = new TransferFreight();
                     transferFreight.TransferFromId = Convert.ToInt32(transferFreightfromRequest[0].Value);
                     transferFreight.TransferToId = Convert.ToInt32(transferFreightfromRequest[1].Value);
-                    transferFreight.ProductCode = transferFreightfromRequest[2].Value;
+                    transferFreight.ProductCodeId = Convert.ToInt32(transferFreightfromRequest[2].Value);
                     transferFreight.TransferCost = Convert.ToDouble(transferFreightfromRequest[3].Value);
                     _dataContext.TransferFreight.Add(transferFreight);
                     int result = await _dataContext.SaveChangesAsync();
@@ -528,7 +550,7 @@ namespace SupplyWebApp.Controllers
                 {
                     transferFreight.TransferFromId = Convert.ToInt32(transferFreightFromReq[1].Value);
                     transferFreight.TransferToId = Convert.ToInt32(transferFreightFromReq[2].Value);
-                    transferFreight.ProductCode = transferFreightFromReq[3].Value;
+                    transferFreight.ProductCodeId = Convert.ToInt32(transferFreightFromReq[3].Value);
                     transferFreight.TransferCost = Convert.ToDouble(transferFreightFromReq[4].Value);
                 }
                 _dataContext.TransferFreight.Update(transferFreight);

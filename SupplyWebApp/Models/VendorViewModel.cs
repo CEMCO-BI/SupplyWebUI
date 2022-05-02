@@ -13,7 +13,7 @@ namespace SupplyWebApp.Models
         [Key]
         public int VendorId { get; set; }
         public string CheckName { get; set; }
-        public int CompanyId { get; set; }
+        //public int CompanyId { get; set; }
 
     }
 }

@@ -23,3 +23,13 @@ code {
   background-color: #fff;
   border-color: #ccc;
 }
+
+.ag-cell-editor-autocomplete {
+  background-color: white;
+  max-height: 240px !important;
+  max-block-size: 235px;
+  scroll-behavior: inherit;
+  height: auto !important;
+  overflow-y: scroll;
+  cursor: context-menu;
+}

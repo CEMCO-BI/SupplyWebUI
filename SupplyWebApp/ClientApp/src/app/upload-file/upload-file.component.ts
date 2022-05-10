@@ -263,7 +263,7 @@ export class UploadFileComponent implements OnInit {
         this.vendorRefData = obj;
         let op = Object.entries(obj)
           .map(([value, label]) => ({ value, label }))
-        this.vendor = op;
+        this.vendor = op.sort((a, b) => (a.label > b.label ? 1 : -1));
         this.ngOnInit();
       }
     )

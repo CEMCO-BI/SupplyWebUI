@@ -367,7 +367,7 @@ export class UploadFileComponent implements OnInit {
           if (this.isNewRowAdded) {
             return params.data.vendorId.label;
           }
-          else if (params.value.label != undefined) {
+          else if (params.value && params.value.label != undefined) {
             return params.value.label || params.value.value || params.value;
           }
           else {
@@ -651,7 +651,7 @@ export class UploadFileComponent implements OnInit {
           if (this.isNewRowAdded) {
             return params.data.productCodeId.label;
           }
-          else if (params.value.label != undefined) {
+          else if (params.value && params.value.label != undefined) {
             return params.value.label || params.value.value || params.value;
           }
           else {
@@ -836,7 +836,7 @@ export class UploadFileComponent implements OnInit {
           if (this.isNewRowAdded) {
             return params.data.classCodeID.label;
           }
-          else if (params.value.label != undefined) {
+          else if (params.value && params.value.label != undefined) {
             return params.value.label || params.value.value || params.value;
           }
           else {
@@ -864,7 +864,7 @@ export class UploadFileComponent implements OnInit {
           if (this.isNewRowAdded) {
             return params.data.productCodeId.label;
           }
-          else if (params.value.label != undefined) {
+          else if (params.value && params.value.label != undefined) {
             return params.value.label || params.value.value || params.value;
           }
           else {

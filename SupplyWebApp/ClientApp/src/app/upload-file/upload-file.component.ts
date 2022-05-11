@@ -404,6 +404,9 @@ export class UploadFileComponent implements OnInit {
     return this.http.get('./GetAddedFreightsDetails').subscribe(
       data => {
         this.addedFreightrowData = data;
+        this.addedFreightrowData.forEach(r => r.poLocationId += '');
+        this.addedFreightrowData.forEach(r => r.poWarehouseId += '');
+        this.addedFreightrowData.forEach(r => r.poCarrierId += '');
       }
     )
   }
@@ -671,6 +674,8 @@ export class UploadFileComponent implements OnInit {
     return this.http.get('./GetTransferFreightsDetails').subscribe(
       data => {
         this.transferFreightrowData = data;
+        this.transferFreightrowData.forEach(r => r.transferFromId += '');
+        this.transferFreightrowData.forEach(r => r.transferToId += '');
 
       }
     )
@@ -892,7 +897,8 @@ export class UploadFileComponent implements OnInit {
     return this.http.get('./GetClassCodeManagementDetails').subscribe(
       data => {
         this.classCodeManagementrowData = data;
-
+        this.classCodeManagementrowData.forEach(r => r.locationId += '');
+        this.classCodeManagementrowData.forEach(r => r.active += '');
       }
     )
   }
@@ -1066,6 +1072,9 @@ export class UploadFileComponent implements OnInit {
     return this.http.get('./GetDisplayMonthsDetails').subscribe(
       data => {
         this.displayMonthsrowData = data;
+        this.displayMonthsrowData.forEach(r => r.month += '');
+        this.displayMonthsrowData.forEach(r => r.year += '');
+        this.displayMonthsrowData.forEach(r => r.active += '');
 
       }
     )

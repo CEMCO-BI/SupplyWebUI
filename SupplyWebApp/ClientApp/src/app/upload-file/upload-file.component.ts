@@ -357,7 +357,7 @@ export class UploadFileComponent implements OnInit {
         , required: true
       }
       ,{
-        field: "vendorId", headerName: "Vendor", width: "125", cellEditor: AutocompleteSelectCellEditor, required: true
+        field: "vendorId", headerName: "Vendor", width: "240", cellEditor: AutocompleteSelectCellEditor, required: true
         , cellEditorParams: {
           selectData: this.vendor
           , placeholder: 'Select vendor'
@@ -427,9 +427,14 @@ export class UploadFileComponent implements OnInit {
   }
 
   onAddedFreightCellValueChanged(event) {
-    event.data.modified = true;
-    this.disabledSaveAddedFreight = false;
-    this.isRowEdited = true;
+    if (event.newValue != undefined) {
+      event.data.modified = true;
+      this.disabledSaveAddedFreight = false;
+      this.isRowEdited = true;
+    }
+    else {
+      event.data.modified = false;
+    }
   }
 
   onAddedFreightFocusOut(event) {

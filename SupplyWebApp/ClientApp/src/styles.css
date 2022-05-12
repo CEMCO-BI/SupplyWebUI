@@ -32,4 +32,6 @@ code {
   height: auto !important;
   overflow-y: scroll;
   cursor: context-menu;
+  font-size: 13px !important;
+  cursor: pointer;
 }

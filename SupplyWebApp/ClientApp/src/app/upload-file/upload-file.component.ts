@@ -361,6 +361,13 @@ export class UploadFileComponent implements OnInit {
         , cellEditorParams: {
           selectData: this.vendor
           , placeholder: 'Select vendor'
+          //, autocomplete: {
+          //  strict: false,
+          //  onFreeTextSelect: true
+          //}
+          , customFilter: function (vendor: any[], query: string): any[] {
+            return vendor.filter(x => x.checkName.toLowerCase().startsWith(query.toLowerCase()));
+          }
         }
         , refData: this.vendorRefData
         , cellRenderer: (params) => {

@@ -81,9 +81,9 @@ export class UploadFileComponent implements OnInit {
   private carrier: object = {};
   private vendorRefData: object = {};
   private vendor: any = [];
-  private productCode: object = {};
+  private productCode: any = [];
   private productCodeRefData: object = {};
-  private classCode: object = {};
+  private classCode: any = [];
   private classCodeRefData: object = {};
   active = {
     1: "True",
@@ -361,12 +361,13 @@ export class UploadFileComponent implements OnInit {
         , cellEditorParams: {
           selectData: this.vendor
           , placeholder: 'Select vendor'
-          //, autocomplete: {
-          //  strict: false,
-          //  onFreeTextSelect: true
-          //}
-          , customFilter: function (vendor: any[], query: string): any[] {
-            return vendor.filter(x => x.checkName.toLowerCase().startsWith(query.toLowerCase()));
+          ,autocomplete: {
+            fetch: (cellEditor, text, update) => {
+              let match = text.toLowerCase() || cellEditor.eInput.value.toLowerCase();
+
+              var suggestions = this.vendor.filter(n => n.label.toString().toLowerCase().startsWith(match));
+              update(suggestions);
+            },
           }
         }
         , refData: this.vendorRefData
@@ -657,6 +658,14 @@ export class UploadFileComponent implements OnInit {
         , cellEditorParams: {
           selectData: this.productCode
           , placeholder: 'Select Product Code'
+          , autocomplete: {
+            fetch: (cellEditor, text, update) => {
+              let match = text.toLowerCase() || cellEditor.eInput.value.toLowerCase();
+
+              var suggestions = this.productCode.filter(n => n.label.toString().toLowerCase().startsWith(match));
+              update(suggestions);
+            },
+          }
         }
         , refData: this.productCodeRefData
         , cellRenderer: (params) => {
@@ -842,6 +851,14 @@ export class UploadFileComponent implements OnInit {
         , cellEditorParams: {
           selectData: this.classCode
           , placeholder: 'Select Class Code'
+          , autocomplete: {
+            fetch: (cellEditor, text, update) => {
+              let match = text.toLowerCase() || cellEditor.eInput.value.toLowerCase();
+
+              var suggestions = this.classCode.filter(n => n.label.toString().toLowerCase().startsWith(match));
+              update(suggestions);
+            },
+          }
         }
         , refData: this.classCodeRefData
         , cellRenderer: (params) => {
@@ -870,6 +887,14 @@ export class UploadFileComponent implements OnInit {
         , cellEditorParams: {
           selectData: this.productCode
           , placeholder: 'Select Product Code'
+          , autocomplete: {
+            fetch: (cellEditor, text, update) => {
+              let match = text.toLowerCase() || cellEditor.eInput.value.toLowerCase();
+
+              var suggestions = this.productCode.filter(n => n.label.toString().toLowerCase().startsWith(match));
+              update(suggestions);
+            },
+          }
         }
         , refData: this.productCodeRefData
         , cellRenderer: (params) => {

@@ -43,7 +43,6 @@ export class UploadFileComponent implements OnInit {
   from: string = null;
   selectedFile: any;
   isNewRowAdded: boolean = false;
-  isRowEdited: boolean = false;
   disabledSaveAddedFreight: boolean = true;
   disabledSaveTransferFreight: boolean = true;
   disabledSaveClassCodeMgt: boolean = true;
@@ -372,7 +371,7 @@ export class UploadFileComponent implements OnInit {
         }
         , refData: this.vendorRefData
         , cellRenderer: (params) => {
-          if (this.isNewRowAdded) {
+          if (this.isNewRowAdded && params.data.vendorId != undefined) {
             return params.data.vendorId.label;
           }
           else if (params.value && params.value.label != undefined) {
@@ -381,6 +380,14 @@ export class UploadFileComponent implements OnInit {
           else {
             return params.data.vendor.checkName;
           }
+        }
+        , valueFormatter: (params) => {
+          if (params.data.vendor != undefined) {
+            return params.data.vendor.checkName;
+
+          }
+          else
+            return "";
         }
         , editable: true, resizable: true
       }
@@ -438,7 +445,6 @@ export class UploadFileComponent implements OnInit {
     if (event.newValue != undefined) {
       event.data.modified = true;
       this.disabledSaveAddedFreight = false;
-      this.isRowEdited = true;
     }
     else {
       event.data.modified = false;
@@ -584,7 +590,6 @@ export class UploadFileComponent implements OnInit {
           }
         });
         this.disabledSaveAddedFreight = true;
-        this.isRowEdited = false;
       }
     }
     else {
@@ -645,14 +650,6 @@ export class UploadFileComponent implements OnInit {
         , refData: this.locations
         , required: true
       },
-      //{
-      //  field: "productCode", headerName: "Product Code", width: "120", editable: true, cellEditor: 'agSelectCellEditor',
-      //  cellEditorParams: {
-      //    values: this.extractValues(this.productCode),
-      //  }
-      //  , refData: this.productCode
-      //  , required: true
-      //},//TODO: type ahead search
       {
         field: "productCodeId", headerName: "Product Code", width: "120", cellEditor: AutocompleteSelectCellEditor, required: true
         , cellEditorParams: {
@@ -669,7 +666,7 @@ export class UploadFileComponent implements OnInit {
         }
         , refData: this.productCodeRefData
         , cellRenderer: (params) => {
-          if (this.isNewRowAdded) {
+          if (this.isNewRowAdded && params.data.productCodeId != undefined) {
             return params.data.productCodeId.label;
           }
           else if (params.value && params.value.label != undefined) {
@@ -678,6 +675,13 @@ export class UploadFileComponent implements OnInit {
           else {
             return params.data.part.partNo;
           }
+        }
+        , valueFormatter: (params) => {
+          if (params.data.part != undefined) {
+            return params.data.part.partNo;
+          }
+          else
+            return "";
         }
         , editable: true, resizable: true
       }
@@ -753,9 +757,13 @@ export class UploadFileComponent implements OnInit {
   }
 
   onTransferFreightCellValueChanged(event) {
-    event.data.modified = true;
-    this.disabledSaveTransferFreight = false;
-
+    if (event.newValue != undefined) {
+      event.data.modified = true;
+      this.disabledSaveTransferFreight = false;
+    }
+    else {
+      event.data.modified = false;
+    }
   }
 
   onTransferFreightFocusOut(event) {
@@ -838,14 +846,6 @@ export class UploadFileComponent implements OnInit {
   //Class Code Management
   createClassCodeManagementcolumnDefs() {
     this.ClassCodeManagementcolumnDefs = [
-      //{
-      //  field: "classCodeID", headerName: "Class Code", width: "160", editable: true, cellEditor: 'agSelectCellEditor',
-      //  cellEditorParams: {
-      //    values: this.extractValues(this.classCode),
-      //  }
-      //  , refData: this.classCode
-      //  , required: true
-      //}
       {
         field: "classCodeID", headerName: "Class Code", width: "160", cellEditor: AutocompleteSelectCellEditor, required: true
         , cellEditorParams: {
@@ -862,7 +862,7 @@ export class UploadFileComponent implements OnInit {
         }
         , refData: this.classCodeRefData
         , cellRenderer: (params) => {
-          if (this.isNewRowAdded) {
+          if (this.isNewRowAdded && params.data.classCodeID != undefined) {
             return params.data.classCodeID.label;
           }
           else if (params.value && params.value.label != undefined) {
@@ -872,16 +872,15 @@ export class UploadFileComponent implements OnInit {
             return params.data.classCode.code;
           }
         }
+        , valueFormatter: (params) => {
+          if (params.data.classCode != undefined) {
+            return params.data.classCode.code;
+          }
+          else
+            return "";
+        }
         , editable: true, resizable: true
       }
-      //{
-      //  field: "productCodeId", headerName: "Product Code", width: "140", editable: true, cellEditor: 'agSelectCellEditor',
-      //  cellEditorParams: {
-      //    values: this.extractValues(this.productCode),
-      //  }
-      //  , refData: this.productCode
-      //  , required: true
-      //},
       , {
         field: "productCodeId", headerName: "Product Code", width: "140", cellEditor: AutocompleteSelectCellEditor, required: true
         , cellEditorParams: {
@@ -898,7 +897,7 @@ export class UploadFileComponent implements OnInit {
         }
         , refData: this.productCodeRefData
         , cellRenderer: (params) => {
-          if (this.isNewRowAdded) {
+          if (this.isNewRowAdded && params.data.productCodeId != undefined) {
             return params.data.productCodeId.label;
           }
           else if (params.value && params.value.label != undefined) {
@@ -907,6 +906,13 @@ export class UploadFileComponent implements OnInit {
           else {
             return params.data.part.partNo;
           }
+        }
+        , valueFormatter: (params) => {
+          if (params.data.part != undefined) {
+            return params.data.part.partNo;
+          }
+          else
+            return "";
         }
         , editable: true, resizable: true
       }
@@ -990,9 +996,13 @@ export class UploadFileComponent implements OnInit {
   }
 
   onClassCodeMgtCellValueChanged(event) {
-    event.data.modified = true;
-    this.disabledSaveClassCodeMgt = false;
-
+    if (event.newValue != undefined) {
+      event.data.modified = true;
+      this.disabledSaveClassCodeMgt = false;
+    }
+    else {
+      event.data.modified = false;
+    }
   }
 
   onClassCodeMgtFocusOut(event) {
@@ -1168,7 +1178,6 @@ export class UploadFileComponent implements OnInit {
   onDisplayMonthCellValueChanged(event) {
     event.data.modified = true;
     this.disabledSaveDisplayMonths = false;
-
   }
 
   onDisplayMonthFocusOut(event) {

@@ -20,32 +20,32 @@ using System.Text.RegularExpressions;
         RuleFor(cru => cru.date_v)
        .Cascade(CascadeMode.Continue)
        .Must(IsValidYear)
-       .WithMessage("Please enter a valid Year.");
+       .WithMessage("Year cannot be empty. Please enter year in YYYY format.");
 
         RuleFor(cru => cru.date_v)
        .Cascade(CascadeMode.Continue)
        .Must(IsAValidMonth)
-       .WithMessage("Please enter a valid Month.");
+       .WithMessage("Month cannot be empty. Please enter month in MM format in the range 1-12.");
 
         RuleFor(cru => cru.Week1_v)
        .Cascade(CascadeMode.Continue)
-       .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+       .Must(IsAValidAmount).WithMessage("Amount cannot be empty.Please enter a numeric value for Amount.");
 
         RuleFor(cru => cru.Week2_v)
       .Cascade(CascadeMode.Continue)
-      .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+      .Must(IsAValidAmount).WithMessage("Amount cannot be empty.Please enter a numeric value for Amount.");
 
         RuleFor(cru => cru.Week3_v)
       .Cascade(CascadeMode.Continue)
-      .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+      .Must(IsAValidAmount).WithMessage("Amount cannot be empty.Please enter a numeric value for Amount.");
 
         RuleFor(cru => cru.Week4_v)
       .Cascade(CascadeMode.Continue)
-      .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+      .Must(IsAValidAmount).WithMessage("Amount cannot be empty.Please enter a numeric value for Amount.");
 
         RuleFor(cru => cru.Week5_v)
       .Cascade(CascadeMode.Continue)
-      .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+      .Must(IsAValidAmount).WithMessage("Amount cannot be empty.Please enter a numeric value for Amount.");
 
 
     }

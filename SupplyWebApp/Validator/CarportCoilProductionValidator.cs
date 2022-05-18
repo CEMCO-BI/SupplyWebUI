@@ -15,20 +15,20 @@ namespace SupplyWebApp.Validator
             RuleFor(sf => sf.Year_v)
             .Cascade(CascadeMode.Continue)
             .Must(IsValidYear)
-            .WithMessage("Please enter a valid Year.");
+            .WithMessage("Year cannot be empty. Please enter a valid Year.");
 
             RuleFor(sf => sf.Month_v)
             .Cascade(CascadeMode.Continue)
             .Must(IsAValidMonth)
-            .WithMessage("Please enter a valid Month.");
+            .WithMessage("Month cannot be empty. Please enter a valid Month.");
 
             //RuleFor(sf => sf.ClassCode_v)
             //.Cascade(CascadeMode.Continue)
-            //.Must(IsAValidLocation).WithMessage("Please enter a valid Class Code.");
+            //.Must(IsAValidLocation).WithMessage("Class Code cannot be empty. Please enter a valid Class Code.");
 
             RuleFor(sf => sf.Amount_v)
             .Cascade(CascadeMode.Continue)
-            .Must(IsAValidAmount).WithMessage("Please enter a numeric value for Amount.");
+            .Must(IsAValidAmount).WithMessage("Amount cannot be empty. Please enter a numeric value for Amount.");
         }
 
         public bool IsAValidMonth(string month)

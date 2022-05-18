@@ -36,6 +36,7 @@ import { AgGridModule } from 'ag-grid-angular'
       { path: 'SalesForecast/:typo', component: UploadFileComponent, pathMatch: 'full' },
       { path: 'CRUPricing/:typo', component: UploadFileComponent, pathMatch: 'full' },
       { path: 'PlannedBuy/:typo', component: UploadFileComponent, pathMatch: 'full' },
+      { path: 'CarportCoilProduction/:typo', component: UploadFileComponent, pathMatch: 'full' },
       { path: 'MarginTables/:typo', component: UploadFileComponent, pathMatch: 'full' }
 
  

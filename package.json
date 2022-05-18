@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "ag-grid-angular": "^27.1.1",
+    "ag-grid-angular": "^27.2.1",
     "ag-grid-autocomplete-editor": "^3.0.1",
-    "ag-grid-community": "^27.1.0"
+    "ag-grid-community": "^27.2.1"
   }
 }

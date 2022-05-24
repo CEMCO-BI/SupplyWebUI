@@ -16,7 +16,9 @@ namespace SupplyWebApp.Helpers
             // Planned Buy
             F_03,
             //Margin Tables
-            F_04
+            F_04,
+            //Carport Coil Production
+            F_05
         }
     }
 }

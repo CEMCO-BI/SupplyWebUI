@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace SupplyWebApp.Models
 {
-    [Table("SalesForecast", Schema = "Upload")]
-
-    public class SalesForecast
+    [Table("CarportCoilProduction", Schema = "Upload")]
+    public class CarportCoilProduction
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,8 +16,7 @@ namespace SupplyWebApp.Models
         public int Id { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
-        public string Location { get; set; }
+        public string ClassCode { get; set; }
         public double Amount { get; set; }
-
     }
 }

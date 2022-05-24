@@ -26,6 +26,7 @@ namespace SupplyWebApp.Data
         public DbSet<TransferFreight> TransferFreight { get; set; }
         public DbSet<ClassCodeManagement> ClassCodeManagement { get; set; }
         public DbSet<DisplayMonths> DisplayMonths { get; set; }
+        public DbSet<CarportCoilProduction> CarportCoilProductions { get; set; }
 
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)

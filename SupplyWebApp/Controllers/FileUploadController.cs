@@ -60,6 +60,9 @@ namespace SupplyWebApp.Controllers
                 case "F_03":
                     importResult = _fileImporter.Import(Enums.FileNames.F_03, file);
                     break;
+                case "F_05":
+                    importResult = _fileImporter.Import(Enums.FileNames.F_05, file);
+                    break;
             }
 
             return Ok(importResult);

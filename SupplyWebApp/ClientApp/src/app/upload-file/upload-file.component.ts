@@ -108,7 +108,8 @@ export class UploadFileComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.route.snapshot.params.typo == 'F_02' || this.route.snapshot.params.typo == 'F_03' || this.route.snapshot.params.typo == 'F_01' || this.route.snapshot.params.typo == 'F_04') {
+    if (this.route.snapshot.params.typo == 'F_02' || this.route.snapshot.params.typo == 'F_03' || this.route.snapshot.params.typo == 'F_01'
+      || this.route.snapshot.params.typo == 'F_04' || this.route.snapshot.params.typo == 'F_05') {
       this.typeOfFile = this.route.snapshot.params.typo;
       
     }
@@ -1417,7 +1418,7 @@ export class UploadFileComponent implements OnInit {
   checkFileValidation(): boolean {
     let isValidFile: boolean
     //the '' column is to differentiate the salesforecast and the plannedbuy
-    let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount'], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount','CWT']];
+    let fileColumnHeader: string[][] = [['Year', 'Month', 'Location', 'Amount'], ['Spot prices', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'WEEK 5'], ['Year', 'Month', 'Location', 'Amount', 'CWT'], ['Year', 'Month', 'Class Code', 'Amount']];
 
     if (this.typeOfFile == GlobalConstants.F_01) { // no role of the 5th column in salesforecast.
       if (this.header[0].length.valueOf() == 4) {
@@ -1446,18 +1447,34 @@ export class UploadFileComponent implements OnInit {
         isValidFile = false;
       }
     }
-      else if (this.typeOfFile == GlobalConstants.F_03) {
-        if (this.header[0].length.valueOf() == 5) {
-        for (var i = 0; i < 5; i++) {
-          if (this.header[0][i] == fileColumnHeader[2][i])
-            isValidFile = true;
-          else
-            isValidFile = false
-            }
+    else if (this.typeOfFile == GlobalConstants.F_03) {
+      if (this.header[0].length.valueOf() == 5) {
+      for (var i = 0; i < 5; i++) {
+        if (this.header[0][i] == fileColumnHeader[2][i])
+          isValidFile = true;
+        else
+          isValidFile = false
           }
-        else {
-          isValidFile = false;
         }
+      else {
+        isValidFile = false;
+      }
+    }
+    else if (this.typeOfFile == GlobalConstants.F_05) {
+      if (this.header[0].length.valueOf() == 4) {
+        for (var i = 0; i < 4; i++) {
+          if (this.header[0][i] != fileColumnHeader[3][i]) {
+            isValidFile = false;
+            break;
+          }
+          else
+            isValidFile = true
+        }
+      }
+      else {
+        isValidFile = false;
+      }
+
     }
     return isValidFile;
   }

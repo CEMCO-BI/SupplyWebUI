@@ -1423,10 +1423,12 @@ export class UploadFileComponent implements OnInit {
     if (this.typeOfFile == GlobalConstants.F_01) { // no role of the 5th column in salesforecast.
       if (this.header[0].length.valueOf() == 4) {
         for (var i = 0; i < 4; i++) {
-          if (this.header[0][i] == fileColumnHeader[0][i])
-            isValidFile = true;
+          if (this.header[0][i] != fileColumnHeader[0][i]) {
+            isValidFile = false;
+            break;
+          }
           else
-            isValidFile = false
+            isValidFile = true
         }
       }
       else {

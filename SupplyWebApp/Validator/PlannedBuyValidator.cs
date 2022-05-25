@@ -40,7 +40,7 @@ public class PlannedBuyValidator : AbstractValidator<PlannedBuyValidateObj>
         //the validation for cwt and amount is same so amount_validation code is reused.
         RuleFor(sf => sf.Cwt_v)
         .Cascade(CascadeMode.Continue)
-        .Must(IsAValidAmount).WithMessage("Please enter a numeric value for CWT.");
+        .Must(IsAValidAmount).WithMessage("CWT cannot be empty. Please enter a numeric value for CWT.");
     }
 
     public bool IsAValidMonth(string month)
@@ -48,7 +48,7 @@ public class PlannedBuyValidator : AbstractValidator<PlannedBuyValidateObj>
         try
         {
             var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
-            return month == "" || regex.IsMatch(month);
+            return regex.IsMatch(month);
         }
         catch (Exception ex)
         {
@@ -63,7 +63,7 @@ public class PlannedBuyValidator : AbstractValidator<PlannedBuyValidateObj>
             String[] s = { "IND", "DEN", "PIT", "FTW" };
             for (int i = 0; i < s.Length; i++)
             {
-                if (location == s[i] || location == "")
+                if (location == s[i])
                     return true;
             }
             return false;
@@ -79,8 +79,17 @@ public class PlannedBuyValidator : AbstractValidator<PlannedBuyValidateObj>
     {
         try
         {
-            var regex = new Regex("^-?\\d*(\\.\\d+)?$");
-            return regex.IsMatch(amount) || amount == "";
+            bool result;
+            if(amount == "")
+            {
+                result = false;
+            }
+            else
+            {
+                var regex = new Regex("^-?\\d*(\\.\\d+)?$");
+                result = regex.IsMatch(amount);
+            }
+            return result;
         }
         catch (Exception ex)
         {
@@ -95,7 +104,7 @@ public class PlannedBuyValidator : AbstractValidator<PlannedBuyValidateObj>
         try
         {
             var regex = new Regex("^[0-9]+$");
-            return regex.IsMatch(year) && year.Length.Equals(4) || year == "";
+            return regex.IsMatch(year) && year.Length.Equals(4);
 
         }
         catch (Exception ex)

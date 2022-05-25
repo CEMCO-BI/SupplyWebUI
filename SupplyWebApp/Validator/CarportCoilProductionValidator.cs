@@ -22,9 +22,9 @@ namespace SupplyWebApp.Validator
             .Must(IsAValidMonth)
             .WithMessage("Month cannot be empty. Please enter a valid Month.");
 
-            //RuleFor(sf => sf.ClassCode_v)
-            //.Cascade(CascadeMode.Continue)
-            //.Must(IsAValidLocation).WithMessage("Class Code cannot be empty. Please enter a valid Class Code.");
+            RuleFor(sf => sf.ClassCode_v)
+            .Cascade(CascadeMode.Continue)
+            .Must(IsAValidClassCode).WithMessage("Class Code cannot be empty. Please enter a valid Class Code.");
 
             RuleFor(sf => sf.Amount_v)
             .Cascade(CascadeMode.Continue)
@@ -44,24 +44,24 @@ namespace SupplyWebApp.Validator
             }
 
         }
-        //public bool IsAValidLocation(string location)
-        //{
-        //    try
-        //    {
-        //        String[] s = { "IND", "DEN", "PIT", "FTW" };
-        //        for (int i = 0; i < s.Length; i++)
-        //        {
-        //            if (location == s[i] || location == "")
-        //                return true;
-        //        }
-        //        return false;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false;
-        //    }
+        public bool IsAValidClassCode(string classCode)
+        {
+            try
+            {
+                String[] classCodesRequired = { "10955", "14955", "12955" };
+                for (int i = 0; i < classCodesRequired.Length; i++)
+                {
+                    if (classCode == classCodesRequired[i] || classCode == "")
+                        return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
-        //}
+        }
 
         public bool IsAValidAmount(string amount)
         {

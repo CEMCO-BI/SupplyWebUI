@@ -1356,7 +1356,7 @@ export class UploadFileComponent implements OnInit {
           this.reset();
         } else { //if there are errors in the file         
           this.toastr.clear();
-            this.toastr.error("There are some errors in the excel file.","Upload Failed...", { timeOut: 5000, progressBar: false });
+          this.toastr.error(response['Message'],"Upload Failed...", { timeOut: 5000, progressBar: false });
          
         }
       }

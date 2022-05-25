@@ -53,6 +53,13 @@ namespace SupplyWebApp.Services
                         else if (file.FileName.EndsWith(Constants.FILE_EXTENSION_XLSX))
                         {
                             _reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                            if(_reader.ResultsCount > 1)
+                            {
+                                _importResult.Successful = false;
+                                _importResult.Message = "Uploaded File should have only 1 tab.";
+                                result = JsonConvert.SerializeObject(_importResult);
+                                return result;
+                            }
                         }
                         else
                         {
@@ -63,7 +70,7 @@ namespace SupplyWebApp.Services
                         AdvanceToDataRow();
                         var line = 1;
 
-                        while (_reader.Read())
+                        while (_reader.Read() && _reader.ResultsCount == 1)
                         {
                             object year, month, classCode, amount;
                             if (_reader.GetValue(0) == null) { year = ""; } else year = _reader.GetValue(0);

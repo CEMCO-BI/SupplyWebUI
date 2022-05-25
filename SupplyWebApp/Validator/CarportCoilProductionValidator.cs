@@ -36,7 +36,7 @@ namespace SupplyWebApp.Validator
             try
             {
                 var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
-                return month == "" || regex.IsMatch(month);
+                return regex.IsMatch(month);
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace SupplyWebApp.Validator
                 String[] classCodesRequired = { "10955", "14955", "12955" };
                 for (int i = 0; i < classCodesRequired.Length; i++)
                 {
-                    if (classCode == classCodesRequired[i] || classCode == "")
+                    if (classCode == classCodesRequired[i])
                         return true;
                 }
                 return false;
@@ -67,8 +67,17 @@ namespace SupplyWebApp.Validator
         {
             try
             {
-                var regex = new Regex("^-?\\d*(\\.\\d+)?$");
-                return regex.IsMatch(amount) || amount == "";
+                bool result;
+                if(amount == "")
+                {
+                    result = false;
+                }
+                else
+                {
+                    var regex = new Regex("^-?\\d*(\\.\\d+)?$");
+                    result = regex.IsMatch(amount);
+                }
+                return result;
             }
             catch (Exception ex)
             {
@@ -83,7 +92,7 @@ namespace SupplyWebApp.Validator
             try
             {
                 var regex = new Regex("^[0-9]+$");
-                return regex.IsMatch(year) && year.Length.Equals(4) || year == "";
+                return regex.IsMatch(year) && year.Length.Equals(4);
 
             }
             catch (Exception ex)

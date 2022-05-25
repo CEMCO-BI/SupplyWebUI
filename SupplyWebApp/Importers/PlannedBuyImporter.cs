@@ -75,11 +75,11 @@ namespace SupplyWebApp.Services
 
 
 
-                            string year_v = year.ToString();
-                            string month_v = month.ToString();
-                            string location_v = location.ToString();
-                            string amount_v = amount.ToString();
-                            string cwt_v = cwt.ToString();
+                            string year_v = year?.ToString();
+                            string month_v = month?.ToString();
+                            string location_v = location?.ToString();
+                            string amount_v = amount?.ToString();
+                            string cwt_v = cwt?.ToString();
                             Console.WriteLine("cwt value  :" + cwt_v);
                             Console.WriteLine("-------------------------");
                             Console.WriteLine("-------------------------");

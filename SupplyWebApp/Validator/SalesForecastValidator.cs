@@ -42,7 +42,7 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
     {
         try {
             var regex = new Regex("(^0?[1-9]$)|(^1[0-2]$)");
-            return month == "" || regex.IsMatch(month);
+            return regex.IsMatch(month);
         } catch (Exception ex) {
             return false;
                 }
@@ -54,7 +54,7 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
             String[] s = { "IND", "DEN", "PIT", "FTW" };
             for (int i = 0; i < s.Length; i++)
             {
-                if (location == s[i] || location == "")
+                if (location == s[i])
                     return true;
             }
             return false;
@@ -68,8 +68,17 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
     public bool IsAValidAmount(string amount)
     {
         try {
-            var regex = new Regex("^-?\\d*(\\.\\d+)?$");
-            return regex.IsMatch(amount) || amount == "";
+            bool result;
+            if(amount == "")
+            {
+                result = false;
+            }
+            else
+            {
+                var regex = new Regex("^-?\\d*(\\.\\d+)?$");
+                result = regex.IsMatch(amount);
+            }
+            return result;
         }
         catch (Exception ex) {
 
@@ -82,7 +91,7 @@ public class SalesForecastValidator : AbstractValidator<SalesForecastValidateObj
     {
         try {
             var regex = new Regex("^[0-9]+$");
-            return regex.IsMatch(year) && year.Length.Equals(4) || year == "";
+            return regex.IsMatch(year) && year.Length.Equals(4);
 
         }
         catch (Exception ex) {

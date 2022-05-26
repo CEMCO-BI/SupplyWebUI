@@ -54,7 +54,7 @@
         <div class="custom-file" *ngIf="displayBrowseFile">
           <input #file type="file" id="customFile" accept=".xls,.xlsx" multiple (change)="onFileChange($event, file)"
                  class="form-control-file" />
-          <label class="custom-file-label" for="customFile">Choose file</label>
+          <label class="custom-file-label" for="customFile"  (click)="reset()">Choose file</label>
         </div>
 
         <div  *ngIf="displayMarginTables">

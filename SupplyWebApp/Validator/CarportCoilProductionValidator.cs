@@ -68,15 +68,8 @@ namespace SupplyWebApp.Validator
             try
             {
                 bool result;
-                if(amount == "")
-                {
-                    result = false;
-                }
-                else
-                {
-                    var regex = new Regex("^-?\\d*(\\.\\d+)?$");
-                    result = regex.IsMatch(amount);
-                }
+                var regex = new Regex("^-?\\d*(\\.\\d+)?$");
+                result = regex.IsMatch(amount);
                 return result;
             }
             catch (Exception ex)
